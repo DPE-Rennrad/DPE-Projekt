@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_065dzs1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:process id="Process_1t325af" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Kunde hat Interesse an Rennradfahren">
+      <bpmn:outgoing>Flow_16wppke</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_16wppke" sourceRef="StartEvent_1" targetRef="Activity_0rijas4" />
+    <bpmn:callActivity id="Activity_0rijas4" name="Equipmentabfrageprozess">
+      <bpmn:extensionElements>
+        <zeebe:calledElement propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16wppke</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lgxcb3</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_0lgxcb3" sourceRef="Activity_0rijas4" targetRef="Activity_17z34ys" />
+    <bpmn:callActivity id="Activity_17z34ys" name="Profilierungsprozess">
+      <bpmn:extensionElements>
+        <zeebe:calledElement propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0lgxcb3</bpmn:incoming>
+      <bpmn:outgoing>Flow_12r4eht</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_12r4eht" sourceRef="Activity_17z34ys" targetRef="Activity_10n1c6d" />
+    <bpmn:sequenceFlow id="Flow_0rt2r8e" sourceRef="Activity_10n1c6d" targetRef="Activity_000xxar" />
+    <bpmn:callActivity id="Activity_10n1c6d" name="Empfehlungsprozess">
+      <bpmn:extensionElements>
+        <zeebe:calledElement propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_12r4eht</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rt2r8e</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:callActivity id="Activity_000xxar" name="Lifecycleprozess">
+      <bpmn:extensionElements>
+        <zeebe:calledElement propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0rt2r8e</bpmn:incoming>
+      <bpmn:outgoing>Flow_1x7ncng</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:endEvent id="Event_0eocq5k" name="Kunde meldet sich ab">
+      <bpmn:incoming>Flow_1x7ncng</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1x7ncng" sourceRef="Activity_000xxar" targetRef="Event_0eocq5k" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1t325af">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="163" y="145" width="74" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_15ht07z_di" bpmnElement="Activity_0rijas4">
+        <dc:Bounds x="270" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16uo9jc_di" bpmnElement="Activity_17z34ys">
+        <dc:Bounds x="430" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_028jwpd_di" bpmnElement="Activity_10n1c6d">
+        <dc:Bounds x="590" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0oycrhx_di" bpmnElement="Activity_000xxar">
+        <dc:Bounds x="750" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0eocq5k_di" bpmnElement="Event_0eocq5k">
+        <dc:Bounds x="912" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="896" y="145" width="69" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_16wppke_di" bpmnElement="Flow_16wppke">
+        <di:waypoint x="218" y="120" />
+        <di:waypoint x="270" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lgxcb3_di" bpmnElement="Flow_0lgxcb3">
+        <di:waypoint x="370" y="120" />
+        <di:waypoint x="430" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12r4eht_di" bpmnElement="Flow_12r4eht">
+        <di:waypoint x="530" y="120" />
+        <di:waypoint x="590" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rt2r8e_di" bpmnElement="Flow_0rt2r8e">
+        <di:waypoint x="690" y="120" />
+        <di:waypoint x="750" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x7ncng_di" bpmnElement="Flow_1x7ncng">
+        <di:waypoint x="850" y="120" />
+        <di:waypoint x="912" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
