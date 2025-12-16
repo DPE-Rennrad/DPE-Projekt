@@ -45,7 +45,7 @@
       <bpmn:timerEventDefinition id="TimerEventDefinition_0tuerei" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_07581x3" sourceRef="Activity_023166u" targetRef="Event_0utz21t" />
-    <bpmn:endEvent id="Event_00lyla1">
+    <bpmn:endEvent id="Event_00lyla1" name="Kunde motiviert">
       <bpmn:incoming>Flow_0gct42u</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0dem71l">
@@ -65,7 +65,7 @@
       <bpmn:outgoing>Flow_04vdwsq</bpmn:outgoing>
       <bpmn:outgoing>Flow_02q50uq</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:intermediateCatchEvent id="Event_0utz21t">
+    <bpmn:intermediateCatchEvent id="Event_0utz21t" name="Antwort von Kunde erhalten">
       <bpmn:incoming>Flow_07581x3</bpmn:incoming>
       <bpmn:outgoing>Flow_1jrfn8x</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1md6fge" />
@@ -107,7 +107,7 @@
       <bpmndi:BPMNShape id="Event_00lyla1_di" bpmnElement="Event_00lyla1">
         <dc:Bounds x="1422" y="237" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1037" y="280" width="88" height="27" />
+          <dc:Bounds x="1401" y="280" width="78" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0dem71l_di" bpmnElement="Gateway_0dem71l" isMarkerVisible="true">
@@ -121,6 +121,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_125mb0k_di" bpmnElement="Event_0utz21t">
         <dc:Bounds x="432" y="237" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="413" y="207" width="75" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1jabkl8_di" bpmnElement="Gateway_1jabkl8" isMarkerVisible="true">
         <dc:Bounds x="515" y="230" width="50" height="50" />
