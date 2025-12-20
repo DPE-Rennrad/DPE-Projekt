@@ -52,7 +52,7 @@
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_13yv8km" sourceRef="Gateway_1xvorff" targetRef="Activity_1y56zwy" />
     <bpmn:sequenceFlow id="Flow_0ddl7jz" sourceRef="Activity_1y56zwy" targetRef="Gateway_0lkk1r8" />
-    <bpmn:boundaryEvent id="Event_06q0t24" attachedToRef="Activity_1y56zwy">
+    <bpmn:boundaryEvent id="Event_06q0t24" name="Konnte keine Links ermitteln" attachedToRef="Activity_1y56zwy">
       <bpmn:outgoing>Flow_1m0901a</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1gak4ec" />
     </bpmn:boundaryEvent>
@@ -70,7 +70,7 @@
       <bpmn:incoming>Flow_0o6z33v</bpmn:incoming>
       <bpmn:outgoing>Flow_11alfw8</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:boundaryEvent id="Event_0sbsm0g" attachedToRef="Activity_1uevfz8">
+    <bpmn:boundaryEvent id="Event_0sbsm0g" name="Newsletter konnte nicht versandt werden" attachedToRef="Activity_1uevfz8">
       <bpmn:outgoing>Flow_1fedxx6</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1etf2m8" />
     </bpmn:boundaryEvent>
@@ -175,9 +175,15 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0qowlkd_di" bpmnElement="Event_0sbsm0g">
         <dc:Bounds x="1592" y="362" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1615" y="380" width="89" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ifocr6_di" bpmnElement="Event_06q0t24">
         <dc:Bounds x="952" y="362" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="984" y="386" width="71" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0vmrvuz_di" bpmnElement="Event_0wdl56n">
         <dc:Bounds x="322" y="362" width="36" height="36" />

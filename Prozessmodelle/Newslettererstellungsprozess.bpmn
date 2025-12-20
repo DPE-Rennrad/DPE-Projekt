@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnd0al" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.41.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnd0al" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1airooa">
     <bpmn:participant id="Participant_0lj9c54" name="Newslettererstellungsprozess" processRef="Process_03d1egx" />
   </bpmn:collaboration>
@@ -20,14 +20,9 @@
       <bpmn:outgoing>Flow_0zqtfer</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_1352u36" name="&#60; 3 Retries" default="Flow_08oz2wk">
-      <bpmn:incoming>Flow_066fnh6</bpmn:incoming>
+      <bpmn:incoming>Flow_0b6n8tt</bpmn:incoming>
       <bpmn:outgoing>Flow_08oz2wk</bpmn:outgoing>
       <bpmn:outgoing>Flow_19d79wh</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Gateway_05uxvcs">
-      <bpmn:incoming>Flow_0b6n8tt</bpmn:incoming>
-      <bpmn:incoming>Flow_0aaejwt</bpmn:incoming>
-      <bpmn:outgoing>Flow_066fnh6</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Gateway_0hbd8io">
       <bpmn:incoming>Flow_02sls4z</bpmn:incoming>
@@ -38,19 +33,13 @@
       <bpmn:outgoing>Flow_0b6n8tt</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1q409h4" />
     </bpmn:boundaryEvent>
-    <bpmn:boundaryEvent id="Event_1hv8o1t" name="1min" attachedToRef="Activity_1mu9b5k">
-      <bpmn:outgoing>Flow_0aaejwt</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0dw15gu" />
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1b10z3t" sourceRef="Gateway_0hbd8io" targetRef="Activity_1mu9b5k" />
     <bpmn:sequenceFlow id="Flow_1j5vd2m" sourceRef="Activity_1mu9b5k" targetRef="Activity_1t7bkeg" />
     <bpmn:sequenceFlow id="Flow_02sls4z" sourceRef="Event_1memmnn" targetRef="Gateway_0hbd8io" />
     <bpmn:sequenceFlow id="Flow_0zqtfer" sourceRef="Activity_1t7bkeg" targetRef="Event_1gij4lj" />
-    <bpmn:sequenceFlow id="Flow_066fnh6" sourceRef="Gateway_05uxvcs" targetRef="Gateway_1352u36" />
     <bpmn:sequenceFlow id="Flow_08oz2wk" sourceRef="Gateway_1352u36" targetRef="Gateway_0hbd8io" />
     <bpmn:sequenceFlow id="Flow_19d79wh" name="nein" sourceRef="Gateway_1352u36" targetRef="Event_1qfk5l9" />
-    <bpmn:sequenceFlow id="Flow_0b6n8tt" sourceRef="Event_0v3o17n" targetRef="Gateway_05uxvcs" />
-    <bpmn:sequenceFlow id="Flow_0aaejwt" sourceRef="Event_1hv8o1t" targetRef="Gateway_05uxvcs" />
+    <bpmn:sequenceFlow id="Flow_0b6n8tt" sourceRef="Event_0v3o17n" targetRef="Gateway_1352u36" />
     <bpmn:endEvent id="Event_1qfk5l9" name="Konnte keine Links ermitteln">
       <bpmn:incoming>Flow_19d79wh</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1iehoko" />
@@ -82,9 +71,6 @@
           <dc:Bounds x="555" y="464" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_05uxvcs_di" bpmnElement="Gateway_05uxvcs" isMarkerVisible="true">
-        <dc:Bounds x="557" y="327" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0hbd8io_di" bpmnElement="Gateway_0hbd8io" isMarkerVisible="true">
         <dc:Bounds x="397" y="217" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -92,12 +78,6 @@
         <dc:Bounds x="1064" y="414" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1047" y="457" width="71" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0ut4g3g" bpmnElement="Event_1hv8o1t">
-        <dc:Bounds x="614" y="264" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="660" y="275" width="24" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_060shyn" bpmnElement="Event_0v3o17n">
@@ -119,10 +99,6 @@
         <di:waypoint x="932" y="242" />
         <di:waypoint x="1064" y="242" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_066fnh6_di" bpmnElement="Flow_066fnh6">
-        <di:waypoint x="582" y="377" />
-        <di:waypoint x="582" y="407" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08oz2wk_di" bpmnElement="Flow_08oz2wk">
         <di:waypoint x="557" y="432" />
         <di:waypoint x="422" y="432" />
@@ -138,12 +114,8 @@
       <bpmndi:BPMNEdge id="Flow_0b6n8tt_di" bpmnElement="Flow_0b6n8tt">
         <di:waypoint x="532" y="300" />
         <di:waypoint x="532" y="352" />
-        <di:waypoint x="557" y="352" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0aaejwt_di" bpmnElement="Flow_0aaejwt">
-        <di:waypoint x="632" y="300" />
-        <di:waypoint x="632" y="352" />
-        <di:waypoint x="607" y="352" />
+        <di:waypoint x="582" y="352" />
+        <di:waypoint x="582" y="407" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
