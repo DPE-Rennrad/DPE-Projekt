@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_11ssinc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_11ssinc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1fap11t">
     <bpmn:participant id="Participant_0efw4li" name="Routenempfehlungsprozess" processRef="Process_0fudf2q" />
     <bpmn:participant id="Participant_1nfmvcg" name="Kunde" />
@@ -7,11 +7,11 @@
     <bpmn:messageFlow id="Flow_0bdfq5f" name="Bewertungsbogen" sourceRef="Activity_0s8ddi4" targetRef="Participant_1nfmvcg" />
     <bpmn:messageFlow id="Flow_0iotc11" name="Ausgefüllter Bewertungsbogen" sourceRef="Participant_1nfmvcg" targetRef="Event_09xnyl9" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0fudf2q" isExecutable="true">
+  <bpmn:process id="Process_0fudf2q" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0gnz108</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_10795qk" name="Route generieren">
+    <bpmn:serviceTask id="Activity_10795qk" name="Route generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_0gnz108</bpmn:incoming>
       <bpmn:outgoing>Flow_1hgsnc9</bpmn:outgoing>
       <bpmn:property id="Property_1pkxrq4" name="__targetRef_placeholder" />
@@ -69,7 +69,7 @@
     <bpmn:sequenceFlow id="Flow_0orp7iq" name="Ja" sourceRef="Gateway_0eweq79" targetRef="Gateway_051eke0" />
     <bpmn:dataStoreReference id="DataStoreReference_0b6x892" name="Kundenpräferenzen" />
     <bpmn:sequenceFlow id="Flow_0qak8gr" sourceRef="Gateway_051eke0" targetRef="Event_00lyla1" />
-    <bpmn:serviceTask id="Activity_11dvwbb" name="Kundenpräferenzen speichern">
+    <bpmn:serviceTask id="Activity_11dvwbb" name="Kundenpräferenzen speichern" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_0i53si3</bpmn:incoming>
       <bpmn:outgoing>Flow_0kbes7q</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_1v5wl03">

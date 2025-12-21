@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1w5rris" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.23.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1w5rris" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0en4x9m">
     <bpmn:participant id="Participant_0b3gftv" name="Sonderangebotunterprozess" processRef="Process_1urqdp3" />
     <bpmn:participant id="Participant_0jwjkff" name="Crawler" />
     <bpmn:messageFlow id="Flow_1po59wg" name="Sonderangebot" sourceRef="Participant_0jwjkff" targetRef="Event_0xgweht" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1urqdp3" isExecutable="true">
+  <bpmn:process id="Process_1urqdp3" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1s8l18o</bpmn:outgoing>
     </bpmn:startEvent>
@@ -14,7 +14,7 @@
     <bpmn:endEvent id="Event_0yo2vv2" name="Sonderangebote versendet">
       <bpmn:incoming>Flow_04n61nn</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:callActivity id="Activity_0bis4h9" name="Produktempfehlungsprozess">
+    <bpmn:callActivity id="Activity_0bis4h9" name="Produktempfehlungsprozess" calledElement="Produktempfehlungsprozess">
       <bpmn:incoming>Flow_1106d1l</bpmn:incoming>
       <bpmn:outgoing>Flow_04n61nn</bpmn:outgoing>
     </bpmn:callActivity>

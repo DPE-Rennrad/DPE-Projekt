@@ -17,13 +17,13 @@
     <bpmn:endEvent id="Event_0et8afl" name="Kunde hat App deinstalliert">
       <bpmn:incoming>Flow_15dxtey</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_1grpndd" name="Konto anlegen">
+    <bpmn:serviceTask id="Activity_1grpndd" name="Konto anlegen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_08580y8</bpmn:incoming>
       <bpmn:outgoing>Flow_1r260w5</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:startEvent id="StartEvent_1" name="Kunde installiert die App">
       <bpmn:outgoing>Flow_08580y8</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1raz48v" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1raz48v" messageRef="Message_02ht0f5" />
     </bpmn:startEvent>
     <bpmn:subProcess id="Activity_1a3tzxt" triggeredByEvent="true">
       <bpmn:sequenceFlow id="Flow_1fgs0s9" sourceRef="Event_0692f0w" targetRef="Activity_0cfl150" />
@@ -31,13 +31,13 @@
         <bpmn:incoming>Flow_0tl6nkj</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0tl6nkj" sourceRef="Activity_0cfl150" targetRef="Event_0dcswqz" />
-      <bpmn:callActivity id="Activity_0cfl150" name="Routenempfehlungsprozess">
+      <bpmn:callActivity id="Activity_0cfl150" name="Routenempfehlungsprozess" calledElement="Routenempfehlungsprozess">
         <bpmn:incoming>Flow_1fgs0s9</bpmn:incoming>
         <bpmn:outgoing>Flow_0tl6nkj</bpmn:outgoing>
       </bpmn:callActivity>
       <bpmn:startEvent id="Event_0692f0w" name="Kunde hat Routenbedarf">
         <bpmn:outgoing>Flow_1fgs0s9</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_0an14lz" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_0an14lz" messageRef="Message_2ii1kso" />
       </bpmn:startEvent>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_1jbt7jr" triggeredByEvent="true">
@@ -46,13 +46,13 @@
         <bpmn:incoming>Flow_1b078vo</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1b078vo" sourceRef="Activity_1kqz0lm" targetRef="Event_15mfx7q" />
-      <bpmn:callActivity id="Activity_1kqz0lm" name="Produktempfehlungsprozess">
+      <bpmn:callActivity id="Activity_1kqz0lm" name="Produktempfehlungsprozess" calledElement="Produktempfehlungsprozess">
         <bpmn:incoming>Flow_1pmd54i</bpmn:incoming>
         <bpmn:outgoing>Flow_1b078vo</bpmn:outgoing>
       </bpmn:callActivity>
       <bpmn:startEvent id="Event_063y7cw" name="Kunde hat Produktbedarf">
         <bpmn:outgoing>Flow_1pmd54i</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_061e6ao" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_061e6ao" messageRef="Message_0kt6aad" />
       </bpmn:startEvent>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_1do8xv8" triggeredByEvent="true">
@@ -60,13 +60,13 @@
         <bpmn:incoming>Flow_1bazl9m</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1bazl9m" sourceRef="Activity_0k4iuo5" targetRef="Event_1u7zjud" />
-      <bpmn:callActivity id="Activity_0k4iuo5" name="Sonderangebotunterprozess">
+      <bpmn:callActivity id="Activity_0k4iuo5" name="Sonderangebotunterprozess" calledElement="Sonderangebotsunterprozess">
         <bpmn:incoming>Flow_0il7823</bpmn:incoming>
         <bpmn:outgoing>Flow_1bazl9m</bpmn:outgoing>
       </bpmn:callActivity>
       <bpmn:startEvent id="Event_1t49qyh" name="Crawler findet Sonderangebot">
         <bpmn:outgoing>Flow_0il7823</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_11k3qcc" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_11k3qcc" messageRef="Message_06gc41r" />
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_0il7823" sourceRef="Event_1t49qyh" targetRef="Activity_0k4iuo5" />
     </bpmn:subProcess>
@@ -82,7 +82,7 @@
         <bpmn:incoming>Flow_11fnkkv</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_11fnkkv" sourceRef="Activity_1alpj7x" targetRef="Event_1jr160l" />
-      <bpmn:callActivity id="Activity_1alpj7x" name="Kundenmotivationsprozess">
+      <bpmn:callActivity id="Activity_1alpj7x" name="Kundenmotivationsprozess" calledElement="Kundenmotivationsprozess">
         <bpmn:incoming>Flow_0au6cq6</bpmn:incoming>
         <bpmn:outgoing>Flow_11fnkkv</bpmn:outgoing>
       </bpmn:callActivity>
@@ -91,13 +91,15 @@
       <bpmn:sequenceFlow id="Flow_0ne4wpr" sourceRef="Event_1h4ghjj" targetRef="Gateway_1vn7hxi" />
       <bpmn:startEvent id="Event_1h4ghjj" name="Montags">
         <bpmn:outgoing>Flow_0ne4wpr</bpmn:outgoing>
-        <bpmn:timerEventDefinition id="TimerEventDefinition_115pjq8" />
+        <bpmn:timerEventDefinition id="TimerEventDefinition_115pjq8">
+          <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 0 9 1/7 * ?</bpmn:timeCycle>
+        </bpmn:timerEventDefinition>
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_1tzlmp6" name="Newsletter versendet">
         <bpmn:incoming>Flow_1y79oak</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1y79oak" sourceRef="Activity_0kwhdv7" targetRef="Event_1tzlmp6" />
-      <bpmn:callActivity id="Activity_0kwhdv7" name="Eventempfehlungsprozess">
+      <bpmn:callActivity id="Activity_0kwhdv7" name="Eventempfehlungsprozess" calledElement="Eventempfehlungsprozess">
         <bpmn:incoming>Flow_0sysurd</bpmn:incoming>
         <bpmn:outgoing>Flow_1y79oak</bpmn:outgoing>
       </bpmn:callActivity>
@@ -111,7 +113,7 @@
         <bpmn:outgoing>Flow_1i5izwl</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_1y8izy5" sourceRef="Event_1hfowmq" targetRef="Gateway_0syllws" />
-      <bpmn:exclusiveGateway id="Gateway_1vn7hxi">
+      <bpmn:exclusiveGateway id="Gateway_1vn7hxi" default="Flow_0sysurd">
         <bpmn:incoming>Flow_0ne4wpr</bpmn:incoming>
         <bpmn:incoming>Flow_101n7at</bpmn:incoming>
         <bpmn:outgoing>Flow_0sysurd</bpmn:outgoing>
@@ -124,11 +126,15 @@
       <bpmn:intermediateCatchEvent id="Event_0jiaa44" name="24h">
         <bpmn:incoming>Flow_1v7dck0</bpmn:incoming>
         <bpmn:outgoing>Flow_101n7at</bpmn:outgoing>
-        <bpmn:timerEventDefinition id="TimerEventDefinition_06i1a7t" />
+        <bpmn:timerEventDefinition id="TimerEventDefinition_06i1a7t">
+          <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 0 9 * * ?</bpmn:timeCycle>
+        </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:sequenceFlow id="Flow_101n7at" sourceRef="Event_0jiaa44" targetRef="Gateway_1vn7hxi" />
-      <bpmn:sequenceFlow id="Flow_1i5izwl" name="nein" sourceRef="Gateway_0syllws" targetRef="Activity_0prgqh5" />
-      <bpmn:serviceTask id="Activity_0prgqh5" name="Admin benachrichtigen">
+      <bpmn:sequenceFlow id="Flow_1i5izwl" name="nein" sourceRef="Gateway_0syllws" targetRef="Activity_0prgqh5">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:serviceTask id="Activity_0prgqh5" name="Admin benachrichtigen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
         <bpmn:incoming>Flow_1i5izwl</bpmn:incoming>
         <bpmn:outgoing>Flow_09813ks</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -138,6 +144,10 @@
     <bpmn:sequenceFlow id="Flow_15dxtey" sourceRef="Event_00zljba" targetRef="Event_0et8afl" />
     <bpmn:sequenceFlow id="Flow_08580y8" sourceRef="StartEvent_1" targetRef="Activity_1grpndd" />
   </bpmn:process>
+  <bpmn:message id="Message_02ht0f5" name="AppInstallMessage" />
+  <bpmn:message id="Message_0kt6aad" name="Produktbedarfmessage" />
+  <bpmn:message id="Message_2ii1kso" name="Routenbedarfmessage" />
+  <bpmn:message id="Message_06gc41r" name="Sonderangebotmessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1foj5bx">
       <bpmndi:BPMNShape id="Participant_0bd3u3j_di" bpmnElement="Participant_0bd3u3j" isHorizontal="true">
@@ -350,7 +360,7 @@
         <di:waypoint x="845" y="1600" />
         <di:waypoint x="1010" y="1600" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="917" y="1582" width="22" height="14" />
+          <dc:Bounds x="918" y="1582" width="21" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09813ks_di" bpmnElement="Flow_09813ks">

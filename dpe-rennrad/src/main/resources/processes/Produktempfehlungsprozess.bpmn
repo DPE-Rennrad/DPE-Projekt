@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0968yyz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0968yyz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0n3tqi2">
     <bpmn:participant id="Participant_1gbmcgd" name="Produktempfehlungsprozess" processRef="Process_1j8vx5h" />
     <bpmn:participant id="Participant_0abug0t" name="Kunde" />
@@ -9,7 +9,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1ke4sa7" associationDirection="None" sourceRef="Flow_0ue906g" targetRef="TextAnnotation_0hhplce" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1j8vx5h" isExecutable="true">
+  <bpmn:process id="Process_1j8vx5h" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:sequenceFlow id="Flow_12r5c8q" sourceRef="Activity_19cvrku" targetRef="Activity_1ourl5r" />
     <bpmn:sequenceFlow id="Flow_1vvkby5" sourceRef="StartEvent_1" targetRef="Activity_1p63h92" />
     <bpmn:sequenceFlow id="Flow_1bw53s6" sourceRef="Activity_1p63h92" targetRef="Activity_19cvrku" />
@@ -17,11 +17,11 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1vvkby5</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_1p63h92" name="Kundenempfehlungen mit KI abgleichen">
+    <bpmn:serviceTask id="Activity_1p63h92" name="Kundenempfehlungen mit KI abgleichen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_1vvkby5</bpmn:incoming>
       <bpmn:outgoing>Flow_1bw53s6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_19cvrku" name="Affiliate Link für Produktempfehlungen generieren">
+    <bpmn:serviceTask id="Activity_19cvrku" name="Affiliate Link für Produktempfehlungen generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_1bw53s6</bpmn:incoming>
       <bpmn:outgoing>Flow_12r5c8q</bpmn:outgoing>
     </bpmn:serviceTask>

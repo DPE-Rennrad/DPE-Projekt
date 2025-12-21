@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y0n2nb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.23.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y0n2nb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0tgz3wo">
     <bpmn:extensionElements />
     <bpmn:participant id="Participant_1pzq4y5" name="Eventempfehlungsprozess" processRef="Process_1e8yeoq" />
     <bpmn:participant id="Participant_1wmo40f" name="Kunde" />
     <bpmn:messageFlow id="Flow_1qltt1w" name="Affiliatelink" sourceRef="Activity_1uevfz8" targetRef="Participant_1wmo40f" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1e8yeoq" isExecutable="true">
+  <bpmn:process id="Process_1e8yeoq" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:sequenceFlow id="Flow_0zcknzn" name="Nein" sourceRef="Gateway_1xvorff" targetRef="Gateway_0yelgy1" />
     <bpmn:sequenceFlow id="Flow_03ueoi5" sourceRef="Gateway_0yelgy1" targetRef="Event_1uhot5x" />
     <bpmn:sequenceFlow id="Flow_11alfw8" sourceRef="Activity_1uevfz8" targetRef="Gateway_0yelgy1" />
@@ -32,7 +32,7 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_06o99uj" sourceRef="Activity_04g7e4p" targetRef="Gateway_1xvorff" />
     <bpmn:sequenceFlow id="Flow_0o75ir5" sourceRef="Event_0wdl56n" targetRef="Activity_0ww400n" />
-    <bpmn:serviceTask id="Activity_0ww400n" name="Logging">
+    <bpmn:serviceTask id="Activity_0ww400n" name="Logging" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_0o75ir5</bpmn:incoming>
       <bpmn:outgoing>Flow_0mxe5yj</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -60,7 +60,7 @@
       <bpmn:incoming>Flow_1cy8cjl</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1ht4o31" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0w8eqie" name="Logging">
+    <bpmn:serviceTask id="Activity_0w8eqie" name="Logging" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_1m0901a</bpmn:incoming>
       <bpmn:outgoing>Flow_1cy8cjl</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -91,7 +91,7 @@
       <bpmn:incoming>Flow_19e040t</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0x6cpan" />
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0uzcmbv" name="Logging">
+    <bpmn:serviceTask id="Activity_0uzcmbv" name="Logging" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_0n9um7y</bpmn:incoming>
       <bpmn:outgoing>Flow_19e040t</bpmn:outgoing>
     </bpmn:serviceTask>
