@@ -11,7 +11,7 @@
       <bpmn:incoming>Flow_1r260w5</bpmn:incoming>
       <bpmn:outgoing>Flow_15dxtey</bpmn:outgoing>
       <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_0a9fl7l">
-        <bpmn:condition xsi:type="bpmn:tFormalExpression" />
+        <bpmn:condition xsi:type="bpmn:tFormalExpression">${deinstallieren == true}</bpmn:condition>
       </bpmn:conditionalEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:endEvent id="Event_0et8afl" name="Kunde hat App deinstalliert">
@@ -75,14 +75,14 @@
       <bpmn:startEvent id="Event_1td7srf" name="5 Tage inaktiv">
         <bpmn:outgoing>Flow_0au6cq6</bpmn:outgoing>
         <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_17b9006">
-          <bpmn:condition xsi:type="bpmn:tFormalExpression" />
+          <bpmn:condition xsi:type="bpmn:tFormalExpression">${true}</bpmn:condition>
         </bpmn:conditionalEventDefinition>
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_1jr160l" name="Motivationsnachricht versendet">
         <bpmn:incoming>Flow_11fnkkv</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_11fnkkv" sourceRef="Activity_1alpj7x" targetRef="Event_1jr160l" />
-      <bpmn:callActivity id="Activity_1alpj7x" name="Kundenmotivationsprozess" calledElement="Kundenmotivationsprozess">
+      <bpmn:callActivity id="Activity_1alpj7x" name="Motivationsprozess" calledElement="Motivationsprozess">
         <bpmn:incoming>Flow_0au6cq6</bpmn:incoming>
         <bpmn:outgoing>Flow_11fnkkv</bpmn:outgoing>
       </bpmn:callActivity>
