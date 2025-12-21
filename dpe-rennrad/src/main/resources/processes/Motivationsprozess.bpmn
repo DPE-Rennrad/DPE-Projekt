@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0393qe0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0393qe0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_088szti">
     <bpmn:participant id="Participant_0efw4li" name="Kundenmotivationsprozess" processRef="Process_0r47a22" />
     <bpmn:participant id="Participant_1nfmvcg" name="Kunde" />
@@ -11,7 +11,7 @@
     <bpmn:startEvent id="Event_14npagq">
       <bpmn:outgoing>Flow_01z0kc5</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sendTask id="Activity_0s8ddi4" name="Nachricht mit letzter Aktivität und Sprüchen versenden">
+    <bpmn:sendTask id="Activity_0s8ddi4" name="Nachricht mit letzter Aktivität und Sprüchen versenden" camunda:expression="${true}">
       <bpmn:incoming>Flow_1oo2v9d</bpmn:incoming>
       <bpmn:outgoing>Flow_0y63gk2</bpmn:outgoing>
     </bpmn:sendTask>
@@ -36,13 +36,15 @@
     <bpmn:sequenceFlow id="Flow_1ew4dz0" sourceRef="Activity_1j4sl5i" targetRef="Gateway_1l257jg" />
     <bpmn:sequenceFlow id="Flow_0qm8khl" sourceRef="Activity_1pn1wl9" targetRef="Gateway_1l257jg" />
     <bpmn:sequenceFlow id="Flow_01z0kc5" sourceRef="Event_14npagq" targetRef="Activity_023166u" />
-    <bpmn:sendTask id="Activity_023166u" name="Kunde nach Krankheit oder Verletzung abfragen">
+    <bpmn:sendTask id="Activity_023166u" name="Kunde nach Krankheit oder Verletzung abfragen" camunda:expression="${true}">
       <bpmn:incoming>Flow_01z0kc5</bpmn:incoming>
       <bpmn:outgoing>Flow_07581x3</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:boundaryEvent id="Event_0ckl387" name="1 Tag" attachedToRef="Activity_023166u">
       <bpmn:outgoing>Flow_18bsj5p</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0tuerei" />
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0tuerei">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 0 9 * * ?</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_07581x3" sourceRef="Activity_023166u" targetRef="Event_0utz21t" />
     <bpmn:endEvent id="Event_00lyla1" name="Kunde motiviert">
@@ -58,7 +60,9 @@
       <bpmn:incoming>Flow_16c837f</bpmn:incoming>
       <bpmn:outgoing>Flow_1ew4dz0</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_04vdwsq" name="Kunde ist krank oder verletzt" sourceRef="Gateway_0mmf61n" targetRef="Gateway_0dem71l" />
+    <bpmn:sequenceFlow id="Flow_04vdwsq" name="Kunde ist krank oder verletzt" sourceRef="Gateway_0mmf61n" targetRef="Gateway_0dem71l">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_02q50uq" sourceRef="Gateway_0mmf61n" targetRef="Gateway_0jgumv7" />
     <bpmn:exclusiveGateway id="Gateway_0mmf61n" default="Flow_02q50uq">
       <bpmn:incoming>Flow_1u3a8ld</bpmn:incoming>
@@ -68,7 +72,7 @@
     <bpmn:intermediateCatchEvent id="Event_0utz21t" name="Antwort von Kunde erhalten">
       <bpmn:incoming>Flow_07581x3</bpmn:incoming>
       <bpmn:outgoing>Flow_1jrfn8x</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1md6fge" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1md6fge" messageRef="Message_0k1ee9t" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_1jrfn8x" sourceRef="Event_0utz21t" targetRef="Gateway_1jabkl8" />
     <bpmn:exclusiveGateway id="Gateway_1jabkl8">
@@ -79,6 +83,7 @@
     <bpmn:sequenceFlow id="Flow_18bsj5p" sourceRef="Event_0ckl387" targetRef="Gateway_1jabkl8" />
     <bpmn:sequenceFlow id="Flow_1u3a8ld" sourceRef="Gateway_1jabkl8" targetRef="Gateway_0mmf61n" />
   </bpmn:process>
+  <bpmn:message id="Message_0k1ee9t" name="MotivationTriggerMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_088szti">
       <bpmndi:BPMNShape id="Participant_0efw4li_di" bpmnElement="Participant_0efw4li" isHorizontal="true">

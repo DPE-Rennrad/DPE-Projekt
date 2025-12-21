@@ -1,21 +1,21 @@
 # DPE-Projekt
 
 ## Übersicht
-Dieses Quarkus-Projekt integriert BPMN-Prozesse mit CIB seven EE für eine Rennrad-Assistenz-App. Es bietet CRUD-APIs für Rennrad-Entitäten, SOAP-Services und automatisierte Workflows (z. B. Empfehlungen, Newsletter).
+Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine Rennrad-Assistenz-App. Es bietet CRUD-APIs für Rennrad-Entitäten, SOAP-Services und automatisierte Workflows (z. B. Empfehlungen, Newsletter).
 
 ## Architektur
 - **Backend**: Quarkus mit Hibernate Panache, MySQL.
-- **BPMN**: Camunda Modeler für Prozesse, deployt zur Remote CIB seven Engine.
+- **BPMN**: Camunda Modeler für Prozesse, deployt zur Remote Camunda Engine.
 - **APIs**: REST (JAX-RS) und SOAP (Apache CXF).
 - **Struktur**: `model/`, `repository/`, `service/`, `resource/`, `soap/`, `processes/`.
 
 ## Setup
-1. **Voraussetzungen**: Java 17, Maven, MySQL, Docker (für CIB seven).
-2. **CIB seven starten**: 
+1. **Voraussetzungen**: Java 17, Maven, MySQL, Docker (für Camunda).
+2. **Camunda starten** (Community Edition):
    ```
-   docker run --name tomcat-cibseven-ee -d -p 8080:8080 --env CAMUNDA_BPM_HISTORY_ENFORCE_TTL=false artifacts.cibseven.org/docker-ee/cibseven:tomcat-2.1.0-ee
+   docker run -d --name camunda -p 8080:8080 camunda/camunda-bpm-platform:latest
    ```
-   (Deaktiviert TTL-Prüfung; siehe CONFIG_CHEAT_SHEET.md für Details).
+   (Community hat keine TTL-Prüfung; siehe CONFIG_CHEAT_SHEET.md für Details).
 3. **DB einrichten**: Erstelle DB `dpe_rennrad`, setze Credentials in `application.properties`.
 4. **Projekt bauen**: `mvn clean install`.
 5. **Starten**: `mvn quarkus:dev` (Port 8088).
@@ -37,7 +37,6 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit CIB seven EE für eine Rennr
   ```
 
 ## Troubleshooting
-- **TTL-Fehler**: Setze in Engine `--env CAMUNDA_BPM_HISTORY_ENFORCE_TTL=false`.
 - **Parsing-Fehler**: Prüfe BPMN in Modeler (siehe Anleitung in CONFIG_CHEAT_SHEET.md).
 - **DB-Verbindung**: Stelle sicher, MySQL läuft und Credentials stimmen.
 - **Logs**: Quarkus-Console oder Engine-Logs.

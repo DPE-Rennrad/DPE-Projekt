@@ -75,14 +75,14 @@
       <bpmn:startEvent id="Event_1td7srf" name="5 Tage inaktiv">
         <bpmn:outgoing>Flow_0au6cq6</bpmn:outgoing>
         <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_17b9006">
-          <bpmn:condition xsi:type="bpmn:tFormalExpression">${true}</bpmn:condition>
+          <bpmn:condition xsi:type="bpmn:tFormalExpression">${false}</bpmn:condition>
         </bpmn:conditionalEventDefinition>
       </bpmn:startEvent>
       <bpmn:endEvent id="Event_1jr160l" name="Motivationsnachricht versendet">
         <bpmn:incoming>Flow_11fnkkv</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_11fnkkv" sourceRef="Activity_1alpj7x" targetRef="Event_1jr160l" />
-      <bpmn:callActivity id="Activity_1alpj7x" name="Motivationsprozess" calledElement="Motivationsprozess">
+      <bpmn:callActivity id="Activity_1alpj7x" name="Motivationsprozess" calledElement="Process_0r47a22">
         <bpmn:incoming>Flow_0au6cq6</bpmn:incoming>
         <bpmn:outgoing>Flow_11fnkkv</bpmn:outgoing>
       </bpmn:callActivity>
