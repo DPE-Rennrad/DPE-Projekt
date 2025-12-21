@@ -56,13 +56,3 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
 
 ## Troubleshooting
 - **Parsing-Fehler**: Prüfe BPMN in Modeler (siehe Anleitung in CONFIG_CHEAT_SHEET.md).
-- **DB-Verbindung**: Stelle sicher, MySQL läuft und Credentials stimmen.
-- **Logs**: Quarkus-Console oder Engine-Logs.
-
-## Beitrag
-- BPMN in Modeler bearbeiten.
-- Tests hinzufügen (z. B. für Services).
-- Dokumentation erweitern.
-
-## Lizenz
-[Deine Lizenz]
