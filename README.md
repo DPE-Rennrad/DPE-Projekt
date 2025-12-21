@@ -21,8 +21,8 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
 5. **Starten**: `mvn quarkus:dev` (Port 8088).
 
 ## Deployment
-- BPMN-Dateien in `processes/` legen.
-- Quarkus startet automatisch Deployment zur Engine.
+- BPMN-Dateien liegen in `processes/`
+- Mit Camunda Modeler per Deployement (Rakete) Prozess deployen
 - Überprüfe in Cockpit: `http://localhost:8080/camunda/app/cockpit/`.
 
 ## APIs
