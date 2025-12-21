@@ -29,12 +29,14 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
 - **REST**: `GET/POST/PUT/DELETE http://localhost:8088/rennrad` (CRUD für Rennrad).
 - **SOAP**: `http://localhost:8088/soap/rennrad` (getAllRennraeder).
 - **Prozess starten**: POST `http://localhost:8080/engine-rest/message` mit JSON-Body für Kundendaten.  
+  **WICHTIG**: Füge `"resultEnabled": true` hinzu, um die Process Instance ID zu erhalten.  
   Beispiel cURL:  
   ```
   curl -X POST http://localhost:8080/engine-rest/message \
     -H "Content-Type: application/json" \
     -d '{
       "messageName": "AppInstallMessage",
+      "resultEnabled": true,
       "processVariables": {
         "kundeName": {
           "value": "Max Mustermann",
@@ -47,6 +49,10 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
       }
     }'
   ```
+  Response enthält: `[{"processInstance": {"id": "abc-123-xyz", ...}}]`
+  
+- **Prozess beenden**: POST `http://localhost:8088/kunde/deinstallieren/{processInstanceId}`  
+  Beispiel: `curl -X POST http://localhost:8088/kunde/deinstallieren/abc-123-xyz`
 
 ## Troubleshooting
 - **Parsing-Fehler**: Prüfe BPMN in Modeler (siehe Anleitung in CONFIG_CHEAT_SHEET.md).
