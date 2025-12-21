@@ -17,7 +17,7 @@
     <bpmn:endEvent id="Event_0et8afl" name="Kunde hat App deinstalliert">
       <bpmn:incoming>Flow_15dxtey</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_1grpndd" name="Konto anlegen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_1grpndd" name="Konto anlegen" camunda:expression="${execution.setVariable('kundeId', 1)}">
       <bpmn:incoming>Flow_08580y8</bpmn:incoming>
       <bpmn:outgoing>Flow_1r260w5</bpmn:outgoing>
     </bpmn:serviceTask>

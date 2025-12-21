@@ -10,8 +10,8 @@
   <bpmn:process id="Process_0fudf2q" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0gnz108</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_10795qk" name="Route generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    </bpmn:    <bpmn:serviceTask id="Activity_10795qk" name="Route generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+generieren">
       <bpmn:incoming>Flow_0gnz108</bpmn:incoming>
       <bpmn:outgoing>Flow_1hgsnc9</bpmn:outgoing>
       <bpmn:property id="Property_1pkxrq4" name="__targetRef_placeholder" />
@@ -68,8 +68,8 @@
     <bpmn:sequenceFlow id="Flow_1jzsagw" name="Nein" sourceRef="Gateway_0eweq79" targetRef="Gateway_0etln6t" />
     <bpmn:sequenceFlow id="Flow_0orp7iq" name="Ja" sourceRef="Gateway_0eweq79" targetRef="Gateway_051eke0" />
     <bpmn:dataStoreReference id="DataStoreReference_0b6x892" name="Kundenpräferenzen" />
-    <bpmn:sequenceFlow id="Flow_0qak8gr" sourceRef="Gateway_051eke0" targetRef="Event_00lyla1" />
-    <bpmn:serviceTask id="Activity_11dvwbb" name="Kundenpräferenzen speichern" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:sequenceFlow id="F    <bpmn:serviceTask id="Activity_11dvwbb" name="Kundenpräferenzen speichern" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+:serviceTask id="Activity_11dvwbb" name="Kundenpräferenzen speichern">
       <bpmn:incoming>Flow_0i53si3</bpmn:incoming>
       <bpmn:outgoing>Flow_0kbes7q</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_1v5wl03">
@@ -236,6 +236,14 @@
       <bpmndi:BPMNEdge id="Flow_0iotc11_di" bpmnElement="Flow_0iotc11">
         <di:waypoint x="1050" y="580" />
         <di:waypoint x="1050" y="368" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1055" y="507" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
+point x="1050" y="368" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1055" y="507" width="89" height="27" />
         </bpmndi:BPMNLabel>
