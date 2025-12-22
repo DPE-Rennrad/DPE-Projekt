@@ -17,6 +17,7 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
    ```
    (Community hat keine TTL-Prüfung; siehe CONFIG_CHEAT_SHEET.md für Details).
 3. **DB einrichten**: Erstelle DB `dpe_rennrad`, setze Credentials in `application.properties`.
+`docker run --name mysql-dpe -e MYSQL_ROOT_PASSWORD=abc#1234 -e MYSQL_DATABASE=dpe_rennrad -p 3306:3306 -d mysql:latest`
 4. **Projekt bauen**: `mvn clean install`.
 5. **Starten**: `mvn quarkus:dev` (Port 8088).
 
