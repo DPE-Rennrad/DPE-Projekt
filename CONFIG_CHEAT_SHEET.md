@@ -29,10 +29,6 @@ Diese Datei konfiguriert den Quarkus-Client für DB, BPMN und APIs.
   **Warum**: Verbindet den Quarkus-Client zur Remote CIB seven Engine.  
   **Wofür**: Deployment und Interaktion mit BPMN-Prozessen.
 
-- `camunda.bpm.license-file=path/to/your/cibseven-license.txt`  
-  **Warum**: Erforderlich für CIB seven EE-Lizenz.  
-  **Wofür**: Aktiviert EE-Features; setze korrekten Pfad.
-
 - `quarkus.camunda.job-execution.enabled=false`  
   **Warum**: Deaktiviert lokale Job-Ausführung im Client.  
   **Wofür**: Remote Engine übernimmt Jobs (Timer, etc.).

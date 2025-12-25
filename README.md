@@ -10,12 +10,12 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
 - **Struktur**: `model/`, `repository/`, `service/`, `resource/`, `soap/`, `processes/`.
 
 ## Setup
-1. **Voraussetzungen**: Java 17, Maven, MySQL, Docker (für Camunda).
-2. **Camunda starten** (Community Edition):
+1. **Voraussetzungen**: Java 17, Maven, MySQL, Docker (für CIB seven EE).
+2. **CIB seven EE starten** (Enterprise Edition):
    ```
-   docker run -d --name camunda -p 8080:8080 camunda/camunda-bpm-platform:latest
+   docker pull artifacts.cibseven.org/docker-ee/cibseven:tomcat-2.1.0-ee
+   docker run --name tomcat-cibseven-ee -d -p 8080:8080 artifacts.cibseven.org/docker-ee/cibseven:tomcat-2.1.0-ee
    ```
-   (Community hat keine TTL-Prüfung; siehe CONFIG_CHEAT_SHEET.md für Details).
 3. **DB einrichten**: Erstelle DB `dpe_rennrad`, setze Credentials in `application.properties`.
 4. **Projekt bauen**: `mvn clean install`.
 5. **Starten**: `mvn quarkus:dev` (Port 8088).
