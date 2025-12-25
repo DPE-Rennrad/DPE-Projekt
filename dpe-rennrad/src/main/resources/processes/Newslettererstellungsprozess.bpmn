@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnd0al" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnd0al" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1airooa">
     <bpmn:participant id="Participant_0lj9c54" name="Newslettererstellungsprozess" processRef="Process_03d1egx" />
   </bpmn:collaboration>
@@ -7,7 +7,9 @@
     <bpmn:serviceTask id="Activity_1mu9b5k" name="Affiliatelink für Eventanmeldung generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_1b10z3t</bpmn:incoming>
       <bpmn:outgoing>Flow_1j5vd2m</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics />
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="affiliatelinkListe">
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${affiliatelinkListe}</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:serviceTask>
     <bpmn:startEvent id="Event_1memmnn">
       <bpmn:outgoing>Flow_02sls4z</bpmn:outgoing>
@@ -38,14 +40,16 @@
     <bpmn:sequenceFlow id="Flow_02sls4z" sourceRef="Event_1memmnn" targetRef="Gateway_0hbd8io" />
     <bpmn:sequenceFlow id="Flow_0zqtfer" sourceRef="Activity_1t7bkeg" targetRef="Event_1gij4lj" />
     <bpmn:sequenceFlow id="Flow_08oz2wk" sourceRef="Gateway_1352u36" targetRef="Gateway_0hbd8io" />
-    <bpmn:sequenceFlow id="Flow_19d79wh" name="nein" sourceRef="Gateway_1352u36" targetRef="Event_1qfk5l9" />
+    <bpmn:sequenceFlow id="Flow_19d79wh" name="nein" sourceRef="Gateway_1352u36" targetRef="Event_1qfk5l9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${manyRetriesAffiliateGenerieren == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0b6n8tt" sourceRef="Event_0v3o17n" targetRef="Gateway_1352u36" />
     <bpmn:endEvent id="Event_1qfk5l9" name="Konnte keine Links ermitteln">
       <bpmn:incoming>Flow_19d79wh</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1iehoko" errorRef="Error_02apgp0" />
     </bpmn:endEvent>
   </bpmn:process>
-  <bpmn:error id="Error_02apgp0" name="Error_1" />
+  <bpmn:error id="Error_02apgp0" name="NO_LINKS" errorCode="NO_LINKS" camunda:errorMessage="Konnten keine Links ermitteln" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1airooa">
       <bpmndi:BPMNShape id="Participant_0lj9c54_di" bpmnElement="Participant_0lj9c54" isHorizontal="true">

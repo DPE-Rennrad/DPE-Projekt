@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y0n2nb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y0n2nb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0tgz3wo">
     <bpmn:extensionElements />
     <bpmn:participant id="Participant_1pzq4y5" name="Eventempfehlungsprozess" processRef="Process_1e8yeoq" />
@@ -7,7 +7,9 @@
     <bpmn:messageFlow id="Flow_1qltt1w" name="Affiliatelink" sourceRef="Activity_1uevfz8" targetRef="Participant_1wmo40f" />
   </bpmn:collaboration>
   <bpmn:process id="Process_1e8yeoq" isExecutable="true" camunda:historyTimeToLive="P1D">
-    <bpmn:sequenceFlow id="Flow_0zcknzn" name="Nein" sourceRef="Gateway_1xvorff" targetRef="Gateway_0yelgy1" />
+    <bpmn:sequenceFlow id="Flow_0zcknzn" name="Nein" sourceRef="Gateway_1xvorff" targetRef="Gateway_0yelgy1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${passendesEventGefunden == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_03ueoi5" sourceRef="Gateway_0yelgy1" targetRef="Event_1uhot5x" />
     <bpmn:sequenceFlow id="Flow_11alfw8" sourceRef="Activity_1uevfz8" targetRef="Gateway_0yelgy1" />
     <bpmn:endEvent id="Event_1uhot5x">
@@ -22,7 +24,7 @@
       <bpmn:outgoing>Flow_14kjyq5</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_14kjyq5" sourceRef="StartEvent_1" targetRef="Activity_04g7e4p" />
-    <bpmn:callActivity id="Activity_04g7e4p" name="Eventermittlungsprozess">
+    <bpmn:callActivity id="Activity_04g7e4p" name="Eventermittlungsprozess" calledElement="Process_136mmdz">
       <bpmn:incoming>Flow_14kjyq5</bpmn:incoming>
       <bpmn:outgoing>Flow_06o99uj</bpmn:outgoing>
     </bpmn:callActivity>
@@ -39,14 +41,14 @@
     <bpmn:sequenceFlow id="Flow_0mxe5yj" sourceRef="Activity_0ww400n" targetRef="Event_080k7bd" />
     <bpmn:endEvent id="Event_080k7bd" name="Technical Error">
       <bpmn:incoming>Flow_0mxe5yj</bpmn:incoming>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_130wmcg" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_130wmcg" errorRef="Error_0tl2trv" />
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_1xvorff" name="Passende Events gefunden?" default="Flow_13yv8km">
       <bpmn:incoming>Flow_06o99uj</bpmn:incoming>
       <bpmn:outgoing>Flow_0zcknzn</bpmn:outgoing>
       <bpmn:outgoing>Flow_13yv8km</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:callActivity id="Activity_1y56zwy" name="Newslettererstellungsprozess">
+    <bpmn:callActivity id="Activity_1y56zwy" name="Newslettererstellungsprozess" calledElement="Process_03d1egx">
       <bpmn:incoming>Flow_13yv8km</bpmn:incoming>
       <bpmn:outgoing>Flow_07m6hmx</bpmn:outgoing>
     </bpmn:callActivity>
@@ -57,7 +59,7 @@
     </bpmn:boundaryEvent>
     <bpmn:endEvent id="Event_0l0c3f5" name="Technical Error">
       <bpmn:incoming>Flow_1cy8cjl</bpmn:incoming>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1ht4o31" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1ht4o31" errorRef="Error_1l1uh8u" />
     </bpmn:endEvent>
     <bpmn:serviceTask id="Activity_0w8eqie" name="Logging" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
       <bpmn:incoming>Flow_1m0901a</bpmn:incoming>
@@ -65,12 +67,14 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1cy8cjl" sourceRef="Activity_0w8eqie" targetRef="Event_0l0c3f5" />
     <bpmn:sequenceFlow id="Flow_1m0901a" sourceRef="Event_06q0t24" targetRef="Activity_0w8eqie" />
-    <bpmn:sendTask id="Activity_1uevfz8" name="Newsletter an Kunden senden">
+    <bpmn:sendTask id="Activity_1uevfz8" name="Newsletter an Kunden senden" camunda:expression="${mailService.send(execution)}">
       <bpmn:incoming>Flow_07m6hmx</bpmn:incoming>
       <bpmn:outgoing>Flow_11alfw8</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_07m6hmx" sourceRef="Activity_1y56zwy" targetRef="Activity_1uevfz8" />
   </bpmn:process>
+  <bpmn:error id="Error_0tl2trv" name="TECH_ERROR_001" errorCode="TECH_ERROR_001" camunda:errorMessage="Konnte keine Events ermitteln" />
+  <bpmn:error id="Error_1l1uh8u" name="TECH_ERROR_002" errorCode="TECH_ERROR_002" camunda:errorMessage="Konnte keine Links ermitteln" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0tgz3wo">
       <bpmndi:BPMNShape id="Participant_1pzq4y5_di" bpmnElement="Participant_1pzq4y5" isHorizontal="true">
