@@ -18,7 +18,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${manyRetriesEventsSpeichern == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08q3wbk" sourceRef="Event_0w89u08" targetRef="Activity_0xsbrs1" />
-    <bpmn:serviceTask id="Activity_0xsbrs1" name="Externe Anbieter laden" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_0xsbrs1" name="Externe Anbieter laden" camunda:delegateExpression="${externalProviderLadenDelegate}">
       <bpmn:incoming>Flow_08q3wbk</bpmn:incoming>
       <bpmn:outgoing>Flow_1cqbtia</bpmn:outgoing>
       <bpmn:property id="Property_1v5yowj" name="__targetRef_placeholder" />
@@ -29,21 +29,21 @@
     </bpmn:serviceTask>
     <bpmn:dataStoreReference id="DataStoreReference_0nkudll" name="ExternalProvidersDB" />
     <bpmn:sequenceFlow id="Flow_1cqbtia" sourceRef="Activity_0xsbrs1" targetRef="Activity_00ahyxx" />
-    <bpmn:sendTask id="Activity_00ahyxx" name="Externe Anbieter abfragen" camunda:expression="${mailService.send(execution)}">
+    <bpmn:sendTask id="Activity_00ahyxx" name="Externe Anbieter abfragen" camunda:delegateExpression="${externalProviderAbfragenDelegate}">
       <bpmn:incoming>Flow_1cqbtia</bpmn:incoming>
       <bpmn:outgoing>Flow_1ssgr9a</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter">
-        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${eventanbieterListe}</bpmn:completionCondition>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter" camunda:elementVariable="eventanbieter">
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${nrOfCompletedInstances == nrOfInstances}</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1ssgr9a" sourceRef="Activity_00ahyxx" targetRef="Activity_03mh6ig" />
-    <bpmn:receiveTask id="Activity_03mh6ig" name="Antworten empfangen">
+    <bpmn:serviceTask id="Activity_03mh6ig" name="Antworten empfangen" camunda:delegateExpression="${antwortenEmpfangenDelegate}">
       <bpmn:incoming>Flow_1ssgr9a</bpmn:incoming>
       <bpmn:outgoing>Flow_1ngb5sh</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter">
-        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${eventanbieterListe}</bpmn:completionCondition>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter" camunda:elementVariable="eventanbieter">
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${nrOfCompletedInstances == nrOfInstances}</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
-    </bpmn:receiveTask>
+    </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0hullng" name="30s" attachedToRef="Activity_03mh6ig">
       <bpmn:outgoing>Flow_13t4imn</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0ssg0ze">
