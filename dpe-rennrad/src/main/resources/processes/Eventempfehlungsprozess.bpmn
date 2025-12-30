@@ -53,6 +53,10 @@
       <bpmn:outgoing>Flow_13yv8km</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:callActivity id="Activity_1y56zwy" name="Newslettererstellungsprozess" calledElement="Process_03d1egx">
+      <bpmn:extensionElements>
+        <camunda:in source="events" target="events" />
+        <camunda:out source="newsletterText" target="newsletterText" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_13yv8km</bpmn:incoming>
       <bpmn:outgoing>Flow_07m6hmx</bpmn:outgoing>
     </bpmn:callActivity>
@@ -71,10 +75,10 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1cy8cjl" sourceRef="Activity_0w8eqie" targetRef="Event_0l0c3f5" />
     <bpmn:sequenceFlow id="Flow_1m0901a" sourceRef="Event_06q0t24" targetRef="Activity_0w8eqie" />
-    <bpmn:serviceTask id="Activity_1uevfz8" name="Newsletter an Kunden senden" camunda:type="external" camunda:topic="newsletter-senden">
+    <bpmn:sendTask id="Activity_1uevfz8" name="Newsletter an Kunden senden" camunda:type="external" camunda:topic="newsletter-senden">
       <bpmn:incoming>Flow_07m6hmx</bpmn:incoming>
       <bpmn:outgoing>Flow_11alfw8</bpmn:outgoing>
-    </bpmn:serviceTask>
+    </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_07m6hmx" sourceRef="Activity_1y56zwy" targetRef="Activity_1uevfz8" />
   </bpmn:process>
   <bpmn:error id="Error_0tl2trv" name="TECH_ERROR_001" errorCode="TECH_ERROR_001" camunda:errorMessage="Konnte keine Events ermitteln" />

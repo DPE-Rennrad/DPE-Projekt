@@ -22,6 +22,10 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URLEncoder;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -52,6 +56,9 @@ public class EventermittlungExternalTaskWorker {
     @ConfigProperty(name = "camunda.engine-rest.url", defaultValue = "http://localhost:8080/engine-rest")
     String engineRestUrl;
 
+    @ConfigProperty(name = "newsletter.send.webhook.url", defaultValue = "http://localhost:8088/mock-inbox/newsletter")
+    String newsletterSendWebhookUrl;
+
     static final String WORKER_ID = "quarkus-eventermittlung-worker";
 
     private final ExternalProviderService externalProviderService;
@@ -60,6 +67,8 @@ public class EventermittlungExternalTaskWorker {
     private final ObjectMapper objectMapper;
 
     private ExternalTaskClient client;
+
+    private static final HttpClient HTTP = HttpClient.newBuilder().build();
 
     private static final List<String> MUST_HAVE_NAMES = List.of("Hans", "Peter", "Kermit");
     private static final AtomicInteger NAME_ROTATOR = new AtomicInteger(0);
@@ -90,6 +99,35 @@ public class EventermittlungExternalTaskWorker {
 
     private static String urlEncode(String value) {
         return URLEncoder.encode(value == null ? "" : value, StandardCharsets.UTF_8);
+    }
+
+    private String buildNewsletterDeliveryJson(String processInstanceId, String taskId, String status, String newsletterText) {
+        // keep it minimal and JSON-safe
+        try {
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("processInstanceId", processInstanceId);
+            payload.put("taskId", taskId);
+            payload.put("status", status);
+            payload.put("newsletterText", newsletterText);
+            return objectMapper.writeValueAsString(payload);
+        } catch (Exception e) {
+            // fallback: still send something
+            String safe = newsletterText == null ? "" : newsletterText.replace("\\\"", "\\\\\"");
+            return "{\"processInstanceId\":\"" + (processInstanceId == null ? "" : processInstanceId)
+                + "\",\"taskId\":\"" + (taskId == null ? "" : taskId)
+                + "\",\"status\":\"" + (status == null ? "" : status)
+                + "\",\"newsletterText\":\"" + safe + "\"}";
+        }
+    }
+
+    private int postNewsletterDelivery(String jsonBody) throws Exception {
+        HttpRequest req = HttpRequest.newBuilder()
+            .uri(URI.create(newsletterSendWebhookUrl))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+            .build();
+        HttpResponse<String> resp = HTTP.send(req, HttpResponse.BodyHandlers.ofString());
+        return resp.statusCode();
     }
 
     private String resolveCustomerFirstName(ExternalTask externalTask) {
@@ -767,8 +805,36 @@ public class EventermittlungExternalTaskWorker {
                 String preview = text.length() > 200 ? text.substring(0, 200) + "..." : text;
                 LOG.infof("Mock send newsletter preview=%s", preview.replace("\n", " "));
 
+                String status = "SENT";
+                Integer webhookStatus = null;
+                String webhookUrl = newsletterSendWebhookUrl;
+                if (webhookUrl != null && !webhookUrl.isBlank()) {
+                    try {
+                        String payloadJson = buildNewsletterDeliveryJson(
+                            externalTask.getProcessInstanceId(),
+                            externalTask.getId(),
+                            status,
+                            text
+                        );
+                        webhookStatus = postNewsletterDelivery(payloadJson);
+                        if (webhookStatus < 200 || webhookStatus >= 300) {
+                            status = "SENT_WEBHOOK_FAILED";
+                        } else {
+                            status = "SENT_WEBHOOK";
+                        }
+                        LOG.infof("Newsletter webhook delivered url=%s status=%d", webhookUrl, webhookStatus);
+                    } catch (Exception e) {
+                        status = "SENT_WEBHOOK_FAILED";
+                        LOG.warnf(e, "Newsletter webhook delivery failed url=%s", webhookUrl);
+                    }
+                }
+
                 Map<String, Object> out = new HashMap<>();
-                out.put("newsletterSendStatus", "SENT");
+                out.put("newsletterSendStatus", status);
+                out.put("newsletterSendWebhookUrl", webhookUrl);
+                if (webhookStatus != null) {
+                    out.put("newsletterSendWebhookStatus", webhookStatus);
+                }
                 externalTaskService.complete(externalTask, out);
                 LOG.infof("Completed topic=%s taskId=%s", TOPIC_NEWSLETTER_SENDEN, externalTask.getId());
             } catch (Exception e) {
