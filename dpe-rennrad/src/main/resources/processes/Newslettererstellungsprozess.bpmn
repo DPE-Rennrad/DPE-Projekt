@@ -4,12 +4,9 @@
     <bpmn:participant id="Participant_0lj9c54" name="Newslettererstellungsprozess" processRef="Process_03d1egx" />
   </bpmn:collaboration>
   <bpmn:process id="Process_03d1egx" isExecutable="true" camunda:historyTimeToLive="P1D">
-    <bpmn:serviceTask id="Activity_1mu9b5k" name="Affiliatelink für Eventanmeldung generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_1mu9b5k" name="Affiliatelink für Eventanmeldung generieren" camunda:type="external" camunda:topic="affiliate-links-generieren">
       <bpmn:incoming>Flow_1b10z3t</bpmn:incoming>
       <bpmn:outgoing>Flow_1j5vd2m</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="affiliatelinkListe">
-        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${affiliatelinkListe}</bpmn:completionCondition>
-      </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:serviceTask>
     <bpmn:startEvent id="Event_1memmnn">
       <bpmn:outgoing>Flow_02sls4z</bpmn:outgoing>
@@ -17,7 +14,7 @@
     <bpmn:endEvent id="Event_1gij4lj" name="Newsletter erfolgreich erstellt">
       <bpmn:incoming>Flow_0zqtfer</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_1t7bkeg" name="Newsletter mit Affiliatelinks erstellen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_1t7bkeg" name="Newsletter mit Affiliatelinks erstellen" camunda:type="external" camunda:topic="newsletter-erstellen">
       <bpmn:incoming>Flow_1j5vd2m</bpmn:incoming>
       <bpmn:outgoing>Flow_0zqtfer</bpmn:outgoing>
     </bpmn:serviceTask>

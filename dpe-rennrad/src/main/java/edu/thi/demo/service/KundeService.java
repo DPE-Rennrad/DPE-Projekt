@@ -18,6 +18,7 @@ public class KundeService {
         return kunde;
     }
 
+    @Transactional
     public Kunde getKundeById(Long id) {
         return kundeRepository.findById(id);
     }

@@ -25,6 +25,10 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_14kjyq5" sourceRef="StartEvent_1" targetRef="Activity_04g7e4p" />
     <bpmn:callActivity id="Activity_04g7e4p" name="Eventermittlungsprozess" calledElement="Process_136mmdz">
+      <bpmn:extensionElements>
+        <camunda:out source="passendesEventGefunden" target="passendesEventGefunden" />
+        <camunda:out source="events" target="events" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_14kjyq5</bpmn:incoming>
       <bpmn:outgoing>Flow_06o99uj</bpmn:outgoing>
     </bpmn:callActivity>
@@ -67,10 +71,10 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1cy8cjl" sourceRef="Activity_0w8eqie" targetRef="Event_0l0c3f5" />
     <bpmn:sequenceFlow id="Flow_1m0901a" sourceRef="Event_06q0t24" targetRef="Activity_0w8eqie" />
-    <bpmn:sendTask id="Activity_1uevfz8" name="Newsletter an Kunden senden" camunda:expression="${mailService.send(execution)}">
+    <bpmn:serviceTask id="Activity_1uevfz8" name="Newsletter an Kunden senden" camunda:type="external" camunda:topic="newsletter-senden">
       <bpmn:incoming>Flow_07m6hmx</bpmn:incoming>
       <bpmn:outgoing>Flow_11alfw8</bpmn:outgoing>
-    </bpmn:sendTask>
+    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_07m6hmx" sourceRef="Activity_1y56zwy" targetRef="Activity_1uevfz8" />
   </bpmn:process>
   <bpmn:error id="Error_0tl2trv" name="TECH_ERROR_001" errorCode="TECH_ERROR_001" camunda:errorMessage="Konnte keine Events ermitteln" />

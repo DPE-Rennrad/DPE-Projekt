@@ -18,7 +18,8 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${manyRetriesEventsSpeichern == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08q3wbk" sourceRef="Event_0w89u08" targetRef="Activity_0xsbrs1" />
-    <bpmn:serviceTask id="Activity_0xsbrs1" name="Externe Anbieter laden" camunda:delegateExpression="${externalProviderLadenDelegate}">
+    <bpmn:serviceTask id="Activity_0xsbrs1" name="Externe Anbieter laden" camunda:type="external" camunda:topic="external-provider-laden">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_08q3wbk</bpmn:incoming>
       <bpmn:outgoing>Flow_1cqbtia</bpmn:outgoing>
       <bpmn:property id="Property_1v5yowj" name="__targetRef_placeholder" />
@@ -29,20 +30,17 @@
     </bpmn:serviceTask>
     <bpmn:dataStoreReference id="DataStoreReference_0nkudll" name="ExternalProvidersDB" />
     <bpmn:sequenceFlow id="Flow_1cqbtia" sourceRef="Activity_0xsbrs1" targetRef="Activity_00ahyxx" />
-    <bpmn:sendTask id="Activity_00ahyxx" name="Externe Anbieter abfragen" camunda:delegateExpression="${externalProviderAbfragenDelegate}">
+    <bpmn:sendTask id="Activity_00ahyxx" name="Externe Anbieter abfragen" camunda:type="external" camunda:topic="external-provider-abfragen">
       <bpmn:incoming>Flow_1cqbtia</bpmn:incoming>
       <bpmn:outgoing>Flow_1ssgr9a</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter" camunda:elementVariable="eventanbieter">
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter" camunda:elementVariable="eventanbieterEintrag">
         <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${nrOfCompletedInstances == nrOfInstances}</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1ssgr9a" sourceRef="Activity_00ahyxx" targetRef="Activity_03mh6ig" />
-    <bpmn:serviceTask id="Activity_03mh6ig" name="Antworten empfangen" camunda:delegateExpression="${antwortenEmpfangenDelegate}">
+    <bpmn:serviceTask id="Activity_03mh6ig" name="Antworten empfangen" camunda:type="external" camunda:topic="antworten-empfangen">
       <bpmn:incoming>Flow_1ssgr9a</bpmn:incoming>
       <bpmn:outgoing>Flow_1ngb5sh</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="eventanbieter" camunda:elementVariable="eventanbieter">
-        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${nrOfCompletedInstances == nrOfInstances}</bpmn:completionCondition>
-      </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0hullng" name="30s" attachedToRef="Activity_03mh6ig">
       <bpmn:outgoing>Flow_13t4imn</bpmn:outgoing>
@@ -72,7 +70,7 @@
       <bpmn:incoming>Flow_1ghidkj</bpmn:incoming>
       <bpmn:outgoing>Flow_0a95aho</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_07ky2z2" name="Events speichern" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_07ky2z2" name="Events speichern" camunda:type="external" camunda:topic="events-speichern">
       <bpmn:incoming>Flow_0a95aho</bpmn:incoming>
       <bpmn:outgoing>Flow_08iovue</bpmn:outgoing>
       <bpmn:property id="Property_1qfh0hv" name="__targetRef_placeholder" />
@@ -96,7 +94,7 @@
     <bpmn:sequenceFlow id="Flow_0hdsh2m" sourceRef="Gateway_048fpxa" targetRef="Gateway_15do6mv" />
     <bpmn:sequenceFlow id="Flow_0a95aho" sourceRef="Gateway_15do6mv" targetRef="Activity_07ky2z2" />
     <bpmn:sequenceFlow id="Flow_12u3kjq" sourceRef="Event_0i1umvq" targetRef="Gateway_048fpxa" />
-    <bpmn:serviceTask id="Activity_05mvi64" name="Events laden" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_05mvi64" name="Events laden" camunda:type="external" camunda:topic="events-laden">
       <bpmn:incoming>Flow_0xayaty</bpmn:incoming>
       <bpmn:outgoing>Flow_0q99zzf</bpmn:outgoing>
       <bpmn:property id="Property_0krfmov" name="__targetRef_placeholder" />
@@ -136,7 +134,7 @@
       <bpmn:incoming>Flow_1rmhe3p</bpmn:incoming>
       <bpmn:outgoing>Flow_1jc8fvw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1q75p1v" name="Kundenpräferenzen mit Events abgleichen (KI)" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_1q75p1v" name="Kundenpräferenzen mit Events abgleichen (KI)" camunda:type="external" camunda:topic="events-abgleichen-ki">
       <bpmn:incoming>Flow_1jc8fvw</bpmn:incoming>
       <bpmn:outgoing>Flow_1v572yb</bpmn:outgoing>
       <bpmn:property id="Property_1bq09y8" name="__targetRef_placeholder" />
@@ -155,7 +153,7 @@
     <bpmn:endEvent id="Event_0tawd9i" name="Events erfolgreich ermittelt">
       <bpmn:incoming>Flow_0m0iys8</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0mn1lb4" name="Beliebtesten Events ermitteln" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_0mn1lb4" name="Beliebtesten Events ermitteln" camunda:type="external" camunda:topic="beliebteste-events-ermitteln">
       <bpmn:incoming>Flow_09g6gd9</bpmn:incoming>
       <bpmn:outgoing>Flow_1gik3qo</bpmn:outgoing>
       <bpmn:property id="Property_02u0w5w" name="__targetRef_placeholder" />

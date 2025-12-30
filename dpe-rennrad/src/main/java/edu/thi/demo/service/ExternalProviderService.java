@@ -17,10 +17,12 @@ public class ExternalProviderService {
         return externalProviderRepository.listAll();
     }
 
+    @Transactional
     public List<ExternalProvider> getActiveProviders() {
         return externalProviderRepository.findActiveProviders();
     }
 
+    @Transactional
     public ExternalProvider getProviderById(Long id) {
         return externalProviderRepository.findById(id);
     }

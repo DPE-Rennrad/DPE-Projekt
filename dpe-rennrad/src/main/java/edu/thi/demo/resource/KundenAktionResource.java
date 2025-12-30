@@ -3,6 +3,8 @@ package edu.thi.demo.resource;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -15,11 +17,13 @@ public class KundenAktionResource {
 
     private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
+    @ConfigProperty(name = "camunda.engine-rest.url", defaultValue = "http://localhost:8080/engine-rest")
+    String engineRestUrl;
+
     @POST
     @Path("/deinstallieren/{processInstanceId}")
     public Response appDeinstallieren(@PathParam("processInstanceId") String processInstanceId) {
-        String engineUrl = "http://localhost:8080/engine-rest/process-instance/" 
-            + processInstanceId + "/variables/deinstallieren";
+        String engineUrl = engineRestUrl + "/process-instance/" + processInstanceId + "/variables/deinstallieren";
         
         try {
             HttpRequest request = HttpRequest.newBuilder()
