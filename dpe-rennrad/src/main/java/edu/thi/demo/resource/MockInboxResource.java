@@ -27,12 +27,22 @@ public class MockInboxResource {
     private static final int MAX_ITEMS = 200;
 
     private final ConcurrentLinkedDeque<Map<String, Object>> newsletterDeliveries = new ConcurrentLinkedDeque<>();
+    private final ConcurrentLinkedDeque<Map<String, Object>> routeEmailDeliveries = new ConcurrentLinkedDeque<>();
+    private final ConcurrentLinkedDeque<Map<String, Object>> bewertungsbogenDeliveries = new ConcurrentLinkedDeque<>();
 
     public static class NewsletterDeliveryRequest {
         public String processInstanceId;
         public String taskId;
         public String status;
         public String newsletterText;
+    }
+
+    public static class EmailDeliveryRequest {
+        public String processInstanceId;
+        public String taskId;
+        public String status;
+        public String emailType;
+        public String emailText;
     }
 
     @POST
@@ -75,6 +85,96 @@ public class MockInboxResource {
         Map<String, Object> first = newsletterDeliveries.peekFirst();
         if (first == null) {
             return Response.status(404).entity(Map.of("ok", false, "message", "No newsletter received yet")).build();
+        }
+        return Response.ok(first).build();
+    }
+
+    @POST
+    @Path("/route")
+    public Response receiveRouteEmail(EmailDeliveryRequest body) {
+        Map<String, Object> item = new LinkedHashMap<>();
+        item.put("receivedAt", Instant.now().toString());
+        item.put("processInstanceId", body == null ? null : body.processInstanceId);
+        item.put("taskId", body == null ? null : body.taskId);
+        item.put("status", body == null ? null : body.status);
+        item.put("emailType", body == null ? null : body.emailType);
+        item.put("emailText", body == null ? null : body.emailText);
+
+        routeEmailDeliveries.addFirst(item);
+        while (routeEmailDeliveries.size() > MAX_ITEMS) {
+            routeEmailDeliveries.pollLast();
+        }
+
+        return Response.ok(Map.of("ok", true, "stored", routeEmailDeliveries.size())).build();
+    }
+
+    @GET
+    @Path("/route")
+    public List<Map<String, Object>> listRouteEmails(@QueryParam("limit") @DefaultValue("20") int limit) {
+        int n = Math.max(1, Math.min(200, limit));
+        List<Map<String, Object>> out = new ArrayList<>(n);
+        int i = 0;
+        for (Map<String, Object> item : routeEmailDeliveries) {
+            out.add(item);
+            i++;
+            if (i >= n) {
+                break;
+            }
+        }
+        return out;
+    }
+
+    @GET
+    @Path("/route/latest")
+    public Response latestRouteEmail() {
+        Map<String, Object> first = routeEmailDeliveries.peekFirst();
+        if (first == null) {
+            return Response.status(404).entity(Map.of("ok", false, "message", "No route email received yet")).build();
+        }
+        return Response.ok(first).build();
+    }
+
+    @POST
+    @Path("/bewertungsbogen")
+    public Response receiveBewertungsbogen(EmailDeliveryRequest body) {
+        Map<String, Object> item = new LinkedHashMap<>();
+        item.put("receivedAt", Instant.now().toString());
+        item.put("processInstanceId", body == null ? null : body.processInstanceId);
+        item.put("taskId", body == null ? null : body.taskId);
+        item.put("status", body == null ? null : body.status);
+        item.put("emailType", body == null ? null : body.emailType);
+        item.put("emailText", body == null ? null : body.emailText);
+
+        bewertungsbogenDeliveries.addFirst(item);
+        while (bewertungsbogenDeliveries.size() > MAX_ITEMS) {
+            bewertungsbogenDeliveries.pollLast();
+        }
+
+        return Response.ok(Map.of("ok", true, "stored", bewertungsbogenDeliveries.size())).build();
+    }
+
+    @GET
+    @Path("/bewertungsbogen")
+    public List<Map<String, Object>> listBewertungsboegen(@QueryParam("limit") @DefaultValue("20") int limit) {
+        int n = Math.max(1, Math.min(200, limit));
+        List<Map<String, Object>> out = new ArrayList<>(n);
+        int i = 0;
+        for (Map<String, Object> item : bewertungsbogenDeliveries) {
+            out.add(item);
+            i++;
+            if (i >= n) {
+                break;
+            }
+        }
+        return out;
+    }
+
+    @GET
+    @Path("/bewertungsbogen/latest")
+    public Response latestBewertungsbogen() {
+        Map<String, Object> first = bewertungsbogenDeliveries.peekFirst();
+        if (first == null) {
+            return Response.status(404).entity(Map.of("ok", false, "message", "No bewertungsbogen received yet")).build();
         }
         return Response.ok(first).build();
     }
