@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lta4z1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lta4z1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1hwx3pm">
     <bpmn:participant id="Participant_0lbtdf6" name="Eventermittlungsprozess" processRef="Process_136mmdz" />
     <bpmn:participant id="Participant_09841t8" name="External Providers" />
@@ -38,16 +38,6 @@
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1ssgr9a" sourceRef="Activity_00ahyxx" targetRef="Activity_03mh6ig" />
-    <bpmn:serviceTask id="Activity_03mh6ig" name="Antworten empfangen" camunda:type="external" camunda:topic="antworten-empfangen">
-      <bpmn:incoming>Flow_1ssgr9a</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ngb5sh</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_0hullng" name="30s" attachedToRef="Activity_03mh6ig">
-      <bpmn:outgoing>Flow_13t4imn</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0ssg0ze">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
     <bpmn:exclusiveGateway id="Gateway_0gap0m2">
       <bpmn:incoming>Flow_1ngb5sh</bpmn:incoming>
       <bpmn:incoming>Flow_13t4imn</bpmn:incoming>
@@ -189,6 +179,17 @@
       <bpmn:incoming>Flow_0qdwv02</bpmn:incoming>
       <bpmn:outgoing>Flow_0xayaty</bpmn:outgoing>
     </bpmn:exclusiveGateway>
+    <bpmn:receiveTask id="Activity_03mh6ig" name="Antworten empfangen">
+      <bpmn:incoming>Flow_1ssgr9a</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ngb5sh</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics />
+    </bpmn:receiveTask>
+    <bpmn:boundaryEvent id="Event_0hullng" name="30s" attachedToRef="Activity_03mh6ig">
+      <bpmn:outgoing>Flow_13t4imn</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0ssg0ze">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmn:error id="Error_11m42t2" name="NO_EVENTS" errorCode="NO_EVENTS" camunda:errorMessage="Konnte keine Events laden" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -208,9 +209,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0akua3c_di" bpmnElement="Activity_00ahyxx">
         <dc:Bounds x="430" y="342" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0xf5tis_di" bpmnElement="Activity_03mh6ig">
-        <dc:Bounds x="580" y="342" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0gap0m2_di" bpmnElement="Gateway_0gap0m2" isMarkerVisible="true">
         <dc:Bounds x="715" y="357" width="50" height="50" />
@@ -300,6 +298,9 @@
       <bpmndi:BPMNShape id="Gateway_0yihixi_di" bpmnElement="Gateway_0yihixi" isMarkerVisible="true">
         <dc:Bounds x="785" y="487" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19p7v6y_di" bpmnElement="Activity_03mh6ig">
+        <dc:Bounds x="580" y="342" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0o9oom7" bpmnElement="Event_1tondnx">
         <dc:Bounds x="1462" y="404" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -361,7 +362,7 @@
         <di:waypoint x="660" y="440" />
         <di:waypoint x="660" y="460" />
         <di:waypoint x="740" y="460" />
-        <di:waypoint x="740" y="410" />
+        <di:waypoint x="740" y="407" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0wg5gqi_di" bpmnElement="Flow_0wg5gqi">
         <di:waypoint x="765" y="382" />
