@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0968yyz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0968yyz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0n3tqi2">
+    <bpmn:extensionElements>
+      <camunda:properties>
+        <camunda:property name="" />
+      </camunda:properties>
+    </bpmn:extensionElements>
     <bpmn:participant id="Participant_1gbmcgd" name="Produktempfehlungsprozess" processRef="Process_1j8vx5h" />
     <bpmn:participant id="Participant_0abug0t" name="Kunde" />
-    <bpmn:messageFlow id="Flow_0ue906g" sourceRef="Activity_1ourl5r" targetRef="Participant_0abug0t" />
+    <bpmn:messageFlow id="Flow_0bxw2xn" sourceRef="Activity_04lba8g" targetRef="Participant_0abug0t" />
     <bpmn:textAnnotation id="TextAnnotation_0hhplce">
       <bpmn:text>Produktempfehlungen mit Affiliate Link</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_1ke4sa7" associationDirection="None" sourceRef="Flow_0ue906g" targetRef="TextAnnotation_0hhplce" />
   </bpmn:collaboration>
   <bpmn:process id="Process_1j8vx5h" isExecutable="true" camunda:historyTimeToLive="P1D">
-    <bpmn:sequenceFlow id="Flow_12r5c8q" sourceRef="Activity_19cvrku" targetRef="Activity_1ourl5r" />
-    <bpmn:sequenceFlow id="Flow_1vvkby5" sourceRef="StartEvent_1" targetRef="Activity_1p63h92" />
-    <bpmn:sequenceFlow id="Flow_1bw53s6" sourceRef="Activity_1p63h92" targetRef="Activity_19cvrku" />
-    <bpmn:sequenceFlow id="Flow_071uunk" sourceRef="Activity_1ourl5r" targetRef="Event_1df9643" />
-    <bpmn:startEvent id="StartEvent_1">
+    <bpmn:sequenceFlow id="Flow_1vvkby5" sourceRef="Produktempfehlungsprozess" targetRef="Activity_1p63h92" />
+    <bpmn:sequenceFlow id="Flow_1bw53s6" sourceRef="Activity_1p63h92" targetRef="Gateway_11uclzb" />
+    <bpmn:startEvent id="Produktempfehlungsprozess" name="">
       <bpmn:outgoing>Flow_1vvkby5</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_1p63h92" name="Kundenempfehlungen mit KI abgleichen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+    <bpmn:serviceTask id="Activity_1p63h92" name="Kundenempfehlungen mit KI abgleichen" camunda:type="external" camunda:topic="kundenempfehlungen-abgleichen-ki">
       <bpmn:incoming>Flow_1vvkby5</bpmn:incoming>
       <bpmn:outgoing>Flow_1bw53s6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_19cvrku" name="Affiliate Link für Produktempfehlungen generieren" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
-      <bpmn:incoming>Flow_1bw53s6</bpmn:incoming>
-      <bpmn:outgoing>Flow_12r5c8q</bpmn:outgoing>
+    <bpmn:serviceTask id="Activity_19cvrku" name="Affiliate Link für Produktempfehlungen generieren" camunda:type="external" camunda:topic="produktempfehlung-link">
+      <bpmn:incoming>Flow_09bn19h</bpmn:incoming>
+      <bpmn:outgoing>Flow_1owtv62</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_1ourl5r" name="Produktempfehlungen mit Affiliate Link versenden">
-      <bpmn:incoming>Flow_12r5c8q</bpmn:incoming>
-      <bpmn:outgoing>Flow_071uunk</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:endEvent id="Event_1df9643" name="Produkt empfohlen">
-      <bpmn:incoming>Flow_071uunk</bpmn:incoming>
+      <bpmn:incoming>Flow_13dkwfp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1owtv62" sourceRef="Activity_19cvrku" targetRef="Activity_04lba8g" />
+    <bpmn:sendTask id="Activity_04lba8g" name="Produktempfehlung senden" camunda:type="external" camunda:topic="produktempfehlung-senden">
+      <bpmn:incoming>Flow_1owtv62</bpmn:incoming>
+      <bpmn:outgoing>Flow_13dkwfp</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_13dkwfp" sourceRef="Activity_04lba8g" targetRef="Event_1df9643" />
+    <bpmn:sequenceFlow id="Flow_09bn19h" sourceRef="Gateway_11uclzb" targetRef="Activity_19cvrku" />
+    <bpmn:exclusiveGateway id="Gateway_11uclzb" name="Produkt passt?" default="Flow_09bn19h">
+      <bpmn:incoming>Flow_1bw53s6</bpmn:incoming>
+      <bpmn:outgoing>Flow_09bn19h</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0qkos8k</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0qkos8k" name="nein" sourceRef="Gateway_11uclzb" targetRef="Event_1uzak94">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${kiScore &lt; 0.2}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_1uzak94" name="Kein passendes Produkt gefunden">
+      <bpmn:incoming>Flow_0qkos8k</bpmn:incoming>
     </bpmn:endEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -39,8 +55,11 @@
         <dc:Bounds x="132" y="70" width="1298" height="350" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="Produktempfehlungsprozess">
         <dc:Bounds x="222" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="198" y="275" width="84" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0oubkp4_di" bpmnElement="Activity_1p63h92">
         <dc:Bounds x="400" y="210" width="100" height="80" />
@@ -48,50 +67,66 @@
       <bpmndi:BPMNShape id="Activity_1a9c799_di" bpmnElement="Activity_19cvrku">
         <dc:Bounds x="670" y="210" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1e20s6d_di" bpmnElement="Activity_1ourl5r">
-        <dc:Bounds x="970" y="210" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1df9643_di" bpmnElement="Event_1df9643">
         <dc:Bounds x="1302" y="232" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1294" y="275" width="52" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_12r5c8q_di" bpmnElement="Flow_12r5c8q">
-        <di:waypoint x="770" y="250" />
-        <di:waypoint x="970" y="250" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_01lt12o_di" bpmnElement="Activity_04lba8g">
+        <dc:Bounds x="940" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_11uclzb_di" bpmnElement="Gateway_11uclzb" isMarkerVisible="true">
+        <dc:Bounds x="565" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="553" y="285" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1uzak94_di" bpmnElement="Event_1uzak94">
+        <dc:Bounds x="1302" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1277" y="165" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1vvkby5_di" bpmnElement="Flow_1vvkby5">
         <di:waypoint x="258" y="250" />
         <di:waypoint x="400" y="250" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1bw53s6_di" bpmnElement="Flow_1bw53s6">
         <di:waypoint x="500" y="250" />
-        <di:waypoint x="670" y="250" />
+        <di:waypoint x="565" y="250" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_071uunk_di" bpmnElement="Flow_071uunk">
-        <di:waypoint x="1070" y="250" />
+      <bpmndi:BPMNEdge id="Flow_1owtv62_di" bpmnElement="Flow_1owtv62">
+        <di:waypoint x="770" y="250" />
+        <di:waypoint x="940" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13dkwfp_di" bpmnElement="Flow_13dkwfp">
+        <di:waypoint x="1040" y="250" />
         <di:waypoint x="1302" y="250" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09bn19h_di" bpmnElement="Flow_09bn19h">
+        <di:waypoint x="615" y="250" />
+        <di:waypoint x="670" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qkos8k_di" bpmnElement="Flow_0qkos8k">
+        <di:waypoint x="590" y="225" />
+        <di:waypoint x="590" y="140" />
+        <di:waypoint x="1302" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="180" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0abug0t_di" bpmnElement="Participant_0abug0t" isHorizontal="true">
-        <dc:Bounds x="132" y="480" width="1298" height="60" />
+        <dc:Bounds x="130" y="490" width="1298" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0hhplce_di" bpmnElement="TextAnnotation_0hhplce">
         <dc:Bounds x="900" y="330" width="99.98694034205708" height="54.98955466530539" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0ue906g_di" bpmnElement="Flow_0ue906g">
-        <di:waypoint x="1020" y="290" />
-        <di:waypoint x="1020" y="480" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1034" y="443" width="32" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1ke4sa7_di" bpmnElement="Association_1ke4sa7">
-        <di:waypoint x="1020" y="385" />
-        <di:waypoint x="1000" y="370" />
+      <bpmndi:BPMNEdge id="Flow_0bxw2xn_di" bpmnElement="Flow_0bxw2xn">
+        <di:waypoint x="990" y="290" />
+        <di:waypoint x="990" y="490" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
