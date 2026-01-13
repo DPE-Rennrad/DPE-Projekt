@@ -32,6 +32,8 @@ public class MotivationExternalTaskWorker {
 
     static final String TOPIC_SPRUCH_ERSTELLEN = "spruch-erstellen";
     static final String TOPIC_KUNDE_ABFRAGEN = "kunde-abfragen";
+    // NEU: Topic für das Versenden
+    static final String TOPIC_NACHRICHT_VERSENDEN = "nachricht-versenden";
 
     @ConfigProperty(name = "camunda.engine-rest.url", defaultValue = "http://localhost:8080/engine-rest")
     String engineRestUrl;
@@ -71,12 +73,14 @@ public class MotivationExternalTaskWorker {
                 .open();
         LOG.infof("Subscribed topic=%s", TOPIC_SPRUCH_ERSTELLEN);
 
-        // NEU: Abo für Kunden-Abfrage
-        client.subscribe(TOPIC_KUNDE_ABFRAGEN)
+        // 3. NEU: Nachricht versenden
+        client.subscribe(TOPIC_NACHRICHT_VERSENDEN)
                 .lockDuration(30_000)
-                .handler(new KundeAbfragenHandler())
+                .handler(new NachrichtVersendenHandler())
                 .open();
-        LOG.infof("Subscribed topic=%s", TOPIC_KUNDE_ABFRAGEN);
+
+        LOG.infof("Subscribed to topics: %s, %s, %s",
+                TOPIC_SPRUCH_ERSTELLEN, TOPIC_KUNDE_ABFRAGEN, TOPIC_NACHRICHT_VERSENDEN);
     }
 
     @PreDestroy
@@ -118,6 +122,9 @@ public class MotivationExternalTaskWorker {
                 Map<String, Object> out = new HashMap<>();
                 out.put("motivationsSpruch", motivationsSpruch);
                 externalTaskService.complete(externalTask, out);
+
+                LOG.infof("Erfolgreich abgeschlossen: %s", motivationsSpruch);
+
             } catch (Exception e) {
                 externalTaskService.handleFailure(externalTask, "Fehler beim Spruch", stackTrace(e), 3, 5000L);
             }
@@ -192,4 +199,35 @@ public class MotivationExternalTaskWorker {
             }
         }
     }
+
+    class NachrichtVersendenHandler implements ExternalTaskHandler {
+        @Override
+        public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
+            LOG.infof("Handling topic=%s taskId=%s", TOPIC_NACHRICHT_VERSENDEN, externalTask.getId());
+
+            try {
+                // Hier holen wir den Spruch aus den Prozessvariablen
+                String spruch = externalTask.getVariable("motivationsSpruch");
+
+                if (spruch != null) {
+                    LOG.info("--------------------------------------------------");
+                    LOG.infof("VERSENDE NACHRICHT: %s", spruch);
+                    LOG.info("--------------------------------------------------");
+
+                    // Hier käme dein Code für E-Mail, SMS oder WhatsApp hin
+
+                    externalTaskService.complete(externalTask);
+                    LOG.infof("Task %s erfolgreich abgeschlossen.", TOPIC_NACHRICHT_VERSENDEN);
+                } else {
+                    LOG.warn("Kein Motivationsspruch gefunden!");
+                    externalTaskService.handleBpmnError(externalTask, "NO_QUOTE_FOUND", "Spruch war leer");
+                }
+
+            } catch (Exception e) {
+                LOG.error("Fehler beim Versenden der Nachricht", e);
+                externalTaskService.handleFailure(externalTask, "Versandfehler", stackTrace(e), 2, 5000L);
+            }
+        }
+    }
+
 }
