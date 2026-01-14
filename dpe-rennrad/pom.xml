@@ -91,7 +91,15 @@
             <artifactId>camunda-external-task-client</artifactId>
         </dependency>
 
-        <!-- Camel Quarkus Dependencies (Versionen vom BOM) -->
+        <!-- Camel Quarkus Dependencies -->
+        <dependency>
+            <groupId>org.apache.camel.quarkus</groupId>
+            <artifactId>camel-quarkus-platform-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.quarkus</groupId>
+            <artifactId>camel-quarkus-http</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.camel.quarkus</groupId>
             <artifactId>camel-quarkus-jms</artifactId>
