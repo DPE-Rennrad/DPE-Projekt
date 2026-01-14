@@ -20,6 +20,7 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
 `docker run --name mysql-dpe -e MYSQL_ROOT_PASSWORD=abc#1234 -e MYSQL_DATABASE=dpe_rennrad -p 3306:3306 -d mysql:latest`
 4. **Projekt bauen**: `mvn clean install`.
 5. **Starten**: `mvn quarkus:dev` (Port 8088).
+6. cd apache-activemq-6.2.0\bin       .\activemq start       # Web Console: http://localhost:8161/admin (admin/admin)
 
 ## Deployment
 - BPMN-Dateien liegen in `processes/`
@@ -54,6 +55,5 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
   
 - **Prozess beenden**: POST `http://localhost:8088/kunde/deinstallieren/{processInstanceId}`  
   Beispiel: `curl -X POST http://localhost:8088/kunde/deinstallieren/abc-123-xyz`
-
 ## Troubleshooting
 - **Parsing-Fehler**: Prüfe BPMN in Modeler (siehe Anleitung in CONFIG_CHEAT_SHEET.md).
