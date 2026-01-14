@@ -6,10 +6,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.RuntimeService;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @ApplicationScoped
 @Named("externalProviderAbfragenDelegate")
@@ -19,8 +22,8 @@ public class ExternalProviderAbfragenDelegate implements JavaDelegate {
     
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        // Aktuellen Provider aus dem Multi-Instance Loop holen
-        ExternalProvider provider = (ExternalProvider) execution.getVariable("eventanbieter");
+        // Provider aus der Prozessvariable holen
+        ExternalProvider provider = (ExternalProvider) execution.getVariable("eventanbieterEintrag");
         
         System.out.println("Sende Anfrage an Provider: " + provider.name + " (" + provider.apiEndpoint + ")");
         
@@ -30,11 +33,15 @@ public class ExternalProviderAbfragenDelegate implements JavaDelegate {
         // Mock-Events für diesen Provider generieren
         List<Event> mockEvents = generateMockEvents(provider);
         
-        // Events als Variable speichern (mit Provider-Name als Suffix)
-        String variableName = "events_" + provider.id;
-        execution.setVariable(variableName, mockEvents);
+        // Events und enoughAnswers in der Message senden
+        RuntimeService runtimeService = execution.getProcessEngineServices().getRuntimeService();
+        Map<String, Object> messagePayload = new HashMap<>();
+        messagePayload.put("receivedEvents", mockEvents);
+        messagePayload.put("enoughAnswers", true);  // Da nur ein Provider, genug Antworten
         
-        System.out.println("Anfrage an " + provider.name + " gesendet. Erwarte " + mockEvents.size() + " Events.");
+        runtimeService.correlateMessage("event", execution.getProcessInstanceId(), messagePayload);
+        
+        System.out.println("Message 'event' gesendet mit " + mockEvents.size() + " Events.");
     }
     
     private List<Event> generateMockEvents(ExternalProvider provider) {

@@ -24,18 +24,14 @@ public class ExternalProviderLadenDelegate implements JavaDelegate {
         // Aktive Provider aus der Datenbank laden
         List<ExternalProvider> activeProviders = externalProviderService.getActiveProviders();
         
-        // Provider-Liste als Prozessvariable setzen (für Multi-Instance Loop)
-        execution.setVariable("eventanbieter", activeProviders);
-        
-        // Optional: Anzahl der Provider setzen
-        execution.setVariable("providerCount", activeProviders.size());
-        
-        // Optional: Provider-Namen für Logging
-        List<String> providerNames = activeProviders.stream()
-            .map(p -> p.name)
-            .collect(Collectors.toList());
-        execution.setVariable("providerNames", providerNames);
-        
-        System.out.println("Externe Anbieter geladen: " + providerNames);
+        // Nur den ersten aktiven Provider laden (für vereinfachten Prozess)
+        if (!activeProviders.isEmpty()) {
+            ExternalProvider singleProvider = activeProviders.get(0);
+            execution.setVariable("eventanbieterEintrag", singleProvider);
+            execution.setVariable("providerCount", 1);
+            System.out.println("Ein externer Anbieter geladen: " + singleProvider.name);
+        } else {
+            throw new RuntimeException("Keine aktiven Provider verfügbar");
+        }
     }
 }

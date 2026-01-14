@@ -8,6 +8,7 @@ import edu.thi.demo.service.StoredEventService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.runtime.Startup;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,8 +17,8 @@ import org.camunda.bpm.client.ExternalTaskClient;
 import org.camunda.bpm.client.task.ExternalTask;
 import org.camunda.bpm.client.task.ExternalTaskHandler;
 import org.camunda.bpm.client.task.ExternalTaskService;
+import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.variable.Variables;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -27,6 +28,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,14 +58,10 @@ public class EventermittlungExternalTaskWorker {
     static final String TOPIC_NEWSLETTER_ERSTELLEN = "newsletter-erstellen";
     static final String TOPIC_NEWSLETTER_SENDEN = "newsletter-senden";
 
-    @ConfigProperty(name = "camunda.engine-rest.url", defaultValue = "http://localhost:8080/engine-rest")
-    String engineRestUrl;
-
-    @ConfigProperty(name = "newsletter.send.webhook.url", defaultValue = "http://localhost:8088/mock-inbox/newsletter")
-    String newsletterSendWebhookUrl;
-
     static final String WORKER_ID = "quarkus-eventermittlung-worker";
 
+    private final String engineRestUrl;
+    private final String newsletterSendWebhookUrl;
     private final ExternalProviderService externalProviderService;
     private final StoredEventService storedEventService;
     private final KundeService kundeService;
@@ -74,11 +75,15 @@ public class EventermittlungExternalTaskWorker {
     private static final AtomicInteger NAME_ROTATOR = new AtomicInteger(0);
 
     public EventermittlungExternalTaskWorker(
+        @ConfigProperty(name = "camunda.engine-rest.url", defaultValue = "http://localhost:8080/engine-rest") String engineRestUrl,
+        @ConfigProperty(name = "newsletter.send.webhook.url", defaultValue = "http://localhost:8088/mock-inbox/newsletter") String newsletterSendWebhookUrl,
         ExternalProviderService externalProviderService,
         StoredEventService storedEventService,
         KundeService kundeService,
         ObjectMapper objectMapper
     ) {
+        this.engineRestUrl = engineRestUrl;
+        this.newsletterSendWebhookUrl = newsletterSendWebhookUrl;
         this.externalProviderService = externalProviderService;
         this.storedEventService = storedEventService;
         this.kundeService = kundeService;
@@ -135,6 +140,13 @@ public class EventermittlungExternalTaskWorker {
         Object n = externalTask.getVariable("kundeVorname");
         if (n == null) n = externalTask.getVariable("vorname");
         if (n == null) n = externalTask.getVariable("firstName");
+        // Also try full name "kundeName" and extract first name
+        if (n == null) {
+            Object fullName = externalTask.getVariable("kundeName");
+            if (fullName instanceof String s && !s.isBlank()) {
+                return firstNameFromFullName(s);
+            }
+        }
         if (n instanceof String s && !s.isBlank()) {
             return s.trim();
         }
@@ -160,10 +172,10 @@ public class EventermittlungExternalTaskWorker {
 
     private List<String> buildPassendeLeuteForMockEvent(String providerKey, int indexWithinProvider) {
         // Guarantee each of Hans/Peter/Kermit occurs at least once across the run.
-        // With 3 providers and multiple events, this gives deterministic coverage.
+        // With single provider mode, ensure Peter is always included for demo
         String mustHave;
         if ("1".equals(providerKey) && indexWithinProvider == 1) {
-            mustHave = "Hans";
+            mustHave = "Peter";  // Changed from Hans to Peter for single-provider demo
         } else if ("2".equals(providerKey) && indexWithinProvider == 1) {
             mustHave = "Peter";
         } else if ("3".equals(providerKey) && indexWithinProvider == 1) {
@@ -230,7 +242,7 @@ public class EventermittlungExternalTaskWorker {
             .lockDuration(30_000)
             .handler(new BeliebtesteEventsErmittelnHandler())
             .open();
-        LOG.infof("Subscribed topic=%s", TOPIC_BELIEBTESTE_EVENTS);
+        LOG.infof("Subscribed topic=%s", TOPIC_BELIEBTESTE_EVENTS); 
 
         client.subscribe(TOPIC_AFFILIATE_LINKS_GENERIEREN)
             .lockDuration(30_000)
@@ -329,7 +341,7 @@ public class EventermittlungExternalTaskWorker {
         return out;
     }
 
-    class ProviderLadenHandler implements ExternalTaskHandler {
+    public class ProviderLadenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_PROVIDER_LADEN, externalTask.getId(), externalTask.getProcessInstanceId());
@@ -337,20 +349,28 @@ public class EventermittlungExternalTaskWorker {
                 externalProviderService.initializeMockProviders();
                 List<ExternalProvider> providers = externalProviderService.getActiveProviders();
 
-                List<String> eventanbieter = providers.stream()
-                    .map(p -> p.id != null ? String.valueOf(p.id) : p.name)
-                    .toList();
-
-                externalTaskService.complete(
-                    externalTask,
-                    Map.of(
-                        "eventanbieter",
-                        Variables.objectValue(eventanbieter)
-                            .serializationDataFormat(Variables.SerializationDataFormats.JSON.getName())
-                            .create()
-                    )
-                );
-                LOG.infof("Completed topic=%s taskId=%s providers=%d", TOPIC_PROVIDER_LADEN, externalTask.getId(), eventanbieter.size());
+                // Nur den ersten Provider laden und ID als String setzen
+                if (!providers.isEmpty()) {
+                    ExternalProvider singleProvider = providers.get(0);
+                    externalTaskService.complete(
+                        externalTask,
+                        Map.of(
+                            "eventanbieterEintrag",
+                            Variables.stringValue(String.valueOf(singleProvider.id)),
+                            "providerCount",
+                            Variables.integerValue(1)
+                        )
+                    );
+                    LOG.infof("Completed topic=%s taskId=%s provider=%s", TOPIC_PROVIDER_LADEN, externalTask.getId(), singleProvider.name);
+                } else {
+                    externalTaskService.handleFailure(
+                        externalTask,
+                        "Keine Provider verfügbar",
+                        "Keine aktiven Provider gefunden",
+                        0,
+                        0L
+                    );
+                }
             } catch (Exception e) {
                 LOG.errorf(e, "Failed topic=%s taskId=%s", TOPIC_PROVIDER_LADEN, externalTask.getId());
                 externalTaskService.handleFailure(
@@ -364,13 +384,13 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class ProviderAbfragenHandler implements ExternalTaskHandler {
+    public class ProviderAbfragenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_PROVIDER_ABFRAGEN, externalTask.getId(), externalTask.getProcessInstanceId());
             try {
-                String providerKey = (String) externalTask.getVariable("eventanbieterEintrag");
-                if (providerKey == null || providerKey.isBlank()) {
+                String providerIdStr = (String) externalTask.getVariable("eventanbieterEintrag");
+                if (providerIdStr == null || providerIdStr.isBlank()) {
                     externalTaskService.handleFailure(
                         externalTask,
                         "Missing provider variable",
@@ -381,13 +401,41 @@ public class EventermittlungExternalTaskWorker {
                     return;
                 }
 
+                Long providerId;
+                try {
+                    providerId = Long.parseLong(providerIdStr);
+                } catch (NumberFormatException e) {
+                    externalTaskService.handleFailure(
+                        externalTask,
+                        "Invalid provider ID",
+                        "Provider ID is not a valid number: " + providerIdStr,
+                        0,
+                        0L
+                    );
+                    return;
+                }
+
+                ExternalProvider provider = externalProviderService.getProviderById(providerId);
+                if (provider == null) {
+                    externalTaskService.handleFailure(
+                        externalTask,
+                        "Provider not found",
+                        "Provider with id " + providerId + " not found",
+                        0,
+                        0L
+                    );
+                    return;
+                }
+
+                String providerKey = provider.id != null ? String.valueOf(provider.id) : provider.name;
+
                 // Mock: 2-5 events
                 int count = ThreadLocalRandom.current().nextInt(2, 6);
                 List<Map<String, Object>> events = new ArrayList<>(count);
                 for (int i = 1; i <= count; i++) {
                     Map<String, Object> ev = new HashMap<>();
                     ev.put("provider", providerKey);
-                    ev.put("title", "Event " + i + " von Anbieter " + providerKey);
+                    ev.put("title", "Event " + i + " von Anbieter " + provider.name);
                     ev.put("location", "Mock-City");
                     ev.put("date", Instant.now().plusSeconds(86400L * i).toString());
                     ev.put("passendeLeute", buildPassendeLeuteForMockEvent(providerKey, i));
@@ -397,17 +445,46 @@ public class EventermittlungExternalTaskWorker {
                 // Persist the mock events to MySQL
                 storedEventService.persistMockEvents(providerKey, events);
 
-                String variableName = "events_" + providerKey;
-                externalTaskService.complete(
-                    externalTask,
-                    Map.of(
-                        variableName,
-                        Variables.objectValue(events)
-                            .serializationDataFormat(Variables.SerializationDataFormats.JSON.getName())
-                            .create()
-                    )
-                );
+                // Complete the external task FIRST without additional variables
+                externalTaskService.complete(externalTask);
                 LOG.infof("Completed topic=%s taskId=%s providerKey=%s events=%d", TOPIC_PROVIDER_ABFRAGEN, externalTask.getId(), providerKey, events.size());
+
+                // Send message AFTER completing the task, with a small delay to ensure Receive Task is reached
+                String processInstanceId = externalTask.getProcessInstanceId();
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        // Wait 500ms to ensure the process has reached the Receive Task
+                        Thread.sleep(500);
+                        
+                        Map<String, Object> messagePayload = new HashMap<>();
+                        messagePayload.put("messageName", "event");
+                        messagePayload.put("processInstanceId", processInstanceId);
+                        
+                        Map<String, Object> processVariables = new HashMap<>();
+                        // Serialize the events list to JSON string for proper REST API format
+                        String eventsJson = objectMapper.writeValueAsString(events);
+                        processVariables.put("receivedEvents", Map.of("value", eventsJson, "type", "Object", "valueInfo", Map.of("objectTypeName", "java.util.List", "serializationDataFormat", "application/json")));
+                        processVariables.put("enoughAnswers", Map.of("value", true, "type", "Boolean"));
+                        messagePayload.put("processVariables", processVariables);
+
+                        String payloadJson = objectMapper.writeValueAsString(messagePayload);
+                        LOG.infof("Sending message correlation: %s", payloadJson);
+                        HttpRequest request = HttpRequest.newBuilder()
+                            .uri(URI.create(engineRestUrl + "/message"))
+                            .header("Content-Type", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString(payloadJson, StandardCharsets.UTF_8))
+                            .build();
+                        
+                        HttpResponse<String> response = HTTP.send(request, HttpResponse.BodyHandlers.ofString());
+                        if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                            LOG.infof("Message 'event' successfully correlated via REST API. Status: %d", response.statusCode());
+                        } else {
+                            LOG.warnf("Message correlation failed. Status: %d, Response: %s", response.statusCode(), response.body());
+                        }
+                    } catch (Exception ex) {
+                        LOG.errorf(ex, "Failed to send message via REST API (async)");
+                    }
+                });
             } catch (Exception e) {
                 LOG.errorf(e, "Failed topic=%s taskId=%s", TOPIC_PROVIDER_ABFRAGEN, externalTask.getId());
                 externalTaskService.handleFailure(
@@ -421,7 +498,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class AntwortenEmpfangenHandler implements ExternalTaskHandler {
+    public class AntwortenEmpfangenHandler implements ExternalTaskHandler {
         @Override
         @SuppressWarnings("unchecked")
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
@@ -480,7 +557,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class EventsSpeichernHandler implements ExternalTaskHandler {
+    public class EventsSpeichernHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_EVENTS_SPEICHERN, externalTask.getId(), externalTask.getProcessInstanceId());
@@ -536,7 +613,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class EventsLadenHandler implements ExternalTaskHandler {
+    public class EventsLadenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_EVENTS_LADEN, externalTask.getId(), externalTask.getProcessInstanceId());
@@ -573,12 +650,15 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class EventsAbgleichenKiHandler implements ExternalTaskHandler {
+    public class EventsAbgleichenKiHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_EVENTS_ABGLEICHEN_KI, externalTask.getId(), externalTask.getProcessInstanceId());
             try {
                 List<Map<String, Object>> events = toListOfMaps(externalTask.getVariable("events"));
+                if (events.isEmpty()) {
+                    events = toListOfMaps(externalTask.getVariable("receivedEvents"));
+                }
                 if (events.isEmpty()) {
                     events = toListOfMaps(externalTask.getVariable("allReceivedEvents"));
                 }
@@ -589,6 +669,9 @@ public class EventermittlungExternalTaskWorker {
                 // Optional preference variables (if present)
                 String preferredLocation = String.valueOf(externalTask.getVariable("preferredLocation") == null ? "" : externalTask.getVariable("preferredLocation"));
                 String preferredKeyword = String.valueOf(externalTask.getVariable("preferredKeyword") == null ? "" : externalTask.getVariable("preferredKeyword"));
+
+                LOG.infof("KI-Abgleich: customer='%s' events=%d preferredLocation='%s' preferredKeyword='%s'", 
+                    customerFirstName, events.size(), preferredLocation, preferredKeyword);
 
                 String loc = preferredLocation.trim().toLowerCase();
                 String kw = preferredKeyword.trim().toLowerCase();
@@ -605,11 +688,16 @@ public class EventermittlungExternalTaskWorker {
                     List<String> passendeLeute = toStringList(ppl);
                     ne.put("passendeLeute", passendeLeute);
 
+                    LOG.infof("Event: title='%s' passendeLeute=%s location='%s'", 
+                        ne.get("title"), passendeLeute, ne.get("location"));
+
                     boolean ok = true;
 
                     // Primary demo rule: if we know the customer's first name, match against passendeLeute
                     if (!customerFirstNameLower.isEmpty()) {
-                        ok = ok && passendeLeute.stream().anyMatch(n -> n != null && n.trim().equalsIgnoreCase(customerFirstNameLower));
+                        boolean nameMatch = passendeLeute.stream().anyMatch(n -> n != null && n.trim().equalsIgnoreCase(customerFirstNameLower));
+                        LOG.infof("  Checking customer '%s' in passendeLeute: %s", customerFirstNameLower, nameMatch);
+                        ok = ok && nameMatch;
                     }
 
                     if (!loc.isEmpty()) {
@@ -663,7 +751,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class BeliebtesteEventsErmittelnHandler implements ExternalTaskHandler {
+    public class BeliebtesteEventsErmittelnHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_BELIEBTESTE_EVENTS, externalTask.getId(), externalTask.getProcessInstanceId());
@@ -714,7 +802,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class AffiliateLinksGenerierenHandler implements ExternalTaskHandler {
+    public class AffiliateLinksGenerierenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_AFFILIATE_LINKS_GENERIEREN, externalTask.getId(), externalTask.getProcessInstanceId());
@@ -760,7 +848,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class NewsletterErstellenHandler implements ExternalTaskHandler {
+    public class NewsletterErstellenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_NEWSLETTER_ERSTELLEN, externalTask.getId(), externalTask.getProcessInstanceId());
@@ -796,7 +884,7 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 
-    class NewsletterSendenHandler implements ExternalTaskHandler {
+    public class NewsletterSendenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
             LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_NEWSLETTER_SENDEN, externalTask.getId(), externalTask.getProcessInstanceId());
