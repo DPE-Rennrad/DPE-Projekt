@@ -26,7 +26,7 @@
 - [X] **CIB seven** BPMN-basierte Process Engine verwendet
 - [X] **Apache ActiveMQ (Classic)** für Messaging
 - [X] **Apache Camel** für Integration
-- [ ] **Esper ESP Engine** verwendet
+- [ ] **Esper ESP Engine** verwendet (Kein Usecase)
 - [X] **MySQL** als Datenbank (oder Äquivalent)
 - [X] **Eclipse IDE** für Jakarta EE Entwickler (oder Äquivalent)
 
