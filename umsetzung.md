@@ -17,7 +17,7 @@
 - [X] **Bidirektionale Transformation** zwischen XML und/oder JSON (Eventermittlungsprozess als Parser mit Queue)
 
 ### Backend-System Simulation
-- [ ] Daten aus Dateisystem ODER DB lesen und in JMS-Queue ablegen
+- [X] Daten aus Dateisystem ODER DB lesen und in JMS-Queue ablegen (Eventermittlungsprozess umgesetzt mit JMS Dateisystem)
 - [ ] Apache Camel nimmt Nachricht entgegen und leitet an Prozess weiter
 
 ### Technologie-Stack
