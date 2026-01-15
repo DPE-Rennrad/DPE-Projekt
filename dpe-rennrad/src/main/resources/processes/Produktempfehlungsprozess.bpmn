@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0968yyz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0968yyz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0n3tqi2">
     <bpmn:extensionElements>
       <camunda:properties>
@@ -15,15 +15,61 @@
   </bpmn:collaboration>
   <bpmn:process id="Process_1j8vx5h" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:sequenceFlow id="Flow_1vvkby5" sourceRef="Produktempfehlungsprozess" targetRef="Activity_1p63h92" />
-    <bpmn:sequenceFlow id="Flow_1bw53s6" sourceRef="Activity_1p63h92" targetRef="Gateway_11uclzb" />
     <bpmn:startEvent id="Produktempfehlungsprozess" name="">
       <bpmn:outgoing>Flow_1vvkby5</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_1p63h92" name="Kundenempfehlungen mit KI abgleichen" camunda:type="external" camunda:topic="kundenempfehlungen-abgleichen-ki">
+    <bpmn:serviceTask id="Activity_1p63h92" name="Kundenempfehlungen mit KI abgleichen">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/produktempfehlung/ki-abgleich</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="payload">${offer}</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="kiScore">
+              <camunda:script scriptFormat="javascript">var json = JSON.parse(response);
+    json.kiScore;</camunda:script>
+            </camunda:outputParameter>
+            <camunda:outputParameter name="offer">
+              <camunda:script scriptFormat="javascript">var json = JSON.parse(response);
+    json.offer;</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1vvkby5</bpmn:incoming>
       <bpmn:outgoing>Flow_1bw53s6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_19cvrku" name="Affiliate Link für Produktempfehlungen generieren" camunda:type="external" camunda:topic="produktempfehlung-link">
+    <bpmn:serviceTask id="Activity_19cvrku" name="Affiliate Link für Produktempfehlungen generieren">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/produktempfehlung/link-transformation</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="javascript">var offer = execution.getVariable("offer");
+    JSON.stringify(offer);</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="offer">
+              <camunda:script scriptFormat="javascript">var json = JSON.parse(response);
+    json.offer;</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_09bn19h</bpmn:incoming>
       <bpmn:outgoing>Flow_1owtv62</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -31,23 +77,57 @@
       <bpmn:incoming>Flow_13dkwfp</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1owtv62" sourceRef="Activity_19cvrku" targetRef="Activity_04lba8g" />
-    <bpmn:sendTask id="Activity_04lba8g" name="Produktempfehlung senden" camunda:type="external" camunda:topic="produktempfehlung-senden">
+    <bpmn:sendTask id="Activity_04lba8g" name="Produktempfehlung senden">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/produktempfehlung</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+                <camunda:entry key="Accept">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="javascript">var offer = execution.getVariable("offer");
+    var kundeEmail = execution.getVariable("kundeEmail");
+    var processInstanceId = execution.getProcessInstanceId();
+    
+    JSON.stringify({
+      "processInstanceId": processInstanceId,
+      "kundeEmail": kundeEmail,
+      "offer": offer,
+      "sentAt": new Date().toISOString()
+    });</camunda:script>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="emailSent">
+              <camunda:script scriptFormat="javascript">response.ok || false;</camunda:script>
+            </camunda:outputParameter>
+            <camunda:outputParameter name="stored">
+              <camunda:script scriptFormat="javascript">response.stored || 0;</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1owtv62</bpmn:incoming>
       <bpmn:outgoing>Flow_13dkwfp</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_13dkwfp" sourceRef="Activity_04lba8g" targetRef="Event_1df9643" />
-    <bpmn:sequenceFlow id="Flow_09bn19h" sourceRef="Gateway_11uclzb" targetRef="Activity_19cvrku" />
+    <bpmn:endEvent id="Event_1uzak94" name="Kein passendes Produkt gefunden">
+      <bpmn:incoming>Flow_0qkos8k</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_11uclzb" name="Produkt passt?" default="Flow_09bn19h">
       <bpmn:incoming>Flow_1bw53s6</bpmn:incoming>
-      <bpmn:outgoing>Flow_09bn19h</bpmn:outgoing>
       <bpmn:outgoing>Flow_0qkos8k</bpmn:outgoing>
+      <bpmn:outgoing>Flow_09bn19h</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0qkos8k" name="nein" sourceRef="Gateway_11uclzb" targetRef="Event_1uzak94">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${kiScore &lt; 0.2}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="Event_1uzak94" name="Kein passendes Produkt gefunden">
-      <bpmn:incoming>Flow_0qkos8k</bpmn:incoming>
-    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_09bn19h" sourceRef="Gateway_11uclzb" targetRef="Activity_19cvrku" />
+    <bpmn:sequenceFlow id="Flow_1bw53s6" sourceRef="Activity_1p63h92" targetRef="Gateway_11uclzb" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0n3tqi2">
@@ -76,25 +156,21 @@
       <bpmndi:BPMNShape id="Activity_01lt12o_di" bpmnElement="Activity_04lba8g">
         <dc:Bounds x="940" y="210" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_11uclzb_di" bpmnElement="Gateway_11uclzb" isMarkerVisible="true">
-        <dc:Bounds x="565" y="225" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="553" y="285" width="74" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1uzak94_di" bpmnElement="Event_1uzak94">
         <dc:Bounds x="1302" y="122" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1277" y="165" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_11uclzb_di" bpmnElement="Gateway_11uclzb" isMarkerVisible="true">
+        <dc:Bounds x="565" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="553" y="285" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1vvkby5_di" bpmnElement="Flow_1vvkby5">
         <di:waypoint x="258" y="250" />
         <di:waypoint x="400" y="250" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1bw53s6_di" bpmnElement="Flow_1bw53s6">
-        <di:waypoint x="500" y="250" />
-        <di:waypoint x="565" y="250" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1owtv62_di" bpmnElement="Flow_1owtv62">
         <di:waypoint x="770" y="250" />
@@ -104,10 +180,6 @@
         <di:waypoint x="1040" y="250" />
         <di:waypoint x="1302" y="250" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_09bn19h_di" bpmnElement="Flow_09bn19h">
-        <di:waypoint x="615" y="250" />
-        <di:waypoint x="670" y="250" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0qkos8k_di" bpmnElement="Flow_0qkos8k">
         <di:waypoint x="590" y="225" />
         <di:waypoint x="590" y="140" />
@@ -115,6 +187,14 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="595" y="180" width="21" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09bn19h_di" bpmnElement="Flow_09bn19h">
+        <di:waypoint x="615" y="250" />
+        <di:waypoint x="670" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bw53s6_di" bpmnElement="Flow_1bw53s6">
+        <di:waypoint x="500" y="250" />
+        <di:waypoint x="565" y="250" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0abug0t_di" bpmnElement="Participant_0abug0t" isHorizontal="true">
         <dc:Bounds x="130" y="490" width="1298" height="60" />
