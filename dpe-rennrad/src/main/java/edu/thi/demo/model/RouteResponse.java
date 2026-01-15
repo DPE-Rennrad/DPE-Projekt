@@ -2,6 +2,7 @@ package edu.thi.demo.model;
 
 import java.util.List;
 
+//Klasse geschrieben von Felix Sewald
 public class RouteResponse {
 
     public List<RoutePoint> coordinates;

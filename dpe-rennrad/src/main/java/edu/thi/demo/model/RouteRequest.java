@@ -1,5 +1,6 @@
 package edu.thi.demo.model;
 
+//Klasse geschrieben von Felix Sewald
 public class RouteRequest {
 
     public String startLocation;
