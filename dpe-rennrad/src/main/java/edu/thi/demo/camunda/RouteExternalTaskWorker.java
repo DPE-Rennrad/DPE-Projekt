@@ -38,8 +38,8 @@ public class RouteExternalTaskWorker {
     static final String TOPIC_ROUTE_GENERIEREN = "route-generieren";
     static final String TOPIC_ROUTE_EMAIL_ERSTELLEN = "route-email-erstellen";
     static final String TOPIC_ROUTE_EMAIL_SENDEN = "route-email-senden";
-    static final String TOPIC_BEWERTUNGSBOGEN_ERSTELLEN = "bewertungsbogen-erstellen";
-    static final String TOPIC_BEWERTUNGSBOGEN_SENDEN = "bewertungsbogen-senden";
+    static final String TOPIC_BEWERTUNGSERINNERUNG_ERSTELLEN = "bewertungserinnerung-erstellen";
+    static final String TOPIC_BEWERTUNGSERINNERUNG_SENDEN = "bewertungserinnerung-senden";
 
     @ConfigProperty(name = "camunda.engine-rest.url", defaultValue = "http://localhost:8080/engine-rest")
     String engineRestUrl;
@@ -164,17 +164,17 @@ public class RouteExternalTaskWorker {
             .open();
         LOG.infof("Subscribed topic=%s", TOPIC_ROUTE_EMAIL_SENDEN);
 
-        client.subscribe(TOPIC_BEWERTUNGSBOGEN_ERSTELLEN)
+        client.subscribe(TOPIC_BEWERTUNGSERINNERUNG_ERSTELLEN)
             .lockDuration(30_000)
-            .handler(new BewertungsbogenErstellenHandler())
+            .handler(new BewertungserinnerungErstellenHandler())
             .open();
-        LOG.infof("Subscribed topic=%s", TOPIC_BEWERTUNGSBOGEN_ERSTELLEN);
+        LOG.infof("Subscribed topic=%s", TOPIC_BEWERTUNGSERINNERUNG_ERSTELLEN);
 
-        client.subscribe(TOPIC_BEWERTUNGSBOGEN_SENDEN)
+        client.subscribe(TOPIC_BEWERTUNGSERINNERUNG_SENDEN)
             .lockDuration(30_000)
-            .handler(new BewertungsbogenSendenHandler())
+            .handler(new BewertungserinnerungSendenHandler())
             .open();
-        LOG.infof("Subscribed topic=%s", TOPIC_BEWERTUNGSBOGEN_SENDEN);
+        LOG.infof("Subscribed topic=%s", TOPIC_BEWERTUNGSERINNERUNG_SENDEN);
     }
 
     @PreDestroy
@@ -331,7 +331,7 @@ public class RouteExternalTaskWorker {
 
                 sb.append("\nViel Spaß auf deiner Tour!\n\n");
                 sb.append("Viele Grüße\n");
-                sb.append("Dein DPE Rennrad-Team\n");
+                sb.append("Dein VeloStart Team\n");
 
                 Map<String, Object> out = new HashMap<>();
                 out.put("routeEmailText", sb.toString());
@@ -405,10 +405,10 @@ public class RouteExternalTaskWorker {
         }
     }
 
-    class BewertungsbogenErstellenHandler implements ExternalTaskHandler {
+    class BewertungserinnerungErstellenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
-            LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_BEWERTUNGSBOGEN_ERSTELLEN, externalTask.getId(), externalTask.getProcessInstanceId());
+            LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_BEWERTUNGSERINNERUNG_ERSTELLEN, externalTask.getId(), externalTask.getProcessInstanceId());
             try {
                 String customerFirstName = resolveCustomerFirstName(externalTask);
                 String startLocation = String.valueOf(externalTask.getVariable("startLocation") == null ? "" : externalTask.getVariable("startLocation"));
@@ -420,38 +420,23 @@ public class RouteExternalTaskWorker {
                     sb.append(" ").append(customerFirstName);
                 }
                 sb.append("!\n\n");
-                sb.append("Wie hat dir die Route von ").append(startLocation).append(" nach ").append(endLocation).append(" gefallen?\n\n");
-                sb.append("Wir würden uns über dein Feedback freuen:\n\n");
-                sb.append("1. Wie schwierig war die Route für dich?\n");
-                sb.append("   [ ] Sehr leicht\n");
-                sb.append("   [ ] Leicht\n");
-                sb.append("   [ ] Mittel\n");
-                sb.append("   [ ] Schwer\n");
-                sb.append("   [ ] Sehr schwer\n\n");
-                sb.append("2. Wie gut war die Routenführung?\n");
-                sb.append("   [ ] Sehr gut\n");
-                sb.append("   [ ] Gut\n");
-                sb.append("   [ ] Mittel\n");
-                sb.append("   [ ] Schlecht\n");
-                sb.append("   [ ] Sehr schlecht\n\n");
-                sb.append("3. Würdest du diese Route weiterempfehlen?\n");
-                sb.append("   [ ] Ja\n");
-                sb.append("   [ ] Nein\n\n");
-                sb.append("4. Weitere Kommentare:\n");
-                sb.append("   ______________________________\n\n");
-                sb.append("Vielen Dank für dein Feedback!\n\n");
+                sb.append("Wir hoffen, deine Route von ").append(startLocation).append(" nach ").append(endLocation).append(" hat dir gefallen!\n\n");
+                sb.append("Wir würden uns freuen, wenn du deine Erfahrungen mit uns teilst.\n");
+                sb.append("Bewerte deine Route unter:\n\n");
+                sb.append("https://velostart.de/chat\n\n");
+                sb.append("Mit deinem Feedback können wir dir beim nächsten Mal noch personalisiertere Routen empfehlen!\n\n");
                 sb.append("Viele Grüße\n");
-                sb.append("Dein DPE Rennrad-Team\n");
+                sb.append("Dein VeloStart Team\n");
 
                 Map<String, Object> out = new HashMap<>();
-                out.put("bewertungsbogenText", sb.toString());
+                out.put("bewertungserinnerungText", sb.toString());
                 externalTaskService.complete(externalTask, out);
-                LOG.infof("Completed topic=%s taskId=%s", TOPIC_BEWERTUNGSBOGEN_ERSTELLEN, externalTask.getId());
+                LOG.infof("Completed topic=%s taskId=%s", TOPIC_BEWERTUNGSERINNERUNG_ERSTELLEN, externalTask.getId());
             } catch (Exception e) {
-                LOG.errorf(e, "Failed topic=%s taskId=%s", TOPIC_BEWERTUNGSBOGEN_ERSTELLEN, externalTask.getId());
+                LOG.errorf(e, "Failed topic=%s taskId=%s", TOPIC_BEWERTUNGSERINNERUNG_ERSTELLEN, externalTask.getId());
                 externalTaskService.handleFailure(
                     externalTask,
-                    "Bewertungsbogen erstellen fehlgeschlagen",
+                    "Bewertungserinnerung erstellen fehlgeschlagen",
                     stackTrace(e),
                     3,
                     5_000L
@@ -460,14 +445,14 @@ public class RouteExternalTaskWorker {
         }
     }
 
-    class BewertungsbogenSendenHandler implements ExternalTaskHandler {
+    class BewertungserinnerungSendenHandler implements ExternalTaskHandler {
         @Override
         public void execute(ExternalTask externalTask, ExternalTaskService externalTaskService) {
-            LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_BEWERTUNGSBOGEN_SENDEN, externalTask.getId(), externalTask.getProcessInstanceId());
+            LOG.infof("Handling topic=%s taskId=%s processInstanceId=%s", TOPIC_BEWERTUNGSERINNERUNG_SENDEN, externalTask.getId(), externalTask.getProcessInstanceId());
             try {
-                String text = String.valueOf(externalTask.getVariable("bewertungsbogenText") == null ? "" : externalTask.getVariable("bewertungsbogenText"));
+                String text = String.valueOf(externalTask.getVariable("bewertungserinnerungText") == null ? "" : externalTask.getVariable("bewertungserinnerungText"));
                 String preview = text.length() > 200 ? text.substring(0, 200) + "..." : text;
-                LOG.infof("Mock send bewertungsbogen preview=%s", preview.replace("\n", " "));
+                LOG.infof("Mock send bewertungserinnerung preview=%s", preview.replace("\n", " "));
 
                 String status = "SENT";
                 Integer webhookStatus = null;
@@ -478,7 +463,7 @@ public class RouteExternalTaskWorker {
                             externalTask.getProcessInstanceId(),
                             externalTask.getId(),
                             status,
-                            "BEWERTUNGSBOGEN",
+                            "BEWERTUNGSERINNERUNG",
                             text
                         );
                         webhookStatus = postEmailDelivery(webhookUrl, payloadJson);
@@ -487,26 +472,26 @@ public class RouteExternalTaskWorker {
                         } else {
                             status = "SENT_WEBHOOK";
                         }
-                        LOG.infof("Bewertungsbogen webhook delivered url=%s status=%d", webhookUrl, webhookStatus);
+                        LOG.infof("Bewertungserinnerung webhook delivered url=%s status=%d", webhookUrl, webhookStatus);
                     } catch (Exception e) {
                         status = "SENT_WEBHOOK_FAILED";
-                        LOG.warnf(e, "Bewertungsbogen webhook delivery failed url=%s", webhookUrl);
+                        LOG.warnf(e, "Bewertungserinnerung webhook delivery failed url=%s", webhookUrl);
                     }
                 }
 
                 Map<String, Object> out = new HashMap<>();
-                out.put("bewertungsbogenSendStatus", status);
-                out.put("bewertungsbogenSendWebhookUrl", webhookUrl);
+                out.put("bewertungserinnerungSendStatus", status);
+                out.put("bewertungserinnerungSendWebhookUrl", webhookUrl);
                 if (webhookStatus != null) {
-                    out.put("bewertungsbogenSendWebhookStatus", webhookStatus);
+                    out.put("bewertungserinnerungSendWebhookStatus", webhookStatus);
                 }
                 externalTaskService.complete(externalTask, out);
-                LOG.infof("Completed topic=%s taskId=%s", TOPIC_BEWERTUNGSBOGEN_SENDEN, externalTask.getId());
+                LOG.infof("Completed topic=%s taskId=%s", TOPIC_BEWERTUNGSERINNERUNG_SENDEN, externalTask.getId());
             } catch (Exception e) {
-                LOG.errorf(e, "Failed topic=%s taskId=%s", TOPIC_BEWERTUNGSBOGEN_SENDEN, externalTask.getId());
+                LOG.errorf(e, "Failed topic=%s taskId=%s", TOPIC_BEWERTUNGSERINNERUNG_SENDEN, externalTask.getId());
                 externalTaskService.handleFailure(
                     externalTask,
-                    "Bewertungsbogen senden fehlgeschlagen",
+                    "Bewertungserinnerung senden fehlgeschlagen",
                     stackTrace(e),
                     3,
                     5_000L
