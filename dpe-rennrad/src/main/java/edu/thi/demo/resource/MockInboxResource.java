@@ -1,5 +1,6 @@
 package edu.thi.demo.resource;
 
+import edu.thi.demo.model.Offer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
@@ -29,6 +30,7 @@ public class MockInboxResource {
     private final ConcurrentLinkedDeque<Map<String, Object>> newsletterDeliveries = new ConcurrentLinkedDeque<>();
     private final ConcurrentLinkedDeque<Map<String, Object>> routeEmailDeliveries = new ConcurrentLinkedDeque<>();
     private final ConcurrentLinkedDeque<Map<String, Object>> bewertungsbogenDeliveries = new ConcurrentLinkedDeque<>();
+    private final ConcurrentLinkedDeque<Map<String, Object>> produktempfehlungDeliveries = new ConcurrentLinkedDeque<>();
 
     public static class NewsletterDeliveryRequest {
         public String processInstanceId;
@@ -43,6 +45,13 @@ public class MockInboxResource {
         public String status;
         public String emailType;
         public String emailText;
+    }
+
+    public static class ProduktempfehlungDeliveryRequest {
+        public String processInstanceId;
+        public String kundeEmail;
+        public Offer offer;
+        public String sentAt;
     }
 
     @POST
@@ -175,6 +184,52 @@ public class MockInboxResource {
         Map<String, Object> first = bewertungsbogenDeliveries.peekFirst();
         if (first == null) {
             return Response.status(404).entity(Map.of("ok", false, "message", "No bewertungsbogen received yet")).build();
+        }
+        return Response.ok(first).build();
+    }
+
+    // ========== PRODUKTEMPFEHLUNG ENDPOINTS (Pallmann Florian) ==========
+
+    @POST
+    @Path("/produktempfehlung")
+    public Response receiveProduktempfehlung(ProduktempfehlungDeliveryRequest body) {
+        Map<String, Object> item = new LinkedHashMap<>();
+        item.put("receivedAt", Instant.now().toString());
+        item.put("processInstanceId", body == null ? null : body.processInstanceId);
+        item.put("kundeEmail", body == null ? null : body.kundeEmail);
+        item.put("offer", body == null ? null : body.offer);
+        item.put("sentAt", body == null ? null : body.sentAt);
+
+        produktempfehlungDeliveries.addFirst(item);
+        while (produktempfehlungDeliveries.size() > MAX_ITEMS) {
+            produktempfehlungDeliveries.pollLast();
+        }
+
+        return Response.ok(Map.of("ok", true, "stored", produktempfehlungDeliveries.size())).build();
+    }
+
+    @GET
+    @Path("/produktempfehlung")
+    public List<Map<String, Object>> listProduktempfehlungen(@QueryParam("limit") @DefaultValue("20") int limit) {
+        int n = Math.max(1, Math.min(200, limit));
+        List<Map<String, Object>> out = new ArrayList<>(n);
+        int i = 0;
+        for (Map<String, Object> item : produktempfehlungDeliveries) {
+            out.add(item);
+            i++;
+            if (i >= n) {
+                break;
+            }
+        }
+        return out;
+    }
+
+    @GET
+    @Path("/produktempfehlung/latest")
+    public Response latestProduktempfehlung() {
+        Map<String, Object> first = produktempfehlungDeliveries.peekFirst();
+        if (first == null) {
+            return Response.status(404).entity(Map.of("ok", false, "message", "No produktempfehlung received yet")).build();
         }
         return Response.ok(first).build();
     }
