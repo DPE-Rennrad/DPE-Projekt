@@ -17,7 +17,7 @@
 - [X] **Bidirektionale Transformation** zwischen XML und/oder JSON (Eventermittlungsprozess als Parser mit Queue)
 
 ### Backend-System Simulation
-- [ ] Per Postman Daten in JMS-Queue schreiben (Backend-System Simulation)
+- [ ] Daten aus Dateisystem ODER DB lesen und in JMS-Queue ablegen
 - [ ] Apache Camel nimmt Nachricht entgegen und leitet an Prozess weiter
 
 ### Technologie-Stack
