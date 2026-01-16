@@ -26,3 +26,5 @@ public class Event {
         this.externalId = externalId;
     }
 }
+
+// Eduard Merker

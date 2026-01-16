@@ -59,3 +59,6 @@ public class RennradResource {
         }
     }
 }
+
+// Eduard Merker
+// für theoretische Erweiterungen

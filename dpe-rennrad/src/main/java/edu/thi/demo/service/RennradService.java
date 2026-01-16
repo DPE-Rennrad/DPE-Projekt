@@ -50,3 +50,6 @@ public class RennradService {
 
     // Weitere Methoden für BPMN-Integration können hier hinzugefügt werden
 }
+
+// Eduard Merker
+// für theoretische Erweiterungen 

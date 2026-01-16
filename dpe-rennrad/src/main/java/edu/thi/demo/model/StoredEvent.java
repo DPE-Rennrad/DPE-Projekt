@@ -31,3 +31,5 @@ public class StoredEvent extends PanacheEntity {
     @Column(name = "passende_leute", columnDefinition = "LONGTEXT")
     public String passendeLeuteJson;
 }
+
+// Eduard Merker

@@ -63,3 +63,5 @@ public class ExternalProviderService {
         }
     }
 }
+
+// Eduard Merker

@@ -74,3 +74,5 @@ public class ExternalProviderAbfragenDelegate implements JavaDelegate {
         return categories[random.nextInt(categories.length)];
     }
 }
+
+// Eduard Merker

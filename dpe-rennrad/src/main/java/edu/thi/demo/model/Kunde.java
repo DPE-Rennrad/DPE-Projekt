@@ -15,3 +15,5 @@ public class Kunde extends PanacheEntity {
 
     // Getter und Setter können weggelassen werden, da Panache sie automatisch generiert
 }
+
+// Eduard Merker

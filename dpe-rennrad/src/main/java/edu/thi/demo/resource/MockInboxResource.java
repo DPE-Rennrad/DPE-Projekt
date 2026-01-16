@@ -98,6 +98,9 @@ public class MockInboxResource {
         return Response.ok(first).build();
     }
 
+    // Eduard Merker
+    // Newsletter
+
     @POST
     @Path("/route")
     public Response receiveRouteEmail(EmailDeliveryRequest body) {

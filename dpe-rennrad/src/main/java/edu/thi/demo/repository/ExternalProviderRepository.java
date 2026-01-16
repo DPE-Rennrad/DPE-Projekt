@@ -12,3 +12,5 @@ public class ExternalProviderRepository implements PanacheRepository<ExternalPro
         return list("active", true);
     }
 }
+
+// Eduard Merker
