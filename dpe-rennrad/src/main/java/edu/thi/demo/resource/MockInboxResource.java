@@ -53,7 +53,7 @@ public class MockInboxResource {
         public Offer offer;
         public String sentAt;
     }
-
+    // ========== Newsletter ENDPOINTS (Merker Eduard) ==========
     @POST
     @Path("/newsletter")
     public Response receiveNewsletter(NewsletterDeliveryRequest body) {
@@ -97,9 +97,6 @@ public class MockInboxResource {
         }
         return Response.ok(first).build();
     }
-
-    // Eduard Merker
-    // Newsletter
 
     //Methode geschrieben von Felix Sewald
     @POST
