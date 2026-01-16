@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Klasse geschrieben von Felix Sewald
 @Startup
 @ApplicationScoped
 public class RouteExternalTaskWorker {

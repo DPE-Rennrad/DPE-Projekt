@@ -101,6 +101,7 @@ public class MockInboxResource {
     // Eduard Merker
     // Newsletter
 
+    //Methode geschrieben von Felix Sewald
     @POST
     @Path("/route")
     public Response receiveRouteEmail(EmailDeliveryRequest body) {
@@ -120,6 +121,7 @@ public class MockInboxResource {
         return Response.ok(Map.of("ok", true, "stored", routeEmailDeliveries.size())).build();
     }
 
+    //Methode geschrieben von Felix Sewald
     @GET
     @Path("/route")
     public List<Map<String, Object>> listRouteEmails(@QueryParam("limit") @DefaultValue("20") int limit) {
@@ -136,6 +138,7 @@ public class MockInboxResource {
         return out;
     }
 
+    //Methode geschrieben von Felix Sewald
     @GET
     @Path("/route/latest")
     public Response latestRouteEmail() {
@@ -146,6 +149,7 @@ public class MockInboxResource {
         return Response.ok(first).build();
     }
 
+    //Methode geschrieben von Felix Sewald
     @POST
     @Path("/bewertungsbogen")
     public Response receiveBewertungsbogen(EmailDeliveryRequest body) {
@@ -165,6 +169,7 @@ public class MockInboxResource {
         return Response.ok(Map.of("ok", true, "stored", bewertungsbogenDeliveries.size())).build();
     }
 
+    //Methode geschrieben von Felix Sewald
     @GET
     @Path("/bewertungsbogen")
     public List<Map<String, Object>> listBewertungsboegen(@QueryParam("limit") @DefaultValue("20") int limit) {
@@ -181,6 +186,7 @@ public class MockInboxResource {
         return out;
     }
 
+    //Methode geschrieben von Felix Sewald
     @GET
     @Path("/bewertungsbogen/latest")
     public Response latestBewertungsbogen() {
