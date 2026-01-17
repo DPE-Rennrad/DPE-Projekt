@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0393qe0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.41.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0393qe0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_088szti">
     <bpmn:extensionElements />
     <bpmn:participant id="Participant_1nfmvcg" name="Kunde" />
     <bpmn:participant id="Participant_144yh94" name="Motivationsprozess" processRef="Process_1xbx5q5" />
     <bpmn:participant id="Participant_03947wf" name="KI" />
-    <bpmn:messageFlow id="Flow_0p2xoj7" name="Kundenantwort" sourceRef="Participant_1nfmvcg" targetRef="Event_1i47jw0" />
-    <bpmn:messageFlow id="Flow_0gpf3kq" name="Wetterdaten" sourceRef="Participant_03947wf" targetRef="Event_0jcqxj3" />
-    <bpmn:messageFlow id="Flow_0gm3ddf" name="Anfrage für Wetterdaten" sourceRef="Activity_0metuxp" targetRef="Participant_03947wf" />
-    <bpmn:messageFlow id="Flow_06yg2b3" name="Kundenbefragung" sourceRef="Activity_0wlmabh" targetRef="Participant_1nfmvcg" />
-    <bpmn:messageFlow id="Flow_0lubsl5" name="Motivationsnachricht" sourceRef="Activity_04af9rs" targetRef="Participant_1nfmvcg" />
+    <bpmn:messageFlow id="Flow_0p2xoj7" sourceRef="Participant_1nfmvcg" targetRef="Event_1i47jw0" />
+    <bpmn:messageFlow id="Flow_0gpf3kq" sourceRef="Participant_03947wf" targetRef="Event_0jcqxj3" />
   </bpmn:collaboration>
   <bpmn:message id="Message_0k1ee9t" name="AntwortNachrichten" />
   <bpmn:message id="Message_1t8dtb3" name="ghjk" />
@@ -88,29 +85,6 @@
       <bpmn:incoming>Flow_00970ur</bpmn:incoming>
       <bpmn:outgoing>Flow_13avxjc</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_0wlmabh" name="Kunde nach Krankheit oder Verletzung abfragen">
-      <bpmn:extensionElements>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/verhinderungsabfrage</camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="headers">
-              <camunda:map>
-                <camunda:entry key="Content-Type">application/json</camunda:entry>
-              </camunda:map>
-            </camunda:inputParameter>
-            <camunda:inputParameter name="payload">
-              <camunda:script scriptFormat="JavaScript">JSON.stringify({
-  "message": "Sind sie verletzt oder krank?"
-});</camunda:script>
-            </camunda:inputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_04grslc</bpmn:incoming>
-      <bpmn:outgoing>Flow_1j903qy</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:exclusiveGateway id="Gateway_11499ta">
       <bpmn:incoming>Flow_1r8rfu8</bpmn:incoming>
       <bpmn:incoming>Flow_1rnepsl</bpmn:incoming>
@@ -145,12 +119,6 @@
     <bpmn:startEvent id="Event_0xodff3">
       <bpmn:outgoing>Flow_04grslc</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:boundaryEvent id="Event_0a1wohf" name="1 Tag" attachedToRef="Activity_0wlmabh">
-      <bpmn:outgoing>Flow_0io049m</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_1jn6aiv">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT24H</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0io049m" sourceRef="Event_0a1wohf" targetRef="Gateway_03ymq4e" />
     <bpmn:sequenceFlow id="Flow_01knm6z" sourceRef="Event_1i47jw0" targetRef="Gateway_03ymq4e" />
     <bpmn:sequenceFlow id="Flow_0z4tnk7" sourceRef="Gateway_03ymq4e" targetRef="Gateway_1tc3tuu" />
@@ -170,6 +138,35 @@
     <bpmn:sequenceFlow id="Flow_04grslc" sourceRef="Event_0xodff3" targetRef="Activity_0wlmabh" />
     <bpmn:sequenceFlow id="Flow_1rnepsl" sourceRef="Activity_04af9rs" targetRef="Gateway_11499ta" />
     <bpmn:sequenceFlow id="Flow_15j0zh3" sourceRef="Gateway_11499ta" targetRef="Event_1ihnanj" />
+    <bpmn:sendTask id="Activity_0wlmabh" name="Kunde nach Krankheit oder Verletzung abfragen">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/verhinderungsabfrage</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="JavaScript">JSON.stringify({
+  "message": "Sind sie verletzt oder krank?"
+});</camunda:script>
+            </camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04grslc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j903qy</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:boundaryEvent id="Event_0a1wohf" name="1 Tag" attachedToRef="Activity_0wlmabh">
+      <bpmn:outgoing>Flow_0io049m</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1jn6aiv">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT24H</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmn:message id="Message_1im43rs" name="Wetter_Daten_erhalten" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -179,7 +176,7 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_144yh94_di" bpmnElement="Participant_144yh94" isHorizontal="true">
-        <dc:Bounds x="151" y="190" width="2029" height="328" />
+        <dc:Bounds x="151" y="190" width="1997" height="328" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_03ymq4e_di" bpmnElement="Gateway_03ymq4e" isMarkerVisible="true">
@@ -216,10 +213,6 @@
         <dc:Bounds x="1140" y="390" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_04oxa9q" bpmnElement="Activity_0wlmabh">
-        <dc:Bounds x="357" y="280" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_11499ta_di" bpmnElement="Gateway_11499ta" isMarkerVisible="true">
         <dc:Bounds x="1855" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -234,6 +227,10 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0tp4wv4_di" bpmnElement="Event_0xodff3">
         <dc:Bounds x="232" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_04oxa9q" bpmnElement="Activity_0wlmabh">
+        <dc:Bounds x="357" y="280" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14fem8m_di" bpmnElement="Event_0a1wohf">
         <dc:Bounds x="439" y="342" width="36" height="36" />
@@ -311,43 +308,16 @@
         <di:waypoint x="1982" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_0d0h2jb" bpmnElement="Participant_03947wf" isHorizontal="true">
-        <dc:Bounds x="151" y="600" width="1997" height="60" />
+        <dc:Bounds x="151" y="550" width="1997" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0p2xoj7_di" bpmnElement="Flow_0p2xoj7">
         <di:waypoint x="560" y="140" />
         <di:waypoint x="560" y="302" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="573" y="163" width="74" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0gpf3kq_di" bpmnElement="Flow_0gpf3kq">
-        <di:waypoint x="1380" y="600" />
+        <di:waypoint x="1380" y="550" />
         <di:waypoint x="1380" y="448" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1390" y="549" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0gm3ddf_di" bpmnElement="Flow_0gm3ddf">
-        <di:waypoint x="1190" y="470" />
-        <di:waypoint x="1190" y="600" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1200" y="543" width="60" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06yg2b3_di" bpmnElement="Flow_06yg2b3">
-        <di:waypoint x="407" y="280" />
-        <di:waypoint x="407" y="140" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="316" y="163" width="88" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0lubsl5_di" bpmnElement="Flow_0lubsl5">
-        <di:waypoint x="1690" y="280" />
-        <di:waypoint x="1690" y="140" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1697" y="156" width="86" height="27" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
