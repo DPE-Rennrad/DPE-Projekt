@@ -166,10 +166,10 @@
       <bpmn:incoming>Flow_1ssgr9a</bpmn:incoming>
       <bpmn:outgoing>Flow_1ngb5sh</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:boundaryEvent id="Event_0hullng" name="30s" attachedToRef="Activity_03mh6ig">
+    <bpmn:boundaryEvent id="Event_0hullng" name="Nach 30s" attachedToRef="Activity_03mh6ig">
       <bpmn:outgoing>Flow_13t4imn</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0ssg0ze">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:exclusiveGateway id="Gateway_048fpxa" name="&#60; 3 Retries" default="Flow_0hdsh2m">
@@ -310,7 +310,7 @@
       <bpmndi:BPMNShape id="Event_0qji8hg_di" bpmnElement="Event_0hullng">
         <dc:Bounds x="642" y="404" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="671" y="443" width="18" height="14" />
+          <dc:Bounds x="657" y="443" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0o9oom7" bpmnElement="Event_1tondnx">
@@ -454,14 +454,16 @@
         <di:waypoint x="1530" y="482" />
         <di:waypoint x="1530" y="537" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_1hzxvsk_di" bpmnElement="Participant_09841t8" isHorizontal="true">
-        <dc:Bounds x="132" y="950" width="1748" height="60" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_0oect40_di" bpmnElement="DataStoreReference_0oect40">
         <dc:Bounds x="1070" y="135" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1073" y="105" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1ih98kh" bpmnElement="DataStoreReference_08sh7cb">
+        <dc:Bounds x="1225" y="865" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1228" y="925" width="44" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_0nkudll_di" bpmnElement="DataStoreReference_0nkudll">
@@ -470,11 +472,9 @@
           <dc:Bounds x="289" y="98" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1ih98kh" bpmnElement="DataStoreReference_08sh7cb">
-        <dc:Bounds x="1225" y="865" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1228" y="925" width="44" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Participant_1hzxvsk_di" bpmnElement="Participant_09841t8" isHorizontal="true">
+        <dc:Bounds x="132" y="950" width="1748" height="60" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataInputAssociation_1cjn0m5_di" bpmnElement="DataInputAssociation_1cjn0m5">
         <di:waypoint x="330" y="185" />

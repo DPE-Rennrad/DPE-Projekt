@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1obkspz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1obkspz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.41.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:message id="Message_1tg1rmh" name="stammdaten-aenderung" />
   <bpmn:collaboration id="Collaboration_1kxvjq0">
     <bpmn:participant id="Participant_04yqgjz" processRef="Process_0gp7lej" />
@@ -102,10 +102,6 @@
         <di:waypoint x="308" y="570" />
         <di:waypoint x="360" y="570" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataOutputAssociation_00mr5ay_di" bpmnElement="DataOutputAssociation_00mr5ay">
-        <di:waypoint x="410" y="610" />
-        <di:waypoint x="410" y="755" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0tcapfp_di" bpmnElement="Flow_0tcapfp">
         <di:waypoint x="278" y="350" />
         <di:waypoint x="387" y="350" />
@@ -114,19 +110,23 @@
         <di:waypoint x="487" y="350" />
         <di:waypoint x="599" y="350" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="DataStoreReference_0c6ur19_di" bpmnElement="DataStoreReference_0c6ur19">
+        <dc:Bounds x="385" y="755" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_1vdcteq_di" bpmnElement="Participant_0omj2en" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="530" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStoreReference_0c6ur19_di" bpmnElement="DataStoreReference_0c6ur19">
-        <dc:Bounds x="385" y="755" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_1djpovl_di" bpmnElement="DataStoreReference_1djpovl">
-        <dc:Bounds x="412" y="165" width="50" height="50" />
+        <dc:Bounds x="412" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataOutputAssociation_1n6evki_di" bpmnElement="DataOutputAssociation_1n6evki">
         <di:waypoint x="437" y="310" />
-        <di:waypoint x="437" y="215" />
+        <di:waypoint x="437" y="255" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_00mr5ay_di" bpmnElement="DataOutputAssociation_00mr5ay">
+        <di:waypoint x="410" y="610" />
+        <di:waypoint x="410" y="755" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1pq7p5o_di" bpmnElement="Flow_1pq7p5o">
         <di:waypoint x="260" y="140" />

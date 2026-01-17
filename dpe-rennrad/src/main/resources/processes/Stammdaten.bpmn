@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0wgr0kf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0wgr0kf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.41.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0a0w254">
     <bpmn:participant id="Participant_09h75yi" name="Stammdatenpflegeprozess" processRef="Process_1t0eqlk" />
     <bpmn:participant id="Participant_0omj2en" name="Admin/Verantwortlicher" />
@@ -15,7 +15,7 @@
         <bpmn:targetRef>DataStoreReference_16lwlzu</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_1shhncc" name="Sammdaten geändert">
+    <bpmn:endEvent id="Event_1shhncc" name="Stammdaten geändert">
       <bpmn:incoming>Flow_1fyoaeu</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:startEvent id="StartEvent_1" name="Stammdaten Änderung">
@@ -55,7 +55,7 @@
       <bpmndi:BPMNShape id="Event_1shhncc_di" bpmnElement="Event_1shhncc">
         <dc:Bounds x="542" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="530" y="435" width="60" height="27" />
+          <dc:Bounds x="529" y="435" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1mddg39_di" bpmnElement="StartEvent_1">
@@ -99,14 +99,8 @@
         <di:waypoint x="542" y="410" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1vdcteq_di" bpmnElement="Participant_0omj2en" isHorizontal="true">
-        <dc:Bounds x="132" y="80" width="508" height="60" />
+        <dc:Bounds x="132" y="110" width="508" height="60" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStoreReference_16lwlzu_di" bpmnElement="DataStoreReference_16lwlzu">
-        <dc:Bounds x="355" y="195" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="339" y="158" width="83" height="27" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_1nrxqvw_di" bpmnElement="DataStoreReference_1nrxqvw">
         <dc:Bounds x="375" y="795" width="50" height="50" />
@@ -114,16 +108,22 @@
           <dc:Bounds x="378" y="852" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_16lwlzu_di" bpmnElement="DataStoreReference_16lwlzu">
+        <dc:Bounds x="355" y="215" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="340" y="178" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataOutputAssociation_1yqk18t_di" bpmnElement="DataOutputAssociation_1yqk18t">
-        <di:waypoint x="379" y="370" />
-        <di:waypoint x="376" y="245" />
+        <di:waypoint x="380" y="370" />
+        <di:waypoint x="380" y="265" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataOutputAssociation_0a3as8o_di" bpmnElement="DataOutputAssociation_0a3as8o">
         <di:waypoint x="400" y="650" />
         <di:waypoint x="400" y="795" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0sjlnw0_di" bpmnElement="Flow_0sjlnw0">
-        <di:waypoint x="230" y="140" />
+        <di:waypoint x="230" y="170" />
         <di:waypoint x="230" y="392" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

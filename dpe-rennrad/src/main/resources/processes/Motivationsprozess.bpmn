@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0393qe0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0393qe0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.41.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_088szti">
     <bpmn:extensionElements />
     <bpmn:participant id="Participant_1nfmvcg" name="Kunde" />
     <bpmn:participant id="Participant_144yh94" name="Motivationsprozess" processRef="Process_1xbx5q5" />
     <bpmn:participant id="Participant_03947wf" name="KI" />
-    <bpmn:messageFlow id="Flow_0p2xoj7" sourceRef="Participant_1nfmvcg" targetRef="Event_1i47jw0" />
-    <bpmn:messageFlow id="Flow_0gpf3kq" sourceRef="Participant_03947wf" targetRef="Event_0jcqxj3" />
+    <bpmn:messageFlow id="Flow_0p2xoj7" name="Kundenantwort" sourceRef="Participant_1nfmvcg" targetRef="Event_1i47jw0" />
+    <bpmn:messageFlow id="Flow_0gpf3kq" name="Wetterdaten" sourceRef="Participant_03947wf" targetRef="Event_0jcqxj3" />
+    <bpmn:messageFlow id="Flow_0gm3ddf" name="Anfrage für Wetterdaten" sourceRef="Activity_0metuxp" targetRef="Participant_03947wf" />
+    <bpmn:messageFlow id="Flow_06yg2b3" name="Kundenbefragung" sourceRef="Activity_0wlmabh" targetRef="Participant_1nfmvcg" />
+    <bpmn:messageFlow id="Flow_0lubsl5" name="Motivationsnachricht" sourceRef="Activity_04af9rs" targetRef="Participant_1nfmvcg" />
   </bpmn:collaboration>
   <bpmn:message id="Message_0k1ee9t" name="AntwortNachrichten" />
   <bpmn:message id="Message_1t8dtb3" name="ghjk" />
@@ -287,37 +290,64 @@
         <di:waypoint x="1490" y="430" />
         <di:waypoint x="1490" y="345" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_15j0zh3_di" bpmnElement="Flow_15j0zh3">
-        <di:waypoint x="1905" y="320" />
-        <di:waypoint x="1982" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1rnepsl_di" bpmnElement="Flow_1rnepsl">
-        <di:waypoint x="1740" y="320" />
-        <di:waypoint x="1855" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_04grslc_di" bpmnElement="Flow_04grslc">
-        <di:waypoint x="268" y="320" />
-        <di:waypoint x="357" y="320" />
+      <bpmndi:BPMNEdge id="Flow_0vwqxs1_di" bpmnElement="Flow_0vwqxs1">
+        <di:waypoint x="1515" y="320" />
+        <di:waypoint x="1640" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1j903qy_di" bpmnElement="Flow_1j903qy">
         <di:waypoint x="457" y="320" />
         <di:waypoint x="542" y="320" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0vwqxs1_di" bpmnElement="Flow_0vwqxs1">
-        <di:waypoint x="1515" y="320" />
-        <di:waypoint x="1640" y="320" />
+      <bpmndi:BPMNEdge id="Flow_04grslc_di" bpmnElement="Flow_04grslc">
+        <di:waypoint x="268" y="320" />
+        <di:waypoint x="357" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rnepsl_di" bpmnElement="Flow_1rnepsl">
+        <di:waypoint x="1740" y="320" />
+        <di:waypoint x="1855" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15j0zh3_di" bpmnElement="Flow_15j0zh3">
+        <di:waypoint x="1905" y="320" />
+        <di:waypoint x="1982" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_0d0h2jb" bpmnElement="Participant_03947wf" isHorizontal="true">
-        <dc:Bounds x="151" y="550" width="1997" height="60" />
+        <dc:Bounds x="151" y="600" width="1997" height="60" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0p2xoj7_di" bpmnElement="Flow_0p2xoj7">
         <di:waypoint x="560" y="140" />
         <di:waypoint x="560" y="302" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="573" y="163" width="74" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0gpf3kq_di" bpmnElement="Flow_0gpf3kq">
-        <di:waypoint x="1380" y="550" />
+        <di:waypoint x="1380" y="600" />
         <di:waypoint x="1380" y="448" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1390" y="549" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gm3ddf_di" bpmnElement="Flow_0gm3ddf">
+        <di:waypoint x="1190" y="470" />
+        <di:waypoint x="1190" y="600" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1200" y="543" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06yg2b3_di" bpmnElement="Flow_06yg2b3">
+        <di:waypoint x="407" y="280" />
+        <di:waypoint x="407" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="316" y="163" width="88" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lubsl5_di" bpmnElement="Flow_0lubsl5">
+        <di:waypoint x="1690" y="280" />
+        <di:waypoint x="1690" y="140" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1697" y="156" width="86" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
