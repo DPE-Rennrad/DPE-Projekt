@@ -1,0 +1,288 @@
+{
+  "info": {
+    "_postman_id": "77647f56-edc0-4f21-a0e4-b293d2a34c6b",
+    "name": "DPE",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29954503"
+  },
+  "item": [
+    {
+      "name": "http://localhost:8080/engine-rest/message",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"messageName\": \"AppInstallMessage\",\r\n    \"resultEnabled\": true,\r\n    \"processVariables\": {\r\n        \"kundeName\": {\r\n          \"value\": \"Peter Mustermann\",\r\n          \"type\": \"String\"\r\n        },\r\n        \"kundeEmail\": {\r\n          \"value\": \"peter.mustermann@example.com\",\r\n          \"type\": \"String\"\r\n        }\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/message",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "message"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8088/kunde/deinstallieren/a9b563f7-ef29-11f0-a62d-aa24e6f0ffbe",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/kunde/deinstallieren/a9b563f7-ef29-11f0-a62d-aa24e6f0ffbe",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "kunde",
+            "deinstallieren",
+            "a9b563f7-ef29-11f0-a62d-aa24e6f0ffbe"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8080/engine-rest/job",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/job?processInstanceId=2c7b2f2c-ef39-11f0-a62d-aa24e6f0ffbe&activityId=Event_1h4ghjj",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "job"
+          ],
+          "query": [
+            {
+              "key": "processInstanceId",
+              "value": "2c7b2f2c-ef39-11f0-a62d-aa24e6f0ffbe"
+            },
+            {
+              "key": "activityId",
+              "value": "Event_1h4ghjj"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8080/engine-rest/job/2c7b5645-ef39-11f0-a62d-aa24e6f0ffbe/execute",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/job/2c7b5645-ef39-11f0-a62d-aa24e6f0ffbe/execute",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "job",
+            "2c7b5645-ef39-11f0-a62d-aa24e6f0ffbe",
+            "execute"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Routenempfehlungsprozess triggern",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/process-definition/key/Routenempfehlungsprozess/start",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "process-definition",
+            "key",
+            "Routenempfehlungsprozess",
+            "start"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Routengenerierung",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/route/generate?startLocation=München&endLocation=Ingolstadt&difficulty=leicht",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "route",
+            "generate"
+          ],
+          "query": [
+            {
+              "key": "startLocation",
+              "value": "München"
+            },
+            {
+              "key": "endLocation",
+              "value": "Ingolstadt"
+            },
+            {
+              "key": "difficulty",
+              "value": "leicht"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Email Inbox Routenempfehlung",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/mock-inbox/route",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "mock-inbox",
+            "route"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Email Inbox Bewertungsbogen",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/mock-inbox/bewertungsbogen",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "mock-inbox",
+            "bewertungsbogen"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "process_start",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"messageName\": \"AppInstallMessage\",\n    \"resultEnabled\": true,\n    \"processVariables\": {\n      \"kundeName\": {\n        \"value\": \"Max Mustermann\",\n        \"type\": \"String\"\n      },\n      \"kundeEmail\": {\n        \"value\": \"max.mustermann@example.com\",\n        \"type\": \"String\"\n      }\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/message",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "message"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "produkt_empfehlung",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"messageName\": \"Produktbedarfmessage\",\n    \"resultEnabled\": true,\n    \"processVariables\": {\n        \"offer\": {\n            \"value\": \"{\\\"id\\\":\\\"99f3639c-cc3c-4567-8fb5-1b5f209778af\\\",\\\"title\\\":\\\"Giant Endurance Road Bike Carbon 8477\\\",\\\"description\\\":\\\"Top Endurance Road Bike with carbon frame and Shimano/SRAM groupset\\\",\\\"price\\\":8591.17,\\\"originalPrice\\\":8591.17,\\\"discountPercent\\\":0,\\\"brand\\\":\\\"Giant\\\",\\\"category\\\":\\\"Endurance Road Bike\\\",\\\"url\\\":\\\"https://radonline.de/product/7aa21a48-c55b-4a1d-bfcb-8f0e11bfbbb4.affiliate.com\\\",\\\"imageUrl\\\":\\\"https://radonline.de/images/aa3e2611-4434-42f9-bf5d-e8f09c66cff7.jpg\\\",\\\"source\\\":\\\"radonline.de\\\", \\\"crawled\\\":\\\"false\\\"}\",\n            \"type\": \"String\"\n        }\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/message",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "message"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

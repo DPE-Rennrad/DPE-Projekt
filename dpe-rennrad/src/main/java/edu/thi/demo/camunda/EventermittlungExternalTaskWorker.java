@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+
 @Startup
 @ApplicationScoped
 public class EventermittlungExternalTaskWorker {
@@ -938,5 +940,3 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 }
-
-//Eduard Merker
