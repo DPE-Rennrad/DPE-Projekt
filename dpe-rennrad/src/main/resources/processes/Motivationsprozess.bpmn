@@ -134,7 +134,7 @@
     <bpmn:sequenceFlow id="Flow_0o3k5ia" sourceRef="Activity_1pzfozf" targetRef="Gateway_0k3x4xn" />
     <bpmn:sequenceFlow id="Flow_1gkm7ay" sourceRef="Gateway_1xamadm" targetRef="Activity_1pzfozf" />
     <bpmn:sequenceFlow id="Flow_091w5zp" sourceRef="Gateway_1tc3tuu" targetRef="Gateway_1xamadm">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0z4tnk7" sourceRef="Gateway_03ymq4e" targetRef="Gateway_1tc3tuu" />
     <bpmn:sendTask id="Activity_06o50er" name="motivierende Nachricht an Kunden versenden">
@@ -211,7 +211,7 @@
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/sprucherstellen</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/spruch</camunda:inputParameter>
             <camunda:inputParameter name="method">GET</camunda:inputParameter>
             <camunda:outputParameter name="spruch">${response}</camunda:outputParameter>
           </camunda:inputOutput>
@@ -252,7 +252,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_15j0zh3" sourceRef="Gateway_11499ta" targetRef="Event_1ihnanj" />
     <bpmn:sequenceFlow id="Flow_1r8rfu8" name="Ja" sourceRef="Gateway_1tc3tuu" targetRef="Gateway_11499ta">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sendTask id="Activity_0wlmabh" name="Kunde nach Krankheit oder Verletzung abfragen">
       <bpmn:extensionElements>
