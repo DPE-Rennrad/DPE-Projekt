@@ -165,7 +165,7 @@
     <bpmn:intermediateCatchEvent id="Event_0jcqxj3" name="Wetter Daten erhalten">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="weatherInfo">${data}</camunda:outputParameter>
+          <camunda:outputParameter name="weatherInfo">${wetterAntwort}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_13avxjc</bpmn:incoming>
@@ -177,14 +177,6 @@
       <bpmn:incoming>Flow_0he6cpj</bpmn:incoming>
       <bpmn:outgoing>Flow_0vwqxs1</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:endEvent id="Event_1ihnanj" name="Kunde motiviert">
-      <bpmn:incoming>Flow_15j0zh3</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_11499ta">
-      <bpmn:incoming>Flow_1r8rfu8</bpmn:incoming>
-      <bpmn:incoming>Flow_1rnepsl</bpmn:incoming>
-      <bpmn:outgoing>Flow_15j0zh3</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:intermediateCatchEvent id="Event_1i47jw0" name="Antwort von Kunde erhalten">
       <bpmn:incoming>Flow_1j903qy</bpmn:incoming>
       <bpmn:outgoing>Flow_01knm6z</bpmn:outgoing>
@@ -217,29 +209,6 @@
       <bpmn:outgoing>Flow_04grslc</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0gpkdc4" messageRef="Message_2gil35l" />
     </bpmn:startEvent>
-    <bpmn:sendTask id="Activity_04af9rs" name="motivierende Nachricht an Kunden versenden">
-      <bpmn:extensionElements>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/verhinderungsabfrage</camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="headers">
-              <camunda:map>
-                <camunda:entry key="Content-Type">application/json</camunda:entry>
-              </camunda:map>
-            </camunda:inputParameter>
-            <camunda:inputParameter name="payload">
-              <camunda:script scriptFormat="JavaScript">JSON.stringify({
-  "message": "Sind sie verletzt oder kkkrank?"
-});</camunda:script>
-            </camunda:inputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0cid8uq</bpmn:incoming>
-      <bpmn:outgoing>Flow_1rnepsl</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_0io049m" sourceRef="Event_0a1wohf" targetRef="Gateway_03ymq4e" />
     <bpmn:sequenceFlow id="Flow_01knm6z" sourceRef="Event_1i47jw0" targetRef="Gateway_03ymq4e" />
     <bpmn:sequenceFlow id="Flow_0z4tnk7" sourceRef="Gateway_03ymq4e" targetRef="Gateway_1tc3tuu" />
@@ -262,7 +231,7 @@
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/motivationsergebnis</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/verhinderungsabfrage</camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
@@ -287,13 +256,38 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT24H</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0vwqxs1" sourceRef="Gateway_0k3x4xn" targetRef="Event_06aswx8" />
-    <bpmn:sequenceFlow id="Flow_0cid8uq" sourceRef="Event_06aswx8" targetRef="Activity_04af9rs" />
-    <bpmn:intermediateCatchEvent id="Event_06aswx8">
+    <bpmn:sequenceFlow id="Flow_0vwqxs1" sourceRef="Gateway_0k3x4xn" targetRef="Activity_04af9rs" />
+    <bpmn:exclusiveGateway id="Gateway_11499ta">
+      <bpmn:incoming>Flow_1r8rfu8</bpmn:incoming>
+      <bpmn:incoming>Flow_1rnepsl</bpmn:incoming>
+      <bpmn:outgoing>Flow_15j0zh3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_1ihnanj" name="Kunde motiviert">
+      <bpmn:incoming>Flow_15j0zh3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sendTask id="Activity_04af9rs" name="motivierende Nachricht an Kunden versenden">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/motivationsergebnis</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="JavaScript">JSON.stringify({
+  message: "Hi, wir haben gesehen du warst fünf Tage nicht aktiv :( Komm jetzt zurück. " + execution.getVariable("weatherInfo") + " " + execution.getVariable("spruch") 
+});</camunda:script>
+            </camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0vwqxs1</bpmn:incoming>
-      <bpmn:outgoing>Flow_0cid8uq</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1rhiid0" messageRef="Message_1t8dtb3" />
-    </bpmn:intermediateCatchEvent>
+      <bpmn:outgoing>Flow_1rnepsl</bpmn:outgoing>
+    </bpmn:sendTask>
   </bpmn:process>
   <bpmn:message id="Message_1im43rs" name="Wetter_Daten_erhalten" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -470,15 +464,6 @@
       <bpmndi:BPMNShape id="Gateway_06wapb4_di" bpmnElement="Gateway_0k3x4xn">
         <dc:Bounds x="1465" y="865" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1ihnanj_di" bpmnElement="Event_1ihnanj">
-        <dc:Bounds x="2092" y="872" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2071" y="915" width="78" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_11499ta_di" bpmnElement="Gateway_11499ta" isMarkerVisible="true">
-        <dc:Bounds x="1985" y="865" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1uox4yn_di" bpmnElement="Event_1i47jw0">
         <dc:Bounds x="542" y="872" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -492,15 +477,21 @@
       <bpmndi:BPMNShape id="Event_0fwe2oh_di" bpmnElement="Event_0xodff3">
         <dc:Bounds x="232" y="872" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1stva1d" bpmnElement="Activity_04af9rs">
-        <dc:Bounds x="1660" y="850" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_04oxa9q" bpmnElement="Activity_0wlmabh">
         <dc:Bounds x="357" y="850" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_15eryg7_di" bpmnElement="Event_06aswx8">
-        <dc:Bounds x="1562" y="872" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_11499ta_di" bpmnElement="Gateway_11499ta" isMarkerVisible="true">
+        <dc:Bounds x="1855" y="865" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ihnanj_di" bpmnElement="Event_1ihnanj">
+        <dc:Bounds x="1982" y="872" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1961" y="915" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1stva1d" bpmnElement="Activity_04af9rs">
+        <dc:Bounds x="1640" y="850" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14fem8m_di" bpmnElement="Event_0a1wohf">
         <dc:Bounds x="439" y="912" width="36" height="36" />
@@ -529,10 +520,10 @@
       <bpmndi:BPMNEdge id="Flow_1r8rfu8_di" bpmnElement="Flow_1r8rfu8">
         <di:waypoint x="840" y="865" />
         <di:waypoint x="840" y="790" />
-        <di:waypoint x="2010" y="790" />
-        <di:waypoint x="2010" y="865" />
+        <di:waypoint x="1880" y="790" />
+        <di:waypoint x="1880" y="865" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1419" y="772" width="12" height="14" />
+          <dc:Bounds x="1354" y="772" width="12" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1gkm7ay_di" bpmnElement="Flow_1gkm7ay">
@@ -558,12 +549,12 @@
         <di:waypoint x="1490" y="915" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15j0zh3_di" bpmnElement="Flow_15j0zh3">
-        <di:waypoint x="2035" y="890" />
-        <di:waypoint x="2092" y="890" />
+        <di:waypoint x="1905" y="890" />
+        <di:waypoint x="1982" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rnepsl_di" bpmnElement="Flow_1rnepsl">
-        <di:waypoint x="1760" y="890" />
-        <di:waypoint x="1985" y="890" />
+        <di:waypoint x="1740" y="890" />
+        <di:waypoint x="1855" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04grslc_di" bpmnElement="Flow_04grslc">
         <di:waypoint x="268" y="890" />
@@ -575,11 +566,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0vwqxs1_di" bpmnElement="Flow_0vwqxs1">
         <di:waypoint x="1515" y="890" />
-        <di:waypoint x="1562" y="890" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0cid8uq_di" bpmnElement="Flow_0cid8uq">
-        <di:waypoint x="1598" y="890" />
-        <di:waypoint x="1660" y="890" />
+        <di:waypoint x="1640" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_0d0h2jb" bpmnElement="Participant_03947wf" isHorizontal="true">
         <dc:Bounds x="151" y="1120" width="1997" height="60" />
