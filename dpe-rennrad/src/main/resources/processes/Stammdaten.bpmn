@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0wgr0kf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0wgr0kf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0a0w254">
     <bpmn:participant id="Participant_09h75yi" name="Stammdatenpflegeprozess" processRef="Process_1t0eqlk" />
     <bpmn:participant id="Participant_0omj2en" name="Admin/Verantwortlicher" />
     <bpmn:messageFlow id="Flow_0sjlnw0" sourceRef="Participant_0omj2en" targetRef="StartEvent_1" />
   </bpmn:collaboration>
   <bpmn:process id="Process_1t0eqlk" isExecutable="true" camunda:historyTimeToLive="P1D">
-    <bpmn:startEvent id="StartEvent_1" name="Stammdaten Änderung">
-      <bpmn:outgoing>Flow_07fbnw1</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1xmtidt" messageRef="Message_1tg1rmh" />
-    </bpmn:startEvent>
+    <bpmn:dataStoreReference id="DataStoreReference_16lwlzu" name="ExternalProvidersDB" />
+    <bpmn:dataStoreReference id="DataStoreReference_1nrxqvw" name="EventDB" />
+    <bpmn:serviceTask id="Activity_1p21bz1" name="Stammdaten updaten" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+      <bpmn:incoming>Flow_1ixznek</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fyoaeu</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_1yqk18t">
+        <bpmn:targetRef>DataStoreReference_16lwlzu</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1shhncc" name="Sammdaten geändert">
-      <bpmn:incoming>Flow_0ri0tyk</bpmn:incoming>
+      <bpmn:incoming>Flow_1fyoaeu</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1" name="Stammdaten Änderung">
+      <bpmn:outgoing>Flow_1ixznek</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1xmtidt" />
+    </bpmn:startEvent>
     <bpmn:subProcess id="Activity_1e1fv0f" triggeredByEvent="true">
-      <bpmn:endEvent id="Event_1iv0js0" name="Abgelaufene Events gelöscht">
-        <bpmn:incoming>Flow_0979rdu</bpmn:incoming>
-      </bpmn:endEvent>
+      <bpmn:startEvent id="Event_10t4pyw" name="12h" isInterrupting="false">
+        <bpmn:outgoing>Flow_196j3jh</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_0bkvfg8" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_196j3jh" sourceRef="Event_10t4pyw" targetRef="Activity_0xvlj5e" />
       <bpmn:serviceTask id="Activity_0xvlj5e" name="Abgelaufene Events löschen" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
         <bpmn:incoming>Flow_196j3jh</bpmn:incoming>
         <bpmn:outgoing>Flow_0979rdu</bpmn:outgoing>
@@ -24,90 +35,68 @@
           <bpmn:targetRef>DataStoreReference_1nrxqvw</bpmn:targetRef>
         </bpmn:dataOutputAssociation>
       </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_1iv0js0" name="Abgelaufene Events gelöscht">
+        <bpmn:incoming>Flow_0979rdu</bpmn:incoming>
+      </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0979rdu" sourceRef="Activity_0xvlj5e" targetRef="Event_1iv0js0" />
-      <bpmn:startEvent id="Event_10t4pyw" name="12h" isInterrupting="false">
-        <bpmn:outgoing>Flow_196j3jh</bpmn:outgoing>
-        <bpmn:timerEventDefinition id="TimerEventDefinition_0bkvfg8">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT12H</bpmn:timeDuration>
-        </bpmn:timerEventDefinition>
-      </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_196j3jh" sourceRef="Event_10t4pyw" targetRef="Activity_0xvlj5e" />
     </bpmn:subProcess>
-    <bpmn:serviceTask id="Activity_1vjm7m6" name="Stammdaten updaten">
-      <bpmn:extensionElements>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/stammdaten</camunda:inputParameter>
-            <camunda:inputParameter name="method">GET</camunda:inputParameter>
-            <camunda:outputParameter name="stammdatenaktualisiert">${response}</camunda:outputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_07fbnw1</bpmn:incoming>
-      <bpmn:outgoing>Flow_0ri0tyk</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="DataOutputAssociation_0hbpt81">
-        <bpmn:targetRef>DataStoreReference_16lwlzu</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_07fbnw1" sourceRef="StartEvent_1" targetRef="Activity_1vjm7m6" />
-    <bpmn:sequenceFlow id="Flow_0ri0tyk" sourceRef="Activity_1vjm7m6" targetRef="Event_1shhncc" />
+    <bpmn:sequenceFlow id="Flow_1ixznek" sourceRef="StartEvent_1" targetRef="Activity_1p21bz1" />
+    <bpmn:sequenceFlow id="Flow_1fyoaeu" sourceRef="Activity_1p21bz1" targetRef="Event_1shhncc" />
   </bpmn:process>
-  <bpmn:message id="Message_1tg1rmh" name="Stammdaten" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0a0w254">
       <bpmndi:BPMNShape id="Participant_09h75yi_di" bpmnElement="Participant_09h75yi" isHorizontal="true">
-        <dc:Bounds x="132" y="270" width="508" height="460" />
+        <dc:Bounds x="132" y="290" width="508" height="460" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zbxim4_di" bpmnElement="Activity_1p21bz1">
+        <dc:Bounds x="330" y="370" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1shhncc_di" bpmnElement="Event_1shhncc">
-        <dc:Bounds x="542" y="372" width="36" height="36" />
+        <dc:Bounds x="542" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="530" y="415" width="60" height="27" />
+          <dc:Bounds x="530" y="435" width="60" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1mddg39_di" bpmnElement="StartEvent_1">
-        <dc:Bounds x="185" y="372" width="36" height="36" />
+        <dc:Bounds x="212" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="172" y="415" width="63" height="27" />
+          <dc:Bounds x="199" y="435" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_16vhkcz" bpmnElement="Activity_1vjm7m6">
-        <dc:Bounds x="330" y="350" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1e1fv0f_di" bpmnElement="Activity_1e1fv0f" isExpanded="true">
-        <dc:Bounds x="220" y="480" width="350" height="200" />
+        <dc:Bounds x="240" y="500" width="350" height="200" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14ywseq_di" bpmnElement="Event_10t4pyw">
-        <dc:Bounds x="242" y="572" width="36" height="36" />
+        <dc:Bounds x="262" y="592" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="251" y="615" width="19" height="14" />
+          <dc:Bounds x="271" y="635" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1r6kzgm_di" bpmnElement="Activity_0xvlj5e">
-        <dc:Bounds x="330" y="550" width="100" height="80" />
+        <dc:Bounds x="350" y="570" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1iv0js0_di" bpmnElement="Event_1iv0js0">
-        <dc:Bounds x="482" y="572" width="36" height="36" />
+        <dc:Bounds x="502" y="592" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="461" y="615" width="79" height="27" />
+          <dc:Bounds x="481" y="635" width="79" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_196j3jh_di" bpmnElement="Flow_196j3jh">
-        <di:waypoint x="278" y="590" />
-        <di:waypoint x="330" y="590" />
+        <di:waypoint x="298" y="610" />
+        <di:waypoint x="350" y="610" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0979rdu_di" bpmnElement="Flow_0979rdu">
-        <di:waypoint x="430" y="590" />
-        <di:waypoint x="482" y="590" />
+        <di:waypoint x="450" y="610" />
+        <di:waypoint x="502" y="610" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_07fbnw1_di" bpmnElement="Flow_07fbnw1">
-        <di:waypoint x="221" y="390" />
-        <di:waypoint x="330" y="390" />
+      <bpmndi:BPMNEdge id="Flow_1ixznek_di" bpmnElement="Flow_1ixznek">
+        <di:waypoint x="248" y="410" />
+        <di:waypoint x="330" y="410" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ri0tyk_di" bpmnElement="Flow_0ri0tyk">
-        <di:waypoint x="430" y="390" />
-        <di:waypoint x="542" y="390" />
+      <bpmndi:BPMNEdge id="Flow_1fyoaeu_di" bpmnElement="Flow_1fyoaeu">
+        <di:waypoint x="430" y="410" />
+        <di:waypoint x="542" y="410" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1vdcteq_di" bpmnElement="Participant_0omj2en" isHorizontal="true">
         <dc:Bounds x="132" y="80" width="508" height="60" />
@@ -120,22 +109,22 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_1nrxqvw_di" bpmnElement="DataStoreReference_1nrxqvw">
-        <dc:Bounds x="355" y="785" width="50" height="50" />
+        <dc:Bounds x="375" y="795" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="358" y="842" width="44" height="14" />
+          <dc:Bounds x="378" y="852" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0sjlnw0_di" bpmnElement="Flow_0sjlnw0">
-        <di:waypoint x="203" y="140" />
-        <di:waypoint x="203" y="372" />
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1yqk18t_di" bpmnElement="DataOutputAssociation_1yqk18t">
+        <di:waypoint x="379" y="370" />
+        <di:waypoint x="376" y="245" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataOutputAssociation_0a3as8o_di" bpmnElement="DataOutputAssociation_0a3as8o">
-        <di:waypoint x="380" y="630" />
-        <di:waypoint x="380" y="785" />
+        <di:waypoint x="400" y="650" />
+        <di:waypoint x="400" y="795" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataOutputAssociation_0hbpt81_di" bpmnElement="DataOutputAssociation_0hbpt81">
-        <di:waypoint x="380" y="350" />
-        <di:waypoint x="380" y="245" />
+      <bpmndi:BPMNEdge id="Flow_0sjlnw0_di" bpmnElement="Flow_0sjlnw0">
+        <di:waypoint x="230" y="140" />
+        <di:waypoint x="230" y="392" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
