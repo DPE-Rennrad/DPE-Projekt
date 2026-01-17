@@ -57,3 +57,6 @@ Dieses Quarkus-Projekt integriert BPMN-Prozesse mit Camunda Community für eine 
   Beispiel: `curl -X POST http://localhost:8088/kunde/deinstallieren/abc-123-xyz`
 ## Troubleshooting
 - **Parsing-Fehler**: Prüfe BPMN in Modeler (siehe Anleitung in CONFIG_CHEAT_SHEET.md).
+
+# Crawler
+In den Ordner dpe-crawler wechseln und `mvn spring-boot:run`ausführen.
