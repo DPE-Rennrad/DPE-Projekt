@@ -228,6 +228,67 @@
       "response": []
     },
     {
+      "name": "Start Motivation - condition zu 5tage ",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"value\": \"5tage\",\r\n  \"type\": \"String\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/process-instance/a0b93d60-f3e5-11f0-8318-f627040849af/variables/inaktivitat",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "process-instance",
+            "a0b93d60-f3e5-11f0-8318-f627040849af",
+            "variables",
+            "inaktivitat"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Kunde Antwort",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"messageName\": \"AntwortNachrichten\",\r\n  \"processVariables\": {\r\n    \"entscheidung\": {\r\n      \"value\": \"Nein\",\r\n      \"type\": \"String\"\r\n    }\r\n  },\r\n  \"resultEnabled\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/message",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "message"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "wetter-antwort",
       "request": {
         "method": "POST",
@@ -257,35 +318,6 @@
           "path": [
             "api",
             "wetter-antwort"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Kunde Antwort",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"messageName\": \"AntwortNachrichten\",\r\n    \"resultEnabled\": true\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8080/engine-rest/message",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "engine-rest",
-            "message"
           ]
         }
       },

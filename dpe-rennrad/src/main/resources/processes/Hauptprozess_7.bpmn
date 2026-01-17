@@ -6,7 +6,7 @@
     <bpmn:participant id="Participant_01jdp0s" name="KI" />
     <bpmn:messageFlow id="Flow_05cd1kt" name="Installationsmitteilung" sourceRef="Participant_01jdp0s" targetRef="StartEvent_1" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_194gnhl" isExecutable="true" camunda:historyTimeToLive="P1D">
+  <bpmn:process id="Process_194gnhl" name="Hauptprozess" isExecutable="true" camunda:historyTimeToLive="P1D">
     <bpmn:intermediateCatchEvent id="Event_00zljba" name="Kunde will App deinstallieren">
       <bpmn:incoming>Flow_1r260w5</bpmn:incoming>
       <bpmn:outgoing>Flow_15dxtey</bpmn:outgoing>
@@ -40,9 +40,9 @@
       </bpmn:callActivity>
       <bpmn:startEvent id="Event_1td7srf" name="5 Tage inaktiv" isInterrupting="false">
         <bpmn:outgoing>Flow_0au6cq6</bpmn:outgoing>
-        <bpmn:timerEventDefinition id="TimerEventDefinition_1jxg20w">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
-        </bpmn:timerEventDefinition>
+        <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_07zw323" camunda:variableName="inaktivitat" camunda:variableEvents="create, update">
+          <bpmn:condition xsi:type="bpmn:tFormalExpression">${inaktivitat== "5tage"}</bpmn:condition>
+        </bpmn:conditionalEventDefinition>
       </bpmn:startEvent>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_1a3tzxt" triggeredByEvent="true">
@@ -194,22 +194,22 @@
           <dc:Bounds x="558" y="1215" width="86" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1so5l49_di" bpmnElement="Event_1td7srf">
+      <bpmndi:BPMNShape id="Event_1agedbm_di" bpmnElement="Event_1td7srf">
         <dc:Bounds x="252" y="1172" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="236" y="1215" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1d5e7fz_di" bpmnElement="Activity_1alpj7x">
-        <dc:Bounds x="408" y="1150" width="100" height="80" />
+        <dc:Bounds x="404" y="1150" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0au6cq6_di" bpmnElement="Flow_0au6cq6">
         <di:waypoint x="288" y="1190" />
-        <di:waypoint x="408" y="1190" />
+        <di:waypoint x="404" y="1190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11fnkkv_di" bpmnElement="Flow_11fnkkv">
-        <di:waypoint x="508" y="1190" />
+        <di:waypoint x="504" y="1190" />
         <di:waypoint x="582" y="1190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1a3tzxt_di" bpmnElement="Activity_1a3tzxt" isExpanded="true">
