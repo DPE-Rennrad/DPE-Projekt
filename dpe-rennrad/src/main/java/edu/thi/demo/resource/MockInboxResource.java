@@ -62,6 +62,10 @@ public class MockInboxResource {
         public String message;
     }
 
+    public static class MotivationsergebnisDeliveryRequest {
+        public String message;
+    }
+
     // ========== Newsletter ENDPOINTS (Merker Eduard) ==========
     @POST
     @Path("/newsletter")
@@ -341,11 +345,10 @@ public class MockInboxResource {
 
     @POST
     @Path("/motivationsergebnis")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response receiveMotivationsergebnis(String body) {
+    public Response receiveMotivationsergebnis(MotivationsergebnisDeliveryRequest body) {
         Map<String, Object> item = new LinkedHashMap<>();
         item.put("receivedAt", Instant.now().toString());
-        item.put("content", body);
+        item.put("message", body == null ? null : body.message);
 
         motivationsergebnisDeliveries.addFirst(item);
         while (motivationsergebnisDeliveries.size() > MAX_ITEMS) {

@@ -213,7 +213,7 @@
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/verhinderungsabfrage</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/motivationsergebnis</camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
@@ -229,7 +229,7 @@
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_02qzltf</bpmn:incoming>
+      <bpmn:incoming>Flow_0bdjlt7</bpmn:incoming>
       <bpmn:outgoing>Flow_1j903qy</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:intermediateCatchEvent id="Event_1i47jw0" name="Antwort von Kunde erhalten">
@@ -264,29 +264,6 @@
       <bpmn:outgoing>Flow_04grslc</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0gpkdc4" messageRef="Message_2gil35l" />
     </bpmn:startEvent>
-    <bpmn:sendTask id="Activity_04af9rs" name="motivierende Nachricht an Kunden versenden">
-      <bpmn:extensionElements>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/motivationsergebnis</camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="header">
-              <camunda:map>
-                <camunda:entry key="Content-Type">application/json</camunda:entry>
-              </camunda:map>
-            </camunda:inputParameter>
-            <camunda:inputParameter name="payload">
-              <camunda:script scriptFormat="JavaScript">JSON.stringify({
-  "message": "tystLSAF"
-});</camunda:script>
-            </camunda:inputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_04grslc</bpmn:incoming>
-      <bpmn:outgoing>Flow_02qzltf</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:boundaryEvent id="Event_0a1wohf" name="1 Tag" attachedToRef="Activity_0wlmabh">
       <bpmn:outgoing>Flow_0io049m</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1jn6aiv">
@@ -310,9 +287,32 @@
     <bpmn:sequenceFlow id="Flow_1qbqzng" sourceRef="Gateway_0k3x4xn" targetRef="Activity_06o50er" />
     <bpmn:sequenceFlow id="Flow_15j0zh3" sourceRef="Gateway_11499ta" targetRef="Event_1ihnanj" />
     <bpmn:sequenceFlow id="Flow_0nyf98a" sourceRef="Activity_06o50er" targetRef="Gateway_11499ta" />
-    <bpmn:sequenceFlow id="Flow_02qzltf" sourceRef="Activity_04af9rs" targetRef="Activity_0wlmabh" />
     <bpmn:sequenceFlow id="Flow_1j903qy" sourceRef="Activity_0wlmabh" targetRef="Event_1i47jw0" />
     <bpmn:sequenceFlow id="Flow_04grslc" sourceRef="Event_0xodff3" targetRef="Activity_04af9rs" />
+    <bpmn:sendTask id="Activity_04af9rs" name="motivierende Nachricht an Kunden versenden">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/mock-inbox/verhinderungsabfrage</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="JavaScript">JSON.stringify({
+  "message": "Sind sie verletzt oder kkkrank?"
+});</camunda:script>
+            </camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04grslc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bdjlt7</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_0bdjlt7" sourceRef="Activity_04af9rs" targetRef="Activity_0wlmabh" />
   </bpmn:process>
   <bpmn:message id="Message_1im43rs" name="Wetter_Daten_erhalten" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -518,8 +518,8 @@
       <bpmndi:BPMNShape id="Event_0fwe2oh_di" bpmnElement="Event_0xodff3">
         <dc:Bounds x="262" y="872" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1wbqzl0" bpmnElement="Activity_04af9rs">
-        <dc:Bounds x="340" y="850" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_15ifgnm" bpmnElement="Activity_04af9rs">
+        <dc:Bounds x="330" y="850" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14fem8m_di" bpmnElement="Event_0a1wohf">
         <dc:Bounds x="552" y="912" width="36" height="36" />
@@ -588,17 +588,17 @@
         <di:waypoint x="1920" y="890" />
         <di:waypoint x="2095" y="890" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02qzltf_di" bpmnElement="Flow_02qzltf">
-        <di:waypoint x="440" y="890" />
-        <di:waypoint x="470" y="890" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1j903qy_di" bpmnElement="Flow_1j903qy">
         <di:waypoint x="570" y="890" />
         <di:waypoint x="652" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04grslc_di" bpmnElement="Flow_04grslc">
         <di:waypoint x="298" y="890" />
-        <di:waypoint x="340" y="890" />
+        <di:waypoint x="330" y="890" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bdjlt7_di" bpmnElement="Flow_0bdjlt7">
+        <di:waypoint x="430" y="890" />
+        <di:waypoint x="470" y="890" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_0d0h2jb" bpmnElement="Participant_03947wf" isHorizontal="true">
         <dc:Bounds x="261" y="1120" width="1997" height="60" />
