@@ -18,3 +18,6 @@ public class RennradSoapService {
         return rennradService.getAllRennraeder();
     }
 }
+
+// Eduard Merker
+// für theoretische Erweiterungen

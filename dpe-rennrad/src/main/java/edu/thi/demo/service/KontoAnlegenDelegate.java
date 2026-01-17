@@ -26,3 +26,5 @@ public class KontoAnlegenDelegate implements JavaDelegate {
         }
     }
 }
+
+// Eduard Merker

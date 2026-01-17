@@ -12,3 +12,6 @@ public class RennradRepository implements PanacheRepository<Rennrad> {
         return list("#Rennrad.findByTyp", typ);
     }
 }
+
+// Eduard Merker
+// für theoretische Erweiterungen 

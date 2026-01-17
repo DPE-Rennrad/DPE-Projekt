@@ -31,9 +31,6 @@ public class MockInboxResource {
     private final ConcurrentLinkedDeque<Map<String, Object>> routeEmailDeliveries = new ConcurrentLinkedDeque<>();
     private final ConcurrentLinkedDeque<Map<String, Object>> bewertungsbogenDeliveries = new ConcurrentLinkedDeque<>();
     private final ConcurrentLinkedDeque<Map<String, Object>> produktempfehlungDeliveries = new ConcurrentLinkedDeque<>();
-    private final ConcurrentLinkedDeque<Map<String, Object>> verhinderungsabfrageDeliveries = new ConcurrentLinkedDeque<>();
-    private final ConcurrentLinkedDeque<Map<String, Object>> kiWetterabfrageDeliveries = new ConcurrentLinkedDeque<>();
-    private final ConcurrentLinkedDeque<Map<String, Object>> motivationsergebnisDeliveries = new ConcurrentLinkedDeque<>();
 
     public static class NewsletterDeliveryRequest {
         public String processInstanceId;
@@ -56,11 +53,7 @@ public class MockInboxResource {
         public Offer offer;
         public String sentAt;
     }
-
-    public static class VerhinderungsabfrageDeliveryRequest {
-        public String message;
-    }
-
+    // ========== Newsletter ENDPOINTS (Merker Eduard) ==========
     @POST
     @Path("/newsletter")
     public Response receiveNewsletter(NewsletterDeliveryRequest body) {
@@ -243,137 +236,6 @@ public class MockInboxResource {
         Map<String, Object> first = produktempfehlungDeliveries.peekFirst();
         if (first == null) {
             return Response.status(404).entity(Map.of("ok", false, "message", "No produktempfehlung received yet")).build();
-        }
-        return Response.ok(first).build();
-    }
-
-    // ========== Niklas Putz ==========
-
-    @POST
-    @Path("/verhinderungsabfrage")
-    public Response receiveVerhinderungsabfrage(VerhinderungsabfrageDeliveryRequest body) {
-        Map<String, Object> item = new LinkedHashMap<>();
-        item.put("receivedAt", Instant.now().toString());
-        item.put("message", body == null ? null : body.message);
-
-        verhinderungsabfrageDeliveries.addFirst(item);
-        while (verhinderungsabfrageDeliveries.size() > MAX_ITEMS) {
-            verhinderungsabfrageDeliveries.pollLast();
-        }
-
-        return Response.ok(Map.of("ok", true, "stored", verhinderungsabfrageDeliveries.size())).build();
-    }
-
-    @GET
-    @Path("/verhinderungsabfrage")
-    public List<Map<String, Object>> listVerhinderungsabfragen(@QueryParam("limit") @DefaultValue("20") int limit) {
-        int n = Math.max(1, Math.min(200, limit));
-        List<Map<String, Object>> out = new ArrayList<>(n);
-        int i = 0;
-        for (Map<String, Object> item : verhinderungsabfrageDeliveries) {
-            out.add(item);
-            i++;
-            if (i >= n) {
-                break;
-            }
-        }
-        return out;
-    }
-
-    @GET
-    @Path("/verhinderungsabfrage/latest")
-    public Response latestVerhinderungsabfrage() {
-        Map<String, Object> first = verhinderungsabfrageDeliveries.peekFirst();
-        if (first == null) {
-            return Response.status(404).entity(Map.of("ok", false, "message", "No verhinderungsabfrage received yet")).build();
-        }
-        return Response.ok(first).build();
-    }
-
-    // ========== Niklas Putz ==========
-
-    @POST
-    @Path("/KIWetterabfrage")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response receiveKIWetterabfrage(String body) {
-        Map<String, Object> item = new LinkedHashMap<>();
-        item.put("receivedAt", Instant.now().toString());
-        item.put("content", body);
-
-        kiWetterabfrageDeliveries.addFirst(item);
-        while (kiWetterabfrageDeliveries.size() > MAX_ITEMS) {
-            kiWetterabfrageDeliveries.pollLast();
-        }
-
-        return Response.ok(Map.of("ok", true, "stored", kiWetterabfrageDeliveries.size())).build();
-    }
-
-    @GET
-    @Path("/KIWetterabfrage")
-    public List<Map<String, Object>> listKIWetterabfragen(@QueryParam("limit") @DefaultValue("20") int limit) {
-        int n = Math.max(1, Math.min(200, limit));
-        List<Map<String, Object>> out = new ArrayList<>(n);
-        int i = 0;
-        for (Map<String, Object> item : kiWetterabfrageDeliveries) {
-            out.add(item);
-            i++;
-            if (i >= n) {
-                break;
-            }
-        }
-        return out;
-    }
-
-    @GET
-    @Path("/KIWetterabfrage/latest")
-    public Response latestKIWetterabfrage() {
-        Map<String, Object> first = kiWetterabfrageDeliveries.peekFirst();
-        if (first == null) {
-            return Response.status(404).entity(Map.of("ok", false, "message", "No KI Wetterabfrage received yet")).build();
-        }
-        return Response.ok(first).build();
-    }
-
-    // ========== Niklas Putz ==========
-
-    @POST
-    @Path("/motivationsergebnis")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response receiveMotivationsergebnis(String body) {
-        Map<String, Object> item = new LinkedHashMap<>();
-        item.put("receivedAt", Instant.now().toString());
-        item.put("content", body);
-
-        motivationsergebnisDeliveries.addFirst(item);
-        while (motivationsergebnisDeliveries.size() > MAX_ITEMS) {
-            motivationsergebnisDeliveries.pollLast();
-        }
-
-        return Response.ok(Map.of("ok", true, "stored", motivationsergebnisDeliveries.size())).build();
-    }
-
-    @GET
-    @Path("/motivationsergebnis")
-    public List<Map<String, Object>> listMotivationsergebnisse(@QueryParam("limit") @DefaultValue("20") int limit) {
-        int n = Math.max(1, Math.min(200, limit));
-        List<Map<String, Object>> out = new ArrayList<>(n);
-        int i = 0;
-        for (Map<String, Object> item : motivationsergebnisDeliveries) {
-            out.add(item);
-            i++;
-            if (i >= n) {
-                break;
-            }
-        }
-        return out;
-    }
-
-    @GET
-    @Path("/motivationsergebnis/latest")
-    public Response latestMotivationsergebnis() {
-        Map<String, Object> first = motivationsergebnisDeliveries.peekFirst();
-        if (first == null) {
-            return Response.status(404).entity(Map.of("ok", false, "message", "No Motivationsergebnis received yet")).build();
         }
         return Response.ok(first).build();
     }

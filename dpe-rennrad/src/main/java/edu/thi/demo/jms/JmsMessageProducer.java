@@ -85,3 +85,5 @@ public class JmsMessageProducer {
         }
     }
 }
+
+// Eduard Merker

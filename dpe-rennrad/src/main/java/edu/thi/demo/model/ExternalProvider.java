@@ -26,3 +26,5 @@ public class ExternalProvider extends PanacheEntity {
         this.active = active;
     }
 }
+
+// Eduard Merker

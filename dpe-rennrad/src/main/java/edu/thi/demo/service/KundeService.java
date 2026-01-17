@@ -23,3 +23,5 @@ public class KundeService {
         return kundeRepository.findById(id);
     }
 }
+
+// Eduard Merker

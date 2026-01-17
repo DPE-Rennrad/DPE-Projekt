@@ -32,3 +32,5 @@ public class JmsConfiguration {
         return factory;
     }
 }
+
+// Eduard Merker

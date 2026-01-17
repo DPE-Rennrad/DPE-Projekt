@@ -35,3 +35,5 @@ public class ExternalProviderLadenDelegate implements JavaDelegate {
         }
     }
 }
+
+// Eduard Merker

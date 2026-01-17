@@ -938,3 +938,5 @@ public class EventermittlungExternalTaskWorker {
         }
     }
 }
+
+//Eduard Merker

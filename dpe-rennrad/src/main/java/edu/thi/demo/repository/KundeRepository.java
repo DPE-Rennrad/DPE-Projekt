@@ -8,3 +8,5 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class KundeRepository implements PanacheRepository<Kunde> {
 
 }
+
+// Eduard Merker
