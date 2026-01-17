@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "77647f56-edc0-4f21-a0e4-b293d2a34c6b",
+    "_postman_id": "d9cd4d15-35d8-48ab-b57f-98d1ceb22781",
     "name": "DPE",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "29954503"
+    "_exporter_id": "44509975",
+    "_collection_link": "https://go.postman.co/collection/44509975-d9cd4d15-35d8-48ab-b57f-98d1ceb22781?source=collection_link"
   },
   "item": [
     {
@@ -124,35 +125,6 @@
       "response": []
     },
     {
-      "name": "Routenempfehlungsprozess triggern",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:8080/engine-rest/process-definition/key/Routenempfehlungsprozess/start",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "engine-rest",
-            "process-definition",
-            "key",
-            "Routenempfehlungsprozess",
-            "start"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "Routengenerierung",
       "request": {
         "method": "GET",
@@ -227,13 +199,13 @@
       "response": []
     },
     {
-      "name": "process_start",
+      "name": "produkt_empfehlung",
       "request": {
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"messageName\": \"AppInstallMessage\",\n    \"resultEnabled\": true,\n    \"processVariables\": {\n      \"kundeName\": {\n        \"value\": \"Max Mustermann\",\n        \"type\": \"String\"\n      },\n      \"kundeEmail\": {\n        \"value\": \"max.mustermann@example.com\",\n        \"type\": \"String\"\n      }\n    }\n}",
+          "raw": "{\n    \"messageName\": \"Produktbedarfmessage\",\n    \"resultEnabled\": true,\n    \"processVariables\": {\n        \"offer\": {\n            \"value\": \"{\\\"id\\\":\\\"99f3639c-cc3c-4567-8fb5-1b5f209778af\\\",\\\"title\\\":\\\"Giant Endurance Road Bike Carbon 8477\\\",\\\"description\\\":\\\"Top Endurance Road Bike with carbon frame and Shimano/SRAM groupset\\\",\\\"price\\\":8591.17,\\\"originalPrice\\\":8591.17,\\\"discountPercent\\\":0,\\\"brand\\\":\\\"Giant\\\",\\\"category\\\":\\\"Endurance Road Bike\\\",\\\"url\\\":\\\"https://radonline.de/product/7aa21a48-c55b-4a1d-bfcb-8f0e11bfbbb4.affiliate.com\\\",\\\"imageUrl\\\":\\\"https://radonline.de/images/aa3e2611-4434-42f9-bf5d-e8f09c66cff7.jpg\\\",\\\"source\\\":\\\"radonline.de\\\", \\\"crawled\\\":\\\"false\\\"}\",\n            \"type\": \"String\"\n        }\n    }\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -256,13 +228,149 @@
       "response": []
     },
     {
-      "name": "produkt_empfehlung",
+      "name": "wetter-antwort",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "Frische Luft pur! Bei knackigen -2 Grad C und trockenen Strassen kannst du jetzt eine herrlich belebende Radtour erleben.",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/api/wetter-antwort",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "api",
+            "wetter-antwort"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Kunde Antwort",
       "request": {
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"messageName\": \"Produktbedarfmessage\",\n    \"resultEnabled\": true,\n    \"processVariables\": {\n        \"offer\": {\n            \"value\": \"{\\\"id\\\":\\\"99f3639c-cc3c-4567-8fb5-1b5f209778af\\\",\\\"title\\\":\\\"Giant Endurance Road Bike Carbon 8477\\\",\\\"description\\\":\\\"Top Endurance Road Bike with carbon frame and Shimano/SRAM groupset\\\",\\\"price\\\":8591.17,\\\"originalPrice\\\":8591.17,\\\"discountPercent\\\":0,\\\"brand\\\":\\\"Giant\\\",\\\"category\\\":\\\"Endurance Road Bike\\\",\\\"url\\\":\\\"https://radonline.de/product/7aa21a48-c55b-4a1d-bfcb-8f0e11bfbbb4.affiliate.com\\\",\\\"imageUrl\\\":\\\"https://radonline.de/images/aa3e2611-4434-42f9-bf5d-e8f09c66cff7.jpg\\\",\\\"source\\\":\\\"radonline.de\\\", \\\"crawled\\\":\\\"false\\\"}\",\n            \"type\": \"String\"\n        }\n    }\n}",
+          "raw": "{\r\n    \"messageName\": \"AntwortNachrichten\",\r\n    \"resultEnabled\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/message",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "message"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "verhinderungsabfrage",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8088/mock-inbox/verhinderungsabfrage",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "mock-inbox",
+            "verhinderungsabfrage"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "KIWetterabfrage",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/mock-inbox/KIWetterabfrage",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "mock-inbox",
+            "KIWetterabfrage"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "motivationsergebnis",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8088/mock-inbox/motivationsergebnis",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8088",
+          "path": [
+            "mock-inbox",
+            "motivationsergebnis"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Routenbedarfsmessage",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"messageName\": \"Routenbedarfmessage\",\r\n    \"resultEnabled\": true\r\n\r\n}",
           "options": {
             "raw": {
               "language": "json"
