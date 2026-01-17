@@ -53,6 +53,11 @@ public class MockInboxResource {
         public Offer offer;
         public String sentAt;
     }
+
+    public static class VerhinderungsabfrageDeliveryRequest {
+        public String message;
+    }
+
     // ========== Newsletter ENDPOINTS (Merker Eduard) ==========
     @POST
     @Path("/newsletter")
