@@ -62,6 +62,10 @@ public class MockInboxResource {
         public String message;
     }
 
+    public static class KIWetterabfrageDeliveryRequest {
+        public String message;
+    }
+
     public static class MotivationsergebnisDeliveryRequest {
         public String message;
     }
@@ -301,11 +305,10 @@ public class MockInboxResource {
 
     @POST
     @Path("/KIWetterabfrage")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response receiveKIWetterabfrage(String body) {
+    public Response receiveKIWetterabfrage(KIWetterabfrageDeliveryRequest body) {
         Map<String, Object> item = new LinkedHashMap<>();
         item.put("receivedAt", Instant.now().toString());
-        item.put("content", body);
+        item.put("message", body == null ? null : body.message);
 
         kiWetterabfrageDeliveries.addFirst(item);
         while (kiWetterabfrageDeliveries.size() > MAX_ITEMS) {
