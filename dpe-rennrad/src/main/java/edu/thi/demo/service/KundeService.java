@@ -22,6 +22,17 @@ public class KundeService {
     public Kunde getKundeById(Long id) {
         return kundeRepository.findById(id);
     }
+
+    @Transactional
+    public Kunde updateKunde(Long id, Kunde kunde) {
+        Kunde existing = kundeRepository.findById(id);
+        if (existing != null) {
+            existing.name = kunde.name;
+            existing.email = kunde.email;
+            kundeRepository.persist(existing);
+        }
+        return existing;
+    }
 }
 
 // Eduard Merker
