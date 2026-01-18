@@ -423,6 +423,36 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Stammdaten Update",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"messageName\": \"stammdaten-aenderung\",\r\n  \"processVariables\": {\r\n    \"kundeId\": {\"value\": 1, \"type\": \"Long\"},\r\n    \"kundeName\": {\"value\": \"Peter Neumann\", \"type\": \"String\"},\r\n    \"kundeEmail\": {\"value\": \"peter.Neumann@example.com\", \"type\": \"String\"}\r\n  }\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/engine-rest/message",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "engine-rest",
+            "message"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }
