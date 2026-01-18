@@ -1,4 +1,6 @@
 //Niklas Putz
+//Diese Klass definiert eine Camel Route die von einem Mock-Backend-System (KI)
+// eine Nachricht über das Wetter an ein nachrichtenbasiertes Zwischenereignis weitergibt
 
 package edu.thi.demo.services;
 
@@ -11,18 +13,17 @@ public class KiMockAntwortRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        // Endpoint fuer Backend-System (simuliert mit Postman)
-        // Nimmt Nachricht entgegen und leitet sie an Camunda Intermediate Catch Event weiter
+        // Endpoint fuer Backend-System (gemockt über Postman)
         from("platform-http:/api/wetter-antwort?httpMethodRestrict=POST")
                 .routeId("wetter-antwort-von-backend")
                 .log("=== Nachricht vom Backend-System empfangen ===")
                 .log("Eingehende Wetter-Antwort: ${body}")
-                // Bereinige die Nachricht (entferne Zeilenumbrueche und escape Anfuehrungszeichen)
+
+                // Bereinige die Nachricht von Zeilenumbrüchen etc.
                 .setProperty("wetterNachricht", body())
                 .process(exchange -> {
                     String nachricht = exchange.getProperty("wetterNachricht", String.class);
                     if (nachricht != null) {
-                        // Entferne Zeilenumbrueche und escape Anfuehrungszeichen
                         nachricht = nachricht.replace("\r\n", " ")
                                 .replace("\n", " ")
                                 .replace("\r", " ")
@@ -31,12 +32,12 @@ public class KiMockAntwortRoute extends RouteBuilder {
                         exchange.setProperty("wetterNachricht", nachricht);
                     }
                 })
-                // Entferne HTTP-spezifische Header
+                // Entfernt HTTP-spezifische Header:
                 .removeHeader("CamelHttpPath")
                 .removeHeader("CamelHttpUri")
                 .removeHeader("CamelHttpUrl")
                 .removeHeader("Content-Type")
-                // Baue die Camunda Message-Anfrage mit der empfangenen Nachricht
+                // Baut die JSON aus/mit der empfangenen Nachricht:
                 .setHeader("Content-Type", constant("application/json"))
                 .setBody(simple("{ " +
                         "\"messageName\": \"Wetter_Daten_erhalten\", " +
@@ -48,7 +49,7 @@ public class KiMockAntwortRoute extends RouteBuilder {
                 .log("Camunda Request Body: ${body}")
                 .to("http://localhost:8080/engine-rest/message?bridgeEndpoint=true")
                 .log("=== Camunda Response: ${body} ===")
-                // Bestaetigung zurueck an Postman
+                // Bestätigung
                 .setBody(constant("{\"status\": \"success\", \"message\": \"Nachricht an Prozess weitergeleitet\"}"));
     }
 }
