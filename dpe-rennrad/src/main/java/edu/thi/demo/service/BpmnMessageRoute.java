@@ -1,3 +1,6 @@
+//Niklas Putz
+//nur zum testen diese Klasse
+
 package edu.thi.demo.services;
 
 import org.apache.camel.builder.RouteBuilder;
@@ -13,7 +16,6 @@ public class BpmnMessageRoute extends RouteBuilder {
                 .routeId("trigger-bpmn-endpoint")
                 .log("=== Nachricht empfangen ===")
                 .log("Body: ${body}")
-                // Entferne HTTP-spezifische Header, die den Pfad enthalten
                 .removeHeader("CamelHttpPath")
                 .removeHeader("CamelHttpUri")
                 .removeHeader("CamelHttpUrl")

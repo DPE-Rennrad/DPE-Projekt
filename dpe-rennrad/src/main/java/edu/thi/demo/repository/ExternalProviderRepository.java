@@ -1,3 +1,4 @@
+// Eduard Merker
 package edu.thi.demo.repository;
 
 import edu.thi.demo.model.ExternalProvider;
@@ -13,4 +14,3 @@ public class ExternalProviderRepository implements PanacheRepository<ExternalPro
     }
 }
 
-// Eduard Merker

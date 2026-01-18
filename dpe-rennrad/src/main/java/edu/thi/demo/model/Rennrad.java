@@ -1,3 +1,6 @@
+// Eduard Merker
+// für theoretische Erweiterungen
+
 package edu.thi.demo.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
@@ -18,6 +21,3 @@ public class Rennrad extends PanacheEntity {
 
     // Getter und Setter können weggelassen werden, da Panache sie automatisch generiert
 }
-
-// Eduard Merker
-// für theoretische Erweiterungen 

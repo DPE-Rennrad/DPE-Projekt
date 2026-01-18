@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,4 +104,3 @@ public class JmsMessageConsumer {
     }
 }
 
-// Eduard Merker

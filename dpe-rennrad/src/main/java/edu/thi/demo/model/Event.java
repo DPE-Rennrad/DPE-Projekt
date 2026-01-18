@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.model;
 
 import java.time.LocalDateTime;
@@ -27,4 +29,3 @@ public class Event {
     }
 }
 
-// Eduard Merker

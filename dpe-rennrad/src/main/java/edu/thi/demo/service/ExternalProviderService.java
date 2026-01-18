@@ -1,3 +1,4 @@
+// Eduard Merker
 package edu.thi.demo.service;
 
 import edu.thi.demo.model.ExternalProvider;
@@ -64,4 +65,3 @@ public class ExternalProviderService {
     }
 }
 
-// Eduard Merker

@@ -1,3 +1,4 @@
+// Eduard Merker
 package edu.thi.demo.repository;
 
 import edu.thi.demo.model.Kunde;
@@ -9,4 +10,3 @@ public class KundeRepository implements PanacheRepository<Kunde> {
 
 }
 
-// Eduard Merker

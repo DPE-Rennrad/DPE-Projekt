@@ -1,3 +1,5 @@
+// Eduard Merker
+// für theoretische Erweiterungen
 package edu.thi.demo.repository;
 
 import edu.thi.demo.model.Rennrad;
@@ -13,5 +15,3 @@ public class RennradRepository implements PanacheRepository<Rennrad> {
     }
 }
 
-// Eduard Merker
-// für theoretische Erweiterungen 

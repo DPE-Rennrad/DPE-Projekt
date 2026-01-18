@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.resource;
 
 import jakarta.ws.rs.*;

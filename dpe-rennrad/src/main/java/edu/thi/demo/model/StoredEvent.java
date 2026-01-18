@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
@@ -32,4 +34,3 @@ public class StoredEvent extends PanacheEntity {
     public String passendeLeuteJson;
 }
 
-// Eduard Merker

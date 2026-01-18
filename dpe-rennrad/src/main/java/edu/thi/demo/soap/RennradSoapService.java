@@ -1,3 +1,6 @@
+// Eduard Merker
+// für theoretische Erweiterungen
+
 package edu.thi.demo.soap;
 
 import edu.thi.demo.model.Rennrad;
@@ -19,5 +22,3 @@ public class RennradSoapService {
     }
 }
 
-// Eduard Merker
-// für theoretische Erweiterungen

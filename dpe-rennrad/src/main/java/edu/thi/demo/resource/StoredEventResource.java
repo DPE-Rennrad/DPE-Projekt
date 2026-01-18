@@ -1,3 +1,5 @@
+//Niklas Putz
+
 package edu.thi.demo.resource;
 
 import edu.thi.demo.model.StoredEvent;

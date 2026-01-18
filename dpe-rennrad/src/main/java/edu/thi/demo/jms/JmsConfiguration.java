@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.jms;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,4 +35,3 @@ public class JmsConfiguration {
     }
 }
 
-// Eduard Merker

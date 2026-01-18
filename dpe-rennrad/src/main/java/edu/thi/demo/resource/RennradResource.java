@@ -1,3 +1,6 @@
+// Eduard Merker
+// für theoretische Erweiterungen
+
 package edu.thi.demo.resource;
 
 import edu.thi.demo.model.Rennrad;
@@ -60,5 +63,3 @@ public class RennradResource {
     }
 }
 
-// Eduard Merker
-// für theoretische Erweiterungen

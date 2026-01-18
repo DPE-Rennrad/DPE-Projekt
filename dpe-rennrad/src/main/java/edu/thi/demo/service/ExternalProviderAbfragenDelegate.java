@@ -1,3 +1,4 @@
+// Eduard Merker
 package edu.thi.demo.service;
 
 import edu.thi.demo.model.ExternalProvider;
@@ -75,4 +76,3 @@ public class ExternalProviderAbfragenDelegate implements JavaDelegate {
     }
 }
 
-// Eduard Merker
