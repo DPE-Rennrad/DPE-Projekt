@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.service;
 
 import edu.thi.demo.model.Kunde;
@@ -22,6 +24,16 @@ public class KundeService {
     public Kunde getKundeById(Long id) {
         return kundeRepository.findById(id);
     }
-}
 
-// Eduard Merker
+    //Methode updateKunde von Niklas Putz
+    @Transactional
+    public Kunde updateKunde(Long id, Kunde kunde) {
+        Kunde existing = kundeRepository.findById(id);
+        if (existing != null) {
+            existing.name = kunde.name;
+            existing.email = kunde.email;
+            kundeRepository.persist(existing);
+        }
+        return existing;
+    }
+}

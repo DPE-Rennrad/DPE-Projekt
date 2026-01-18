@@ -1,3 +1,5 @@
+// Eduard Merker
+
 package edu.thi.demo.service;
 
 import edu.thi.demo.model.Kunde;
@@ -27,4 +29,3 @@ public class KontoAnlegenDelegate implements JavaDelegate {
     }
 }
 
-// Eduard Merker
