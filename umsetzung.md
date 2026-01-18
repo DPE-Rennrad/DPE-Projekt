@@ -18,7 +18,7 @@
 
 ### Backend-System Simulation
 - [X] Daten aus Dateisystem ODER DB lesen und in JMS-Queue ablegen (Eventermittlungsprozess umgesetzt mit JMS Dateisystem)
-- [ ] Apache Camel nimmt Nachricht entgegen und leitet an Prozess weiter
+- [X] Apache Camel nimmt Nachricht entgegen und leitet an Prozess weiter (Camel: KiMockAntwortRoute.java --> event in Motivationsprozess)
 
 ### Technologie-Stack
 - [X] **Java Development Kit (JDK) 17** verwendet
