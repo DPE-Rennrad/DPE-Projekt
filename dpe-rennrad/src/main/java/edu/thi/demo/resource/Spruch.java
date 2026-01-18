@@ -1,6 +1,6 @@
 //Niklas Putz
 
-package edu.thi.demo.services;
+package edu.thi.demo.resource;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

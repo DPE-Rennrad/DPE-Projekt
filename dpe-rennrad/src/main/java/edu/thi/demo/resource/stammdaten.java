@@ -1,6 +1,6 @@
 //Niklas Putz
 
-package edu.thi.demo.services;
+package edu.thi.demo.resource;
 
 
 import jakarta.ws.rs.GET;
@@ -19,7 +19,6 @@ public class stammdaten {
     public String getBeispiel() {
         String ergebnis = "Beispiel-Stammdaten: Max Mustermann, Kundennummer 12345";
 
-        // Loggt das Ergebnis in der Konsole
         LOG.info("Anfrage erhalten. Rückgabewert: " + ergebnis);
 
         return ergebnis;

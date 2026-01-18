@@ -2,7 +2,7 @@
 //Diese Klass definiert eine Camel Route die von einem Mock-Backend-System (KI)
 // eine Nachricht über das Wetter an ein nachrichtenbasiertes Zwischenereignis weitergibt
 
-package edu.thi.demo.services;
+package edu.thi.demo.service;
 
 import org.apache.camel.builder.RouteBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
