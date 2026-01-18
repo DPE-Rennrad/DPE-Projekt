@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnd0al" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnd0al" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_1airooa">
     <bpmn:participant id="Participant_0lj9c54" name="Newslettererstellungsprozess" processRef="Process_03d1egx" />
   </bpmn:collaboration>
   <bpmn:process id="Process_03d1egx" isExecutable="true" camunda:historyTimeToLive="P1D">
-    <bpmn:serviceTask id="Activity_1mu9b5k" name="Affiliatelink für Eventanmeldung generieren" camunda:type="external" camunda:topic="affiliate-links-generieren">
-      <bpmn:incoming>Flow_1b10z3t</bpmn:incoming>
-      <bpmn:outgoing>Flow_1j5vd2m</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:startEvent id="Event_1memmnn">
       <bpmn:outgoing>Flow_02sls4z</bpmn:outgoing>
     </bpmn:startEvent>
@@ -28,10 +24,6 @@
       <bpmn:incoming>Flow_08oz2wk</bpmn:incoming>
       <bpmn:outgoing>Flow_1b10z3t</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:boundaryEvent id="Event_0v3o17n" name="Fehler bei Linkermittlung" attachedToRef="Activity_1mu9b5k">
-      <bpmn:outgoing>Flow_0b6n8tt</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1q409h4" />
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1b10z3t" sourceRef="Gateway_0hbd8io" targetRef="Activity_1mu9b5k" />
     <bpmn:sequenceFlow id="Flow_1j5vd2m" sourceRef="Activity_1mu9b5k" targetRef="Activity_1t7bkeg" />
     <bpmn:sequenceFlow id="Flow_02sls4z" sourceRef="Event_1memmnn" targetRef="Gateway_0hbd8io" />
@@ -45,16 +37,20 @@
       <bpmn:incoming>Flow_19d79wh</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1iehoko" errorRef="Error_02apgp0" />
     </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_1mu9b5k" name="Affiliatelink für Eventanmeldung generieren" camunda:type="external" camunda:topic="affiliate-links-generieren">
+      <bpmn:incoming>Flow_1b10z3t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j5vd2m</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_0v3o17n" name="Fehler bei Linkermittlung" attachedToRef="Activity_1mu9b5k">
+      <bpmn:outgoing>Flow_0b6n8tt</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1q409h4" />
+    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmn:error id="Error_02apgp0" name="NO_LINKS" errorCode="NO_LINKS" camunda:errorMessage="Konnten keine Links ermitteln" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1airooa">
       <bpmndi:BPMNShape id="Participant_0lj9c54_di" bpmnElement="Participant_0lj9c54" isHorizontal="true">
         <dc:Bounds x="132" y="82" width="1170" height="460" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0rakw0o" bpmnElement="Activity_1mu9b5k">
-        <dc:Bounds x="532" y="202" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1memmnn_di" bpmnElement="Event_1memmnn">
@@ -85,18 +81,22 @@
           <dc:Bounds x="1047" y="457" width="71" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0rakw0o" bpmnElement="Activity_1mu9b5k">
+        <dc:Bounds x="534" y="202" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_060shyn" bpmnElement="Event_0v3o17n">
-        <dc:Bounds x="514" y="264" width="36" height="36" />
+        <dc:Bounds x="516" y="264" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="535" y="298" width="69" height="27" />
+          <dc:Bounds x="537" y="298" width="69" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1b10z3t_di" bpmnElement="Flow_1b10z3t">
         <di:waypoint x="447" y="242" />
-        <di:waypoint x="532" y="242" />
+        <di:waypoint x="534" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0sj9nh7" bpmnElement="Flow_1j5vd2m">
-        <di:waypoint x="632" y="242" />
+        <di:waypoint x="634" y="242" />
         <di:waypoint x="832" y="242" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02sls4z_di" bpmnElement="Flow_02sls4z">
@@ -120,8 +120,8 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0b6n8tt_di" bpmnElement="Flow_0b6n8tt">
-        <di:waypoint x="532" y="300" />
-        <di:waypoint x="532" y="352" />
+        <di:waypoint x="534" y="300" />
+        <di:waypoint x="534" y="352" />
         <di:waypoint x="582" y="352" />
         <di:waypoint x="582" y="407" />
       </bpmndi:BPMNEdge>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y0n2nb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y0n2nb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:collaboration id="Collaboration_0tgz3wo">
     <bpmn:extensionElements />
     <bpmn:participant id="Participant_1pzq4y5" name="Eventempfehlungsprozess" processRef="Process_1e8yeoq" />
@@ -38,10 +38,6 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_06o99uj" sourceRef="Activity_04g7e4p" targetRef="Gateway_1xvorff" />
     <bpmn:sequenceFlow id="Flow_0o75ir5" sourceRef="Event_0wdl56n" targetRef="Activity_0ww400n" />
-    <bpmn:serviceTask id="Activity_0ww400n" name="Logging" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
-      <bpmn:incoming>Flow_0o75ir5</bpmn:incoming>
-      <bpmn:outgoing>Flow_0mxe5yj</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0mxe5yj" sourceRef="Activity_0ww400n" targetRef="Event_080k7bd" />
     <bpmn:endEvent id="Event_080k7bd" name="Technical Error">
       <bpmn:incoming>Flow_0mxe5yj</bpmn:incoming>
@@ -80,6 +76,10 @@
       <bpmn:outgoing>Flow_11alfw8</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_07m6hmx" sourceRef="Activity_1y56zwy" targetRef="Activity_1uevfz8" />
+    <bpmn:serviceTask id="Activity_0ww400n" name="Logging" camunda:expression="${java.lang.System.out.println(&#34;Mock Service&#34;)}">
+      <bpmn:incoming>Flow_0o75ir5</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mxe5yj</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:error id="Error_0tl2trv" name="TECH_ERROR_001" errorCode="TECH_ERROR_001" camunda:errorMessage="Konnte keine Events ermitteln" />
   <bpmn:error id="Error_1l1uh8u" name="TECH_ERROR_002" errorCode="TECH_ERROR_002" camunda:errorMessage="Konnte keine Links ermitteln" />
@@ -107,9 +107,6 @@
       <bpmndi:BPMNShape id="Activity_06qeqta_di" bpmnElement="Activity_04g7e4p">
         <dc:Bounds x="260" y="300" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_165692m_di" bpmnElement="Activity_0ww400n">
-        <dc:Bounds x="410" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1csifro_di" bpmnElement="Event_080k7bd">
         <dc:Bounds x="562" y="442" width="36" height="36" />
@@ -139,6 +136,9 @@
       <bpmndi:BPMNShape id="Activity_0yf4ehk_di" bpmnElement="Activity_1uevfz8">
         <dc:Bounds x="1610" y="300" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_165692m_di" bpmnElement="Activity_0ww400n">
+        <dc:Bounds x="412" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ifocr6_di" bpmnElement="Event_06q0t24">
         <dc:Bounds x="952" y="362" width="36" height="36" />
@@ -180,10 +180,10 @@
       <bpmndi:BPMNEdge id="Flow_0o75ir5_di" bpmnElement="Flow_0o75ir5">
         <di:waypoint x="340" y="398" />
         <di:waypoint x="340" y="460" />
-        <di:waypoint x="410" y="460" />
+        <di:waypoint x="412" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0mxe5yj_di" bpmnElement="Flow_0mxe5yj">
-        <di:waypoint x="510" y="460" />
+        <di:waypoint x="512" y="460" />
         <di:waypoint x="562" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13yv8km_di" bpmnElement="Flow_13yv8km">

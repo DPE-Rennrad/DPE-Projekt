@@ -4,12 +4,10 @@
   <bpmn:collaboration id="Collaboration_1kxvjq0">
     <bpmn:participant id="Participant_04yqgjz" name="Stammdatenprozess" processRef="Process_0gp7lej" />
     <bpmn:participant id="Participant_0omj2en" name="Admin/Verantwortlicher" />
-    <bpmn:participant id="Participant_03no4ok" name="Eventaktualisierungsprozess" processRef="Process_07q78ve" />
     <bpmn:messageFlow id="Flow_1pq7p5o" sourceRef="Participant_0omj2en" targetRef="Event_0rd8gvz" />
   </bpmn:collaboration>
   <bpmn:process id="Process_0gp7lej" name="Stammdatenprozess" isExecutable="true" camunda:historyTimeToLive="0">
     <bpmn:dataStoreReference id="DataStoreReference_1djpovl" name="Kundenstammdaten" />
-    <bpmn:dataStoreReference id="DataStoreReference_0c6ur19" name="Events" />
     <bpmn:startEvent id="Event_0rd8gvz" name="Stammdaten Änderung">
       <bpmn:outgoing>Flow_0tcapfp</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1xmtidt" messageRef="Message_1tg1rmh" />
@@ -55,35 +53,6 @@ JsonOutput.toJson(kundeData)</camunda:script>
     <bpmn:sequenceFlow id="Flow_0tcapfp" sourceRef="Event_0rd8gvz" targetRef="Activity_1vjm7m6" />
     <bpmn:sequenceFlow id="Flow_00g3ddd" sourceRef="Activity_1vjm7m6" targetRef="Event_1shhncc" />
   </bpmn:process>
-  <bpmn:process id="Process_07q78ve" name="Eventaktualisierungsprozess" isExecutable="false" camunda:historyTimeToLive="P1D">
-    <bpmn:startEvent id="Event_0erl0i9" name="24h">
-      <bpmn:outgoing>Flow_1a00bvq</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0vylmig">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1a00bvq" sourceRef="Event_0erl0i9" targetRef="Activity_1e48j5o" />
-    <bpmn:sequenceFlow id="Flow_0jfoqkx" sourceRef="Activity_1e48j5o" targetRef="Event_1ww7zdh" />
-    <bpmn:endEvent id="Event_1ww7zdh" name="Abgelaufene Events gelöscht">
-      <bpmn:incoming>Flow_0jfoqkx</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_1e48j5o" name="Abgelaufene Events löschen">
-      <bpmn:extensionElements>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://host.docker.internal:8088/api/events/expired</camunda:inputParameter>
-            <camunda:inputParameter name="method">DELETE</camunda:inputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1a00bvq</bpmn:incoming>
-      <bpmn:outgoing>Flow_0jfoqkx</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="DataOutputAssociation_00mr5ay">
-        <bpmn:targetRef>DataStoreReference_0c6ur19</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-  </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1kxvjq0">
       <bpmndi:BPMNShape id="Participant_04yqgjz_di" bpmnElement="Participant_04yqgjz" isHorizontal="true">
@@ -114,42 +83,9 @@ JsonOutput.toJson(kundeData)</camunda:script>
         <di:waypoint x="487" y="350" />
         <di:waypoint x="599" y="350" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_03no4ok_di" bpmnElement="Participant_03no4ok" isHorizontal="true">
-        <dc:Bounds x="160" y="520" width="530" height="190" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_18lps05_di" bpmnElement="Event_0erl0i9">
-        <dc:Bounds x="232" y="582" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="241" y="625" width="19" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_05lvzf4" bpmnElement="Event_1ww7zdh">
-        <dc:Bounds x="592" y="582" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="571" y="625" width="79" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1jy7fax" bpmnElement="Activity_1e48j5o">
-        <dc:Bounds x="390" y="560" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1a00bvq_di" bpmnElement="Flow_1a00bvq">
-        <di:waypoint x="268" y="600" />
-        <di:waypoint x="390" y="600" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0jfoqkx_di" bpmnElement="Flow_0jfoqkx">
-        <di:waypoint x="490" y="600" />
-        <di:waypoint x="592" y="600" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1vdcteq_di" bpmnElement="Participant_0omj2en" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="530" height="60" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStoreReference_0c6ur19_di" bpmnElement="DataStoreReference_0c6ur19">
-        <dc:Bounds x="412" y="745" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="420" y="802" width="35" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_1djpovl_di" bpmnElement="DataStoreReference_1djpovl">
         <dc:Bounds x="412" y="185" width="50" height="50" />
@@ -164,10 +100,6 @@ JsonOutput.toJson(kundeData)</camunda:script>
       <bpmndi:BPMNEdge id="Flow_1pq7p5o_di" bpmnElement="Flow_1pq7p5o">
         <di:waypoint x="260" y="140" />
         <di:waypoint x="260" y="332" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataOutputAssociation_00mr5ay_di" bpmnElement="DataOutputAssociation_00mr5ay">
-        <di:waypoint x="437" y="640" />
-        <di:waypoint x="437" y="745" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

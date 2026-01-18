@@ -8,6 +8,14 @@
     <bpmn:endEvent id="Event_1ww7zdh" name="Abgelaufene Events gelöscht">
       <bpmn:incoming>Flow_0jfoqkx</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1a00bvq" sourceRef="Event_0erl0i9" targetRef="Activity_1e48j5o" />
+    <bpmn:sequenceFlow id="Flow_0jfoqkx" sourceRef="Activity_1e48j5o" targetRef="Event_1ww7zdh" />
+    <bpmn:startEvent id="Event_0erl0i9" name="24h">
+      <bpmn:outgoing>Flow_1a00bvq</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1jrhdh8">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R3/PT10S</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
     <bpmn:serviceTask id="Activity_1e48j5o" name="Abgelaufene Events löschen">
       <bpmn:extensionElements>
         <camunda:connector>
@@ -24,14 +32,6 @@
         <bpmn:targetRef>DataStoreReference_0val376</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1a00bvq" sourceRef="Event_0erl0i9" targetRef="Activity_1e48j5o" />
-    <bpmn:sequenceFlow id="Flow_0jfoqkx" sourceRef="Activity_1e48j5o" targetRef="Event_1ww7zdh" />
-    <bpmn:startEvent id="Event_0erl0i9" name="24h">
-      <bpmn:outgoing>Flow_1a00bvq</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_1jrhdh8">
-        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R3/PT10S</bpmn:timeCycle>
-      </bpmn:timerEventDefinition>
-    </bpmn:startEvent>
   </bpmn:process>
   <bpmn:message id="Message_0n94o75" name="Starttest" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -46,21 +46,21 @@
           <dc:Bounds x="601" y="225" width="79" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1jy7fax" bpmnElement="Activity_1e48j5o">
-        <dc:Bounds x="420" y="160" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ii2stz_di" bpmnElement="Event_0erl0i9">
         <dc:Bounds x="262" y="182" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="271" y="225" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1jy7fax" bpmnElement="Activity_1e48j5o">
+        <dc:Bounds x="419" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1a00bvq_di" bpmnElement="Flow_1a00bvq">
         <di:waypoint x="298" y="200" />
-        <di:waypoint x="420" y="200" />
+        <di:waypoint x="419" y="200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0jfoqkx_di" bpmnElement="Flow_0jfoqkx">
-        <di:waypoint x="520" y="200" />
+        <di:waypoint x="519" y="200" />
         <di:waypoint x="622" y="200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="DataStoreReference_0val376_di" bpmnElement="DataStoreReference_0val376">
@@ -70,7 +70,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataOutputAssociation_1ytncfn_di" bpmnElement="DataOutputAssociation_1ytncfn">
-        <di:waypoint x="470" y="240" />
+        <di:waypoint x="469" y="240" />
         <di:waypoint x="470" y="375" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
