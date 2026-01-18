@@ -2,12 +2,12 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1obkspz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
   <bpmn:message id="Message_1tg1rmh" name="stammdaten-aenderung" />
   <bpmn:collaboration id="Collaboration_1kxvjq0">
-    <bpmn:participant id="Participant_04yqgjz" processRef="Process_0gp7lej" />
+    <bpmn:participant id="Participant_04yqgjz" name="Stammdatenprozess" processRef="Process_0gp7lej" />
     <bpmn:participant id="Participant_0omj2en" name="Admin/Verantwortlicher" />
     <bpmn:participant id="Participant_03no4ok" name="Eventaktualisierungsprozess" processRef="Process_07q78ve" />
     <bpmn:messageFlow id="Flow_1pq7p5o" sourceRef="Participant_0omj2en" targetRef="Event_0rd8gvz" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0gp7lej" name="" isExecutable="true" camunda:historyTimeToLive="0">
+  <bpmn:process id="Process_0gp7lej" name="Stammdatenprozess" isExecutable="true" camunda:historyTimeToLive="0">
     <bpmn:dataStoreReference id="DataStoreReference_1djpovl" name="Kundenstammdaten" />
     <bpmn:dataStoreReference id="DataStoreReference_0c6ur19" name="Events" />
     <bpmn:startEvent id="Event_0rd8gvz" name="Stammdaten Änderung">
@@ -22,7 +22,7 @@
         <camunda:connector>
           <camunda:inputOutput>
             <camunda:inputParameter name="url">
-              <camunda:script scriptFormat="groovy">"http://host.docker.internal:8088/stammdaten/kunde/" + execution.getVariable("kundeId")</camunda:script>
+              <camunda:script scriptFormat="JavaScript">"http://host.docker.internal:8088/stammdaten/kunde/" + execution.getVariable("kundeId")</camunda:script>
             </camunda:inputParameter>
             <camunda:inputParameter name="method">PUT</camunda:inputParameter>
             <camunda:inputParameter name="headers">
@@ -55,7 +55,7 @@ JsonOutput.toJson(kundeData)</camunda:script>
     <bpmn:sequenceFlow id="Flow_0tcapfp" sourceRef="Event_0rd8gvz" targetRef="Activity_1vjm7m6" />
     <bpmn:sequenceFlow id="Flow_00g3ddd" sourceRef="Activity_1vjm7m6" targetRef="Event_1shhncc" />
   </bpmn:process>
-  <bpmn:process id="Process_07q78ve" isExecutable="false">
+  <bpmn:process id="Process_07q78ve" name="Eventaktualisierungsprozess" isExecutable="false" camunda:historyTimeToLive="P1D">
     <bpmn:startEvent id="Event_0erl0i9" name="24h">
       <bpmn:outgoing>Flow_1a00bvq</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0vylmig">
@@ -71,7 +71,8 @@ JsonOutput.toJson(kundeData)</camunda:script>
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url"></camunda:inputParameter>
+            <camunda:inputParameter name="url">http://host.docker.internal:8088/api/events/expired</camunda:inputParameter>
+            <camunda:inputParameter name="method">DELETE</camunda:inputParameter>
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
@@ -87,6 +88,7 @@ JsonOutput.toJson(kundeData)</camunda:script>
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1kxvjq0">
       <bpmndi:BPMNShape id="Participant_04yqgjz_di" bpmnElement="Participant_04yqgjz" isHorizontal="true">
         <dc:Bounds x="160" y="280" width="530" height="150" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1mddg39_di" bpmnElement="Event_0rd8gvz">
         <dc:Bounds x="242" y="332" width="36" height="36" />
